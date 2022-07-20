@@ -8,12 +8,11 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import com.lumintorious.ambiental.modifiers.BlockModifier;
-import com.lumintorious.ambiental.modifiers.EnvironmentalModifier;
-import com.lumintorious.ambiental.modifiers.ItemModifier;
-import com.lumintorious.ambiental.modifiers.ModifierStorage;
-import com.lumintorious.ambiental.modifiers.TileEntityModifier;
+import com.lumintorious.ambiental.modifiers.*;
 
+import gregtech.common.blocks.BlockWireCoil;
+import gregtech.common.blocks.VariantActiveBlock;
+import gregtech.common.blocks.VariantBlock;
 import net.dries007.tfc.objects.fluids.FluidsTFC;
 import net.dries007.tfc.objects.te.TEBloomery;
 import net.dries007.tfc.objects.te.TECharcoalForge;
@@ -40,11 +39,26 @@ public class TemperatureRegistry<Type extends ITemperatureProvider> implements I
 	public static final TemperatureRegistry<IEnvironmentalTemperatureProvider> ENVIRONMENT = new TemperatureRegistry<>();
 
 	static {
-		TILE_ENTITIES.register(TileEntityModifier::handleCharcoalForge);
-		TILE_ENTITIES.register(TileEntityModifier::handleFirePit);
-		TILE_ENTITIES.register(TileEntityModifier::handleBloomery);
-		TILE_ENTITIES.register(TileEntityModifier::handleLamps);
-	
+
+		// TFC-Tech
+		// Тигель
+		// Кузня
+		// Печь для стекла
+
+		// FirmaLife
+		// Oven
+
+		// GT
+		// Катушки
+
+		// TFC
+		TILE_ENTITIES.register(TileEntityModifier::handleCharcoalForge); // Угольная кузня
+		TILE_ENTITIES.register(TileEntityModifier::handleFirePit); // Костер
+		TILE_ENTITIES.register(TileEntityModifier::handleBloomery); // Доменка
+		TILE_ENTITIES.register(TileEntityModifier::handleLamps); // Лампа
+		TILE_ENTITIES.register(TileEntityModifier::handleCrucible); // Тигель
+
+		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.TORCH ? new BlockModifier("torch", 3f, 3f) : null);
 		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.FIRE ? new BlockModifier("fire", 3f, 3f) : null);
 		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.LAVA ? new BlockModifier("lava", 3f, 3f) : null);
 		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.FLOWING_LAVA ? new BlockModifier("lava", 3f, 3f) : null);

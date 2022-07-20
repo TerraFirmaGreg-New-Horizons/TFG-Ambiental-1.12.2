@@ -1,7 +1,5 @@
 package com.lumintorious.ambiental.capability;
 
-import com.lumintorious.ambiental.TFCAmbiental;
-
 import io.netty.buffer.ByteBuf;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.minecraft.entity.player.EntityPlayer;

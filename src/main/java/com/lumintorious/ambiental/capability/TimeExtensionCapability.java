@@ -1,29 +1,15 @@
 package com.lumintorious.ambiental.capability;
 
-import com.lumintorious.ambiental.TFCAmbientalConfig;
-
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.util.calendar.CalendarTFC;
-import net.minecraft.advancements.critereon.VillagerTradeTrigger;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.EntityPlayer.SleepResult;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider.WorldSleepResult;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.Constants.WorldEvents;
 import net.minecraftforge.event.GameRuleChangeEvent;
-import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 
 public class TimeExtensionCapability<C> implements ICapabilitySerializable<NBTTagCompound>{
 
@@ -62,30 +48,6 @@ public class TimeExtensionCapability<C> implements ICapabilitySerializable<NBTTa
 				cap.stopExtension();
 			}
 		}
-	}
-	
-	public static void onWorldTick(WorldTickEvent event) {
-//		int players = event.world.getPlayers(EntityPlayer.class, (x) -> true).size();
-//		if(players == 0) {
-//			return;
-//		}
-//		TimeExtensionCapability cap = (TimeExtensionCapability) event.world.getCapability(CAPABILITY, null);
-//		int dayTick = (int) (event.world.getWorldTime() % 24000);
-//		boolean cycle = cap.getDaylightCycle();
-//		if(!cap.isExtending && cycle) {
-//			int ticks1;
-//			if(dayTick == 20 && (ticks1 = TFCAmbientalConfig.TIME_EXTENSION.dawnTicks) > 0) {
-//				cap.startExtension(ticks1);
-//			}else if(dayTick == 6020 && (ticks1 = TFCAmbientalConfig.TIME_EXTENSION.noonTicks) > 0) {
-//				cap.startExtension(ticks1);
-//			}else if(dayTick == 12020 && (ticks1 = TFCAmbientalConfig.TIME_EXTENSION.duskTicks) > 0) {
-//				cap.startExtension(ticks1);
-//			}if(dayTick == 18020 && (ticks1 = TFCAmbientalConfig.TIME_EXTENSION.midnightTicks) > 0) {
-//				cap.startExtension(ticks1);
-//			}
-//		}else if(cap.isExtending) {
-//			cap.tickDown();
-//		}
 	}
 	
 	public void tickDown() {

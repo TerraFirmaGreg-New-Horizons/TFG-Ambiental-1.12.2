@@ -2,16 +2,14 @@ package com.lumintorious.ambiental.modifiers;
 
 import com.lumintorious.ambiental.capability.TemperatureCapability;
 
-import net.dries007.tfc.objects.te.TEBloomery;
-import net.dries007.tfc.objects.te.TECharcoalForge;
-import net.dries007.tfc.objects.te.TEFirePit;
-import net.dries007.tfc.objects.te.TELamp;
+import gregtech.common.metatileentities.multi.electric.MetaTileEntityElectricBlastFurnace;
+import net.dries007.tfc.objects.te.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityModifier extends BlockModifier{
+public class TileEntityModifier extends BlockModifier {
 	
 	public TileEntityModifier(String unlocalizedName) {
 		super(unlocalizedName);
@@ -31,12 +29,12 @@ public class TileEntityModifier extends BlockModifier{
 	}
 
 	public static TileEntityModifier handleCharcoalForge(TileEntity tile, EntityPlayer player) {
-		if(tile instanceof TECharcoalForge) {
+		if (tile instanceof TECharcoalForge) {
 			TECharcoalForge forge = (TECharcoalForge)tile;
 			float temp = forge.getField(TECharcoalForge.FIELD_TEMPERATURE);
 			float change =  temp / 140f;
 			float potency = temp / 350f;
-			if(hasProtection(player)){
+			if (hasProtection(player)){
 				change = 1.0F;
 			}
 			return new TileEntityModifier("charcoal_forge", change, potency);
@@ -51,7 +49,7 @@ public class TileEntityModifier extends BlockModifier{
 			float temp = pit.getField(TEFirePit.FIELD_TEMPERATURE);
 			float change =  temp / 100f;
 			float potency = temp / 350f;
-			if(hasProtection(player)){
+			if (hasProtection(player)){
 				change = 1.0F;
 			}
 			return new TileEntityModifier("fire_pit", Math.min(6f, change), potency);
@@ -84,5 +82,20 @@ public class TileEntityModifier extends BlockModifier{
 			}
 		}
 		return null;
+	}
+
+	public static TileEntityModifier handleCrucible(TileEntity tile, EntityPlayer player) {
+		if (tile instanceof TECrucible) {
+			TECrucible crucible = (TECrucible) tile;
+			float temp = crucible.getField(TECrucible.FIELD_TEMPERATURE);
+			float change =  temp / 100f;
+			float potency = temp / 350f;
+			if (hasProtection(player)) {
+				change = 1.0F;
+			}
+			return new TileEntityModifier("crucible", change, potency);
+		}else {
+			return null;
+		}
 	}
 }

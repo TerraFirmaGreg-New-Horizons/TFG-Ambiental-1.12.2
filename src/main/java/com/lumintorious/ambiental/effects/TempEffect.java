@@ -1,14 +1,16 @@
 package com.lumintorious.ambiental.effects;
 
-import com.lumintorious.ambiental.TFCAmbiental;
+import com.lumintorious.ambiental.TFCTemperature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import static com.lumintorious.ambiental.TFCTemperature.MODID;
+
 public class TempEffect extends Potion {
-    private final ResourceLocation POTION_ICONS = new ResourceLocation(TFCAmbiental.MODID, "textures/gui/potions.png");
+    private final ResourceLocation POTION_ICONS = new ResourceLocation(MODID, "textures/gui/potions.png");
 
     public static final TempEffect WARM = new TempEffect("warm", 0xFFFFCC00, 0);
     public static final TempEffect COOL = new TempEffect("cool", 0xFF00CCFF, 1);
@@ -17,7 +19,7 @@ public class TempEffect extends Potion {
         super(false, color);
         setIconIndex(index, 0);
         setRegistryName(name);
-        setPotionName("effect.tfcambiental." + name + ".name");
+        setPotionName("effect." + MODID + "." + name + ".name");
     }
 
     @Override

@@ -1,22 +1,13 @@
 package com.lumintorious.ambiental.modifiers;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.lumintorious.ambiental.TFCAmbientalConfig;
 import com.lumintorious.ambiental.api.IItemTemperatureOwner;
 import com.lumintorious.ambiental.api.IItemTemperatureProvider;
 import com.lumintorious.ambiental.api.TemperatureRegistry;
 
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
-import net.dries007.tfc.api.capability.heat.Heat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
-import net.dries007.tfc.api.recipes.heat.HeatRecipe;
-import net.dries007.tfc.compat.jei.categories.HeatCategory;
-import net.dries007.tfc.objects.items.ItemTFC;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 
 public class ItemModifier extends BaseModifier{
 	

@@ -1,8 +1,6 @@
 package com.lumintorious.ambiental.modifiers;
 
-import com.lumintorious.ambiental.TFCAmbiental;
-import com.lumintorious.ambiental.TFCAmbientalConfig;
-import com.lumintorious.ambiental.Util;
+import com.lumintorious.ambiental.TFCTemperatureConfig;
 import com.lumintorious.ambiental.capability.TemperatureCapability;
 
 public class BaseModifier {
@@ -25,7 +23,7 @@ public class BaseModifier {
 	}
 
 	public float getChange() {
-		return change * multiplier * (count == 1 ? 1f : TFCAmbientalConfig.GENERAL.diminishedModifierMultiplier);
+		return change * multiplier * (count == 1 ? 1f : TFCTemperatureConfig.GENERAL.diminishedModifierMultiplier);
 	}
 
 	public void setChange(float change) {
@@ -33,7 +31,7 @@ public class BaseModifier {
 	}
 
 	public float getPotency() {
-		return potency * multiplier * (count == 1 ? 1f : TFCAmbientalConfig.GENERAL.diminishedModifierMultiplier);
+		return potency * multiplier * (count == 1 ? 1f : TFCTemperatureConfig.GENERAL.diminishedModifierMultiplier);
 	}
 
 	public void setPotency(float potency) {
@@ -45,7 +43,7 @@ public class BaseModifier {
 	}
 	
 	public void absorb(BaseModifier modifier) {
-		if(count >= TFCAmbientalConfig.GENERAL.modifierCap) {
+		if(count >= TFCTemperatureConfig.GENERAL.modifierCap) {
 			return;
 		}
 		this.count += modifier.count;
@@ -70,10 +68,6 @@ public class BaseModifier {
 		this.unlocalizedName = unlocalizedName;
 		this.change = change;
 		this.potency = potency;
-	}
-	
-	public String getDisplayName() {
-		return Util.translate(TFCAmbiental.MODID + ".modifier." + this.unlocalizedName);
 	}
 	
 	public void apply(TemperatureCapability temp) {

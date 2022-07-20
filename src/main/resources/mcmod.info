@@ -1,14 +1,14 @@
 [
 {
-  "modid": "tfcambiental",
-  "name": "TFC Ambiental",
+  "modid": "tfctemperature",
+  "name": "TFC Temperature",
   "description": "A Simple(-ish) TFC temperature mode.",
   "version": "1.0.0",
   "mcversion": "1.12.2",
   "url": "",
   "updateUrl": "",
-  "authorList": ["Lumintorious"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["Lumintorious", "SpeeeDCraft"],
+  "credits": "",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
