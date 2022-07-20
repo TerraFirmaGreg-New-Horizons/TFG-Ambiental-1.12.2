@@ -19,7 +19,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.ArrayUtils;
 
-import static com.lumintorious.ambiental.TFCTemperature.MODID;
+import static com.lumintorious.ambiental.TFCAmbiental.MODID;
 
 public class CommonEventHandler {
 
@@ -29,11 +29,12 @@ public class CommonEventHandler {
 		if (event.getModID().equals(MODID))
 		{
 			ConfigManager.sync(MODID, Config.Type.INSTANCE);
-			TemperatureCapability.AVERAGE = TFCTemperatureConfig.GENERAL.averageTemperature;
-			TemperatureCapability.HOT_THRESHOLD = TFCTemperatureConfig.GENERAL.hotTemperature;
-			TemperatureCapability.COOL_THRESHOLD = TFCTemperatureConfig.GENERAL.coldTemperature;
-			TemperatureCapability.BURN_THRESHOLD = TFCTemperatureConfig.GENERAL.burningTemperature;
-			TemperatureCapability.FREEZE_THRESHOLD = TFCTemperatureConfig.GENERAL.freezingTemperature;
+			TemperatureCapability.AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;
+			TemperatureCapability.HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotTemperature;
+			TemperatureCapability.COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coldTemperature;
+			TemperatureCapability.BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burningTemperature;
+			TemperatureCapability.FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezingTemperature;
+			ClientEventHandler.enableOverlay = TFCAmbientalConfig.CLIENT.enableOverlay;
 		}
 	}
 
@@ -80,7 +81,7 @@ public class CommonEventHandler {
     }
 
 	@SubscribeEvent
-	public void onPlayerUpdate(LivingUpdateEvent  event) {
+	public void onPlayerUpdate(LivingUpdateEvent event) {
 
 		EntityLivingBase entityLiving = event.getEntityLiving();
 		if (!(entityLiving instanceof EntityPlayer)) {
@@ -92,7 +93,7 @@ public class CommonEventHandler {
 			return;
 		}
 
-		if (!ArrayUtils.contains(TFCTemperatureConfig.GENERAL.allowedDims, player.dimension))
+		if (!ArrayUtils.contains(TFCAmbientalConfig.GENERAL.allowedDims, player.dimension))
 		{
 			return;
 		}

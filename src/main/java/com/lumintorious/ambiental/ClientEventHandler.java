@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
-import static com.lumintorious.ambiental.TFCTemperature.MODID;
+import static com.lumintorious.ambiental.TFCAmbiental.MODID;
 
 @SideOnly(Side.CLIENT)
 public class ClientEventHandler {
@@ -33,7 +33,9 @@ public class ClientEventHandler {
     public static final ResourceLocation PLUS = new ResourceLocation(MODID + ":textures/gui/higher.png");
     public static final ResourceLocation MINUSER = new ResourceLocation(MODID + ":textures/gui/lowerer.png");
     public static final ResourceLocation PLUSER = new ResourceLocation(MODID + ":textures/gui/higherer.png");
-    
+
+	public static boolean enableOverlay = TFCAmbientalConfig.CLIENT.enableOverlay;
+
     @SubscribeEvent
     public void render(RenderGameOverlayEvent.Pre event)
     {
@@ -43,7 +45,7 @@ public class ClientEventHandler {
     		return;
     	}
 
-		if (!ArrayUtils.contains(TFCTemperatureConfig.GENERAL.allowedDims, player.dimension))
+		if (!ArrayUtils.contains(TFCAmbientalConfig.GENERAL.allowedDims, player.dimension))
 		{
 			return;
 		}
@@ -118,16 +120,11 @@ public class ClientEventHandler {
 			      drawTexturedModalRect(mid - 8, armorRowHeight - 4 + offsetYArrow, 16, 16, MINUS);
 	    	  }
 	      }
-          if((player.isSneaking() || !TFCTemperatureConfig.CLIENT.sneakyDetails) && tempSystem instanceof TemperatureCapability) {
+          if((player.isSneaking() || !TFCAmbientalConfig.CLIENT.sneakyDetails) && tempSystem instanceof TemperatureCapability) {
         	  TemperatureCapability sys = (TemperatureCapability)tempSystem;
 	    	  float targetFormatted = sys.getTargetTemperature();
 	    	  float tempFormatted = sys.getTemperature();
 	    	  float changeFormatted = sys.getChange();
-	    	  if(!TFCTemperatureConfig.CLIENT.celsius) {
-	    		  targetFormatted = targetFormatted * (9 / 5) + 32;
-	    		  tempFormatted = tempFormatted * (9 / 5) + 32;
-	    		  changeFormatted = changeFormatted * (9 / 5);
-	    	  }
 	    	  FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
 	    	  String tempStr = String.format("%.1f\u00BA -> %.1f\u00BA", temperature, targetFormatted);
 	    	  String changeStr = String.format("%.3f\u00BA/s", change);
@@ -166,7 +163,7 @@ public class ClientEventHandler {
 	
 	private void drawTemperatureVignettes(int width, int height, EntityPlayer player, RenderGameOverlayEvent.Pre event)
     {
-		if (TFCTemperatureConfig.CLIENT.enableOverlay)
+		if (enableOverlay)
 		{
 			ResourceLocation vignetteLocation = null;
 			float temperature = 1f;

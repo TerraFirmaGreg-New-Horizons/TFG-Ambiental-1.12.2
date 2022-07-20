@@ -3,31 +3,14 @@ package com.lumintorious.ambiental.api;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 import com.lumintorious.ambiental.modifiers.*;
 
 import gregtech.common.blocks.BlockWireCoil;
-import gregtech.common.blocks.VariantActiveBlock;
 import gregtech.common.blocks.VariantBlock;
-import net.dries007.tfc.objects.fluids.FluidsTFC;
-import net.dries007.tfc.objects.te.TEBloomery;
-import net.dries007.tfc.objects.te.TECharcoalForge;
-import net.dries007.tfc.objects.te.TEFirePit;
-import net.dries007.tfc.objects.te.TELamp;
-import net.dries007.tfc.util.calendar.CalendarWorldData;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fml.common.Loader;
 
 public class TemperatureRegistry<Type extends ITemperatureProvider> implements Iterable<Type>{
 	// Add functions that provide modifiers, you can use checks and return null to skip
@@ -41,23 +24,30 @@ public class TemperatureRegistry<Type extends ITemperatureProvider> implements I
 	static {
 
 		// TFC-Tech
-		// Тигель
-		// Кузня
-		// Печь для стекла
+		if (Loader.isModLoaded("tfctech")) {
+			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryFirebox); // Топило для печи для стекла
+			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryCauldron); // Печь для стекла
+			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleElectricForge); // Тигель
+			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleInductionCrucible); // Кузня
+			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleFridge); // Холодос
+		}
 
 		// FirmaLife
-		// Oven
+		if (Loader.isModLoaded("firmalife")) {
+			TILE_ENTITIES.register(FirmaLifeTileEntityModifier::handleClayOven); // Oven
+		}
 
-		// GT
-		// Катушки
+		// GTCEu
+		if (Loader.isModLoaded("gregtech")) {
+			// Катушки
+		}
 
 		// TFC
-		TILE_ENTITIES.register(TileEntityModifier::handleCharcoalForge); // Угольная кузня
-		TILE_ENTITIES.register(TileEntityModifier::handleFirePit); // Костер
-		TILE_ENTITIES.register(TileEntityModifier::handleBloomery); // Доменка
-		TILE_ENTITIES.register(TileEntityModifier::handleLamps); // Лампа
-		TILE_ENTITIES.register(TileEntityModifier::handleCrucible); // Тигель
-
+		TILE_ENTITIES.register(TFCTileEntityModifier::handleCharcoalForge); // Угольная кузня
+		TILE_ENTITIES.register(TFCTileEntityModifier::handleFirePit); // Костер
+		TILE_ENTITIES.register(TFCTileEntityModifier::handleBloomery); // Доменка
+		TILE_ENTITIES.register(TFCTileEntityModifier::handleLamps); // Лампа
+		TILE_ENTITIES.register(TFCTileEntityModifier::handleCrucible); // Тигель
 		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.TORCH ? new BlockModifier("torch", 3f, 3f) : null);
 		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.FIRE ? new BlockModifier("fire", 3f, 3f) : null);
 		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.LAVA ? new BlockModifier("lava", 3f, 3f) : null);

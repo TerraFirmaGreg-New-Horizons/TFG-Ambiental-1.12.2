@@ -1,6 +1,6 @@
 package com.lumintorious.ambiental.modifiers;
 
-import com.lumintorious.ambiental.TFCTemperatureConfig;
+import com.lumintorious.ambiental.TFCAmbientalConfig;
 import com.lumintorious.ambiental.capability.TemperatureCapability;
 
 public class BaseModifier {
@@ -23,7 +23,7 @@ public class BaseModifier {
 	}
 
 	public float getChange() {
-		return change * multiplier * (count == 1 ? 1f : TFCTemperatureConfig.GENERAL.diminishedModifierMultiplier);
+		return change * multiplier * (count == 1 ? 1f : TFCAmbientalConfig.GENERAL.diminishedModifierMultiplier);
 	}
 
 	public void setChange(float change) {
@@ -31,7 +31,7 @@ public class BaseModifier {
 	}
 
 	public float getPotency() {
-		return potency * multiplier * (count == 1 ? 1f : TFCTemperatureConfig.GENERAL.diminishedModifierMultiplier);
+		return potency * multiplier * (count == 1 ? 1f : TFCAmbientalConfig.GENERAL.diminishedModifierMultiplier);
 	}
 
 	public void setPotency(float potency) {
@@ -43,7 +43,7 @@ public class BaseModifier {
 	}
 	
 	public void absorb(BaseModifier modifier) {
-		if(count >= TFCTemperatureConfig.GENERAL.modifierCap) {
+		if(count >= TFCAmbientalConfig.GENERAL.modifierCap) {
 			return;
 		}
 		this.count += modifier.count;

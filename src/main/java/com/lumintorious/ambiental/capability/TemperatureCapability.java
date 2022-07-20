@@ -1,7 +1,7 @@
 package com.lumintorious.ambiental.capability;
 
-import com.lumintorious.ambiental.TemperatureDamage;
-import com.lumintorious.ambiental.TFCTemperatureConfig;
+import com.lumintorious.ambiental.TFCAmbientalDamage;
+import com.lumintorious.ambiental.TFCAmbientalConfig;
 import com.lumintorious.ambiental.modifiers.BaseModifier;
 import com.lumintorious.ambiental.modifiers.BlockModifier;
 import com.lumintorious.ambiental.modifiers.EnvironmentalModifier;
@@ -23,7 +23,8 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 {
 	@CapabilityInject(ITemperatureCapability.class)
     public static final Capability<ITemperatureCapability> CAPABILITY = null;
-	
+
+	public static final int tickInterval = 20;
 	
     /** The capability this is for */
     private final EntityPlayer player;
@@ -36,11 +37,11 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 	public static final BaseModifier CORE_TEMPERATURE = new BaseModifier("core", 0f, 0.0f);
 	public boolean isRising;
 	
-	public static float AVERAGE = TFCTemperatureConfig.GENERAL.averageTemperature;
-	public static float HOT_THRESHOLD = TFCTemperatureConfig.GENERAL.hotTemperature;
-	public static float COOL_THRESHOLD = TFCTemperatureConfig.GENERAL.coldTemperature;
-	public static float BURN_THRESHOLD = TFCTemperatureConfig.GENERAL.burningTemperature;
-	public static float FREEZE_THRESHOLD = TFCTemperatureConfig.GENERAL.freezingTemperature;
+	public static float AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;
+	public static float HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotTemperature;
+	public static float COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coldTemperature;
+	public static float BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burningTemperature;
+	public static float FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezingTemperature;
 	
 	public ModifierStorage modifiers = new ModifierStorage();
 	
@@ -79,56 +80,50 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 	
 	public float getTemperatureChange() {
 		float target = getTargetTemperature();
-		float speed = getPotency() * TFCTemperatureConfig.GENERAL.temperatureMultiplier;
+		float speed = getPotency() * TFCAmbientalConfig.GENERAL.temperatureMultiplier;
 		float change = Math.min(CHANGE_CAP, Math.max(-CHANGE_CAP, target - bodyTemperature));
 		float newTemp = bodyTemperature + change;
 		boolean isRising = true;
-		if((bodyTemperature < AVERAGE && newTemp > bodyTemperature) || (bodyTemperature > AVERAGE && newTemp < bodyTemperature)) {
-			speed *= GOOD_MULTIPLIER * TFCTemperatureConfig.GENERAL.positiveModifier;
-		}else {
-			speed *= BAD_MULTIPLIER * TFCTemperatureConfig.GENERAL.negativeModifier;
+		if ((bodyTemperature < AVERAGE && newTemp > bodyTemperature) || (bodyTemperature > AVERAGE && newTemp < bodyTemperature)) {
+			speed *= GOOD_MULTIPLIER * TFCAmbientalConfig.GENERAL.positiveModifier;
 		}
-		return ((float) change * speed);
+		else {
+			speed *= BAD_MULTIPLIER * TFCAmbientalConfig.GENERAL.negativeModifier;
+		}
+		return (change * speed);
 	}
 	
 	public int tick = 0;
-	public int damageTick = 0;
-	
-	public void update() {
 
-		if(!player.world.isRemote) {
-			this.setTemperature(this.getTemperature() + this.getTemperatureChange() / TFCTemperatureConfig.GENERAL.tickInterval);
-			
-			if (tick <= TFCTemperatureConfig.GENERAL.tickInterval) {
+	public void update() {
+		if (!player.world.isRemote) {
+			this.setTemperature(this.getTemperature() + this.getTemperatureChange() / tickInterval);
+
+			if (tick <= tickInterval) {
 				tick++;
 				return;
-			} else {
+			}
+			else {
 				tick = 0;
-				if (damageTick > 40) {
-					damageTick = 0;
-					if (TFCTemperatureConfig.GENERAL.takeDamage) {
-						if(this.getTemperature() > BURN_THRESHOLD) {
-								player.attackEntityFrom(TemperatureDamage.HEAT,  4f);
-						}else if (this.getTemperature() < FREEZE_THRESHOLD){
-								player.attackEntityFrom(TemperatureDamage.COLD, 4f);
+				if (TFCAmbientalConfig.GENERAL.takeDamage) {
+					if (this.getTemperature() > BURN_THRESHOLD) {
+						player.attackEntityFrom(TFCAmbientalDamage.HEAT,  2f);
+					} else if (this.getTemperature() < FREEZE_THRESHOLD) {
+						player.attackEntityFrom(TFCAmbientalDamage.COLD, 2f);
+					}
+				}
+				if (TFCAmbientalConfig.GENERAL.loseHungerThirst) {
+					if(player.getFoodStats() instanceof FoodStatsTFC) {
+						FoodStatsTFC stats = (FoodStatsTFC)player.getFoodStats();
+						if (this.getTemperature() > (HOT_THRESHOLD * 2f + BURN_THRESHOLD) / 3f) {
+							stats.addThirst(-8);
+						} else if (this.getTemperature() < (COOL_THRESHOLD * 2f + FREEZE_THRESHOLD) / 3f){
+							stats.setFoodLevel(stats.getFoodLevel() - 1);
 						}
 					}
-					if (TFCTemperatureConfig.GENERAL.loseHungerThirst) {
-						if (player.getFoodStats() instanceof FoodStatsTFC) {
-							FoodStatsTFC stats = (FoodStatsTFC)player.getFoodStats();
-							if (this.getTemperature() > (HOT_THRESHOLD * 2f + BURN_THRESHOLD) / 3f) {
-								stats.addThirst(-8);
-							} else if (this.getTemperature() < (COOL_THRESHOLD * 2f + FREEZE_THRESHOLD) / 3f){
-								stats.setFoodLevel(stats.getFoodLevel() - 1);
-							}
-						}
-						
-					}
-					
-				} else {
-					damageTick++;
 				}
 			}
+
 			this.evaluateModifiers();
 			updateAndSync();
 		}
@@ -160,7 +155,9 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 	public void setTemperature(float newTemp) {
 		if (newTemp < this.getTemperature()) {
 			isRising = false;
-		}else {
+		}
+		else
+		{
 			isRising = true;
 		}
 		this.bodyTemperature = newTemp;

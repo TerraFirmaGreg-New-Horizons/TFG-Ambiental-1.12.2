@@ -2,89 +2,91 @@ package com.lumintorious.ambiental.modifiers;
 
 import com.lumintorious.ambiental.capability.TemperatureCapability;
 
-import gregtech.common.metatileentities.multi.electric.MetaTileEntityElectricBlastFurnace;
 import net.dries007.tfc.objects.te.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityModifier extends BlockModifier {
+public class TFCTileEntityModifier extends BlockModifier {
 	
-	public TileEntityModifier(String unlocalizedName) {
+	public TFCTileEntityModifier(String unlocalizedName) {
 		super(unlocalizedName);
 	}
 	
-	public TileEntityModifier(String unlocalizedName, float change, float potency) {
+	public TFCTileEntityModifier(String unlocalizedName, float change, float potency) {
 		super(unlocalizedName, change, potency);
 	}
 	
-	public TileEntityModifier(String unlocalizedName, float change, float potency, boolean affectedByDistance) {
+	public TFCTileEntityModifier(String unlocalizedName, float change, float potency, boolean affectedByDistance) {
 		super(unlocalizedName, change, potency, affectedByDistance);
 	}
 
-	private static boolean hasProtection(EntityPlayer player){
+	public static boolean hasProtection(EntityPlayer player) {
 		ItemStack stack = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		return stack != null && !stack.isEmpty();
 	}
 
-	public static TileEntityModifier handleCharcoalForge(TileEntity tile, EntityPlayer player) {
+	public static TFCTileEntityModifier handleCharcoalForge(TileEntity tile, EntityPlayer player) {
 		if (tile instanceof TECharcoalForge) {
 			TECharcoalForge forge = (TECharcoalForge)tile;
 			float temp = forge.getField(TECharcoalForge.FIELD_TEMPERATURE);
-			float change =  temp / 140f;
+			float change =  temp / 100f; // 140
 			float potency = temp / 350f;
-			if (hasProtection(player)){
+			if (hasProtection(player)) {
 				change = 1.0F;
 			}
-			return new TileEntityModifier("charcoal_forge", change, potency);
-		}else {
+			return new TFCTileEntityModifier("charcoal_forge", change, potency);
+		}
+		else {
 			return null;
 		}
 	}
 	
-	public static TileEntityModifier handleFirePit(TileEntity tile, EntityPlayer player) {
+	public static TFCTileEntityModifier handleFirePit(TileEntity tile, EntityPlayer player) {
 		if(tile instanceof TEFirePit) {
 			TEFirePit pit = (TEFirePit)tile;
 			float temp = pit.getField(TEFirePit.FIELD_TEMPERATURE);
 			float change =  temp / 100f;
 			float potency = temp / 350f;
-			if (hasProtection(player)){
+			if (hasProtection(player)) {
 				change = 1.0F;
 			}
-			return new TileEntityModifier("fire_pit", Math.min(6f, change), potency);
-		}else {
+			return new TFCTileEntityModifier("fire_pit", Math.min(6f, change), potency);
+		}
+		else {
 			return null;
 		}
 	}
 	
-	public static TileEntityModifier handleBloomery(TileEntity tile, EntityPlayer player) {
-		if(tile instanceof TEBloomery) {
+	public static TFCTileEntityModifier handleBloomery(TileEntity tile, EntityPlayer player) {
+		if (tile instanceof TEBloomery) {
 			TEBloomery bloomery = (TEBloomery)tile;
 			float change = bloomery.getRemainingTicks() > 0 ? 4f : 0f;
 			float potency = change;
-			if(hasProtection(player)){
+			if(hasProtection(player)) {
 				change = 1.0F;
 			}
-			return new TileEntityModifier("bloomery", change, potency);
-		}else {
+			return new TFCTileEntityModifier("bloomery", change, potency);
+		}
+		else {
 			return null;
 		}
 	}
 	
-	public static TileEntityModifier handleLamps(TileEntity tile, EntityPlayer player) {
-		if(tile instanceof TELamp) {
+	public static TFCTileEntityModifier handleLamps(TileEntity tile, EntityPlayer player) {
+		if (tile instanceof TELamp) {
 			TELamp lamp = (TELamp)tile;
-			if(EnvironmentalModifier.getEnvironmentTemperature(player) < TemperatureCapability.AVERAGE) {
+			if (EnvironmentalModifier.getEnvironmentTemperature(player) < TemperatureCapability.AVERAGE) {
 				float change = (lamp.isPowered() && lamp.getFuel() > 0) ? 1f : 0f;
 				float potency = 0f;
-				return new TileEntityModifier("lamp", change, potency, false);
+				return new TFCTileEntityModifier("lamp", change, potency, false);
 			}
 		}
 		return null;
 	}
 
-	public static TileEntityModifier handleCrucible(TileEntity tile, EntityPlayer player) {
+	public static TFCTileEntityModifier handleCrucible(TileEntity tile, EntityPlayer player) {
 		if (tile instanceof TECrucible) {
 			TECrucible crucible = (TECrucible) tile;
 			float temp = crucible.getField(TECrucible.FIELD_TEMPERATURE);
@@ -93,8 +95,8 @@ public class TileEntityModifier extends BlockModifier {
 			if (hasProtection(player)) {
 				change = 1.0F;
 			}
-			return new TileEntityModifier("crucible", change, potency);
-		}else {
+			return new TFCTileEntityModifier("crucible", change, potency);
+		} else {
 			return null;
 		}
 	}

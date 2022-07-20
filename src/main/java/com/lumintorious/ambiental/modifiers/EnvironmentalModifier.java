@@ -1,6 +1,6 @@
 package com.lumintorious.ambiental.modifiers;
 
-import com.lumintorious.ambiental.TFCTemperatureConfig;
+import com.lumintorious.ambiental.TFCAmbientalConfig;
 import com.lumintorious.ambiental.api.IEnvironmentalTemperatureProvider;
 import com.lumintorious.ambiental.api.TemperatureRegistry;
 import com.lumintorious.ambiental.capability.TemperatureCapability;
@@ -26,11 +26,11 @@ public class EnvironmentalModifier extends BaseModifier {
 	public static float getEnvironmentTemperature(EntityPlayer player) {
 		float avg = ClimateData.DEFAULT.getRegionalTemp() + 2f;
 		float actual = ClimateTFC.getActualTemp(player.world, player.getPosition());
-		if(TFCTemperatureConfig.GENERAL.harsherTemperateAreas) {
+		if(TFCAmbientalConfig.GENERAL.harsherTemperateAreas) {
 			float diff = actual - TemperatureCapability.AVERAGE;
 			float sign = Math.signum(diff);
 			float generalDiff = Math.abs(avg - TemperatureCapability.AVERAGE);
-			float mult0 = Math.max(0f, TFCTemperatureConfig.GENERAL.harsherMultiplier - 1f);
+			float mult0 = Math.max(0f, TFCAmbientalConfig.GENERAL.harsherMultiplier - 1f);
 			float multiplier = 1 + Math.max(0, 1 - generalDiff / 55) * mult0;
 			actual = TemperatureCapability.AVERAGE + (diff + 1.5f * sign) * multiplier;
 		}
