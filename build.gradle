@@ -47,7 +47,8 @@ dependencies {
     deobfCompile 'curse.maven:CCL-242818:2779848'
 
     deobfCompile 'curse.maven:hei-557549:3669679'
-
+    deobfCompile "curse.maven:firmalife-453394:3612887"
+    deobfCompile "curse.maven:tfc-tech-unofficial-340660:3209033"
 }
 
 processResources {

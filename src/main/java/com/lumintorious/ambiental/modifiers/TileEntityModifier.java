@@ -24,7 +24,7 @@ public class TileEntityModifier extends BlockModifier {
 
 	public static boolean hasProtection(EntityPlayer player) {
 		ItemStack stack = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-		return stack != null && !stack.isEmpty();
+		return (stack != null && !stack.isEmpty()) || BlockModifier.haveFullNanoOrQuarkArmor(player);
 	}
 
 	public static TileEntityModifier handleCharcoalForge(TileEntity tile, EntityPlayer player) {
