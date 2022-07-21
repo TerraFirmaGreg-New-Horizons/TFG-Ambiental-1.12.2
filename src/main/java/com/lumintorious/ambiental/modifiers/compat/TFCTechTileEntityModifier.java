@@ -1,11 +1,13 @@
-package com.lumintorious.ambiental.modifiers;
+package com.lumintorious.ambiental.modifiers.compat;
 
+import com.lumintorious.ambiental.modifiers.BlockModifier;
+import com.lumintorious.ambiental.modifiers.TileEntityModifier;
 import net.dries007.tfc.objects.te.TECrucible;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import tfctech.objects.tileentities.*;
 
-import static com.lumintorious.ambiental.modifiers.TFCTileEntityModifier.hasProtection;
+import static com.lumintorious.ambiental.modifiers.TileEntityModifier.hasProtection;
 
 public class TFCTechTileEntityModifier extends BlockModifier {
 
@@ -21,7 +23,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
         super(name, change, potency, affectedByDistance);
     }
 
-    public static TFCTileEntityModifier handleElectricForge(TileEntity tile, EntityPlayer player) {
+    public static TileEntityModifier handleElectricForge(TileEntity tile, EntityPlayer player) {
         if (tile instanceof TEElectricForge) {
             TEElectricForge electricForge = (TEElectricForge) tile;
             float temp = electricForge.getField(TECrucible.FIELD_TEMPERATURE);
@@ -30,13 +32,13 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             if (hasProtection(player)) {
                 change = 1.0F;
             }
-            return new TFCTileEntityModifier("electric_forge", change, potency);
+            return new TileEntityModifier("electric_forge", change, potency);
         } else {
             return null;
         }
     }
 
-    public static TFCTileEntityModifier handleInductionCrucible(TileEntity tile, EntityPlayer player) {
+    public static TileEntityModifier handleInductionCrucible(TileEntity tile, EntityPlayer player) {
         if (tile instanceof TEInductionCrucible) {
             TEInductionCrucible inductionCrucible = (TEInductionCrucible) tile;
             float temp = inductionCrucible.getField(TECrucible.FIELD_TEMPERATURE);
@@ -45,13 +47,13 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             if (hasProtection(player)) {
                 change = 1.0F;
             }
-            return new TFCTileEntityModifier("induction_crucible", change, potency);
+            return new TileEntityModifier("induction_crucible", change, potency);
         } else {
             return null;
         }
     }
 
-    public static TFCTileEntityModifier handleSmelteryCauldron(TileEntity tile, EntityPlayer player) {
+    public static TileEntityModifier handleSmelteryCauldron(TileEntity tile, EntityPlayer player) {
         if (tile instanceof TESmelteryCauldron) {
             TESmelteryCauldron smelteryCauldron = (TESmelteryCauldron) tile;
             float temp = smelteryCauldron.getField(TECrucible.FIELD_TEMPERATURE);
@@ -60,13 +62,13 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             if (hasProtection(player)) {
                 change = 1.0F;
             }
-            return new TFCTileEntityModifier("smeltery_cauldron", change, potency);
+            return new TileEntityModifier("smeltery_cauldron", change, potency);
         } else {
             return null;
         }
     }
 
-    public static TFCTileEntityModifier handleSmelteryFirebox(TileEntity tile, EntityPlayer player) {
+    public static TileEntityModifier handleSmelteryFirebox(TileEntity tile, EntityPlayer player) {
         if (tile instanceof TESmelteryFirebox) {
             TESmelteryFirebox smelteryFirebox = (TESmelteryFirebox) tile;
             float temp = smelteryFirebox.getField(TECrucible.FIELD_TEMPERATURE);
@@ -75,13 +77,13 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             if (hasProtection(player)) {
                 change = 1.0F;
             }
-            return new TFCTileEntityModifier("smeltery_firebox", change, potency);
+            return new TileEntityModifier("smeltery_firebox", change, potency);
         } else {
             return null;
         }
     }
 
-    public static TFCTileEntityModifier handleFridge(TileEntity tile, EntityPlayer player) {
+    public static TileEntityModifier handleFridge(TileEntity tile, EntityPlayer player) {
         if (tile instanceof TEFridge) {
             TEFridge fridge = (TEFridge) tile;
 
@@ -90,11 +92,11 @@ public class TFCTechTileEntityModifier extends BlockModifier {
 
             if (fridge.isOpen())
             {
-                change =  -1.5f;
+                change =  -5f;
                 potency = -0.2f;
             }
 
-            return new TFCTileEntityModifier("fridge", change, potency);
+            return new TileEntityModifier("fridge", change, potency);
         } else {
             return null;
         }

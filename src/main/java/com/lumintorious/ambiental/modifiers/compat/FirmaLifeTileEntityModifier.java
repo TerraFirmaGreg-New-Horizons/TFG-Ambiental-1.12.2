@@ -1,13 +1,13 @@
-package com.lumintorious.ambiental.modifiers;
+package com.lumintorious.ambiental.modifiers.compat;
 
 import com.eerussianguy.firmalife.te.TEOven;
+import com.lumintorious.ambiental.modifiers.BlockModifier;
+import com.lumintorious.ambiental.modifiers.TileEntityModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
-import static com.lumintorious.ambiental.modifiers.TFCTileEntityModifier.hasProtection;
+import static com.lumintorious.ambiental.modifiers.TileEntityModifier.hasProtection;
 
 public class FirmaLifeTileEntityModifier extends BlockModifier {
     public FirmaLifeTileEntityModifier(String name) {
@@ -22,7 +22,7 @@ public class FirmaLifeTileEntityModifier extends BlockModifier {
         super(name, change, potency, affectedByDistance);
     }
 
-    public static TFCTileEntityModifier handleClayOven(TileEntity tile, EntityPlayer player) {
+    public static TileEntityModifier handleClayOven(TileEntity tile, EntityPlayer player) {
         if (tile instanceof TEOven) {
             TEOven oven = (TEOven) tile;
 
@@ -46,7 +46,7 @@ public class FirmaLifeTileEntityModifier extends BlockModifier {
             if (hasProtection(player)) {
                 change = 1.0F;
             }
-            return new TFCTileEntityModifier("firmalife_oven", change, potency);
+            return new TileEntityModifier("firmalife_oven", change, potency);
         }
         else {
             return null;

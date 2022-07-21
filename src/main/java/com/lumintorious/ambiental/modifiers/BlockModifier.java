@@ -1,19 +1,23 @@
 package com.lumintorious.ambiental.modifiers;
 
-import com.lumintorious.ambiental.api.IBlockTemperatureOwner;
-import com.lumintorious.ambiental.api.IBlockTemperatureProvider;
-import com.lumintorious.ambiental.api.ITileEntityTemperatureOwner;
-import com.lumintorious.ambiental.api.ITileEntityTemperatureProvider;
-import com.lumintorious.ambiental.api.TemperatureRegistry;
+import com.lumintorious.ambiental.api.*;
 
+import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.common.blocks.BlockWireCoil;
+import gregtech.common.blocks.MetaBlocks;
+import gregtech.common.items.MetaItems;
 import net.dries007.tfc.objects.blocks.stone.BlockRockRaw;
 import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import scala.tools.cmd.Meta;
 
 public class BlockModifier extends BaseModifier{
 
@@ -31,7 +35,45 @@ public class BlockModifier extends BaseModifier{
 		super(name, change, potency);
 		this.affectedByDistance = affectedByDistance;
 	}
-	
+
+	public static boolean haveFullNanoOrQuarkArmor(EntityPlayer player) {
+		Item head = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem();
+		Item chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem();
+		Item legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem();
+		Item feet = player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem();
+
+		Item nanoHelmet = MetaItems.NANO_HELMET.getStackForm().getItem();
+		Item nanoChestplate = MetaItems.NANO_CHESTPLATE.getStackForm().getItem();
+		Item nanoAdvancedChestplate = MetaItems.NANO_CHESTPLATE_ADVANCED.getStackForm().getItem();
+		Item nanoLeggings = MetaItems.NANO_LEGGINGS.getStackForm().getItem();
+		Item nanoBoots = MetaItems.NANO_BOOTS.getStackForm().getItem();
+
+		Item quantumHelmet = MetaItems.QUANTUM_HELMET.getStackForm().getItem();
+		Item quantumChestplate = MetaItems.QUANTUM_CHESTPLATE.getStackForm().getItem();
+		Item quantumAdvancedChestplate = MetaItems.QUANTUM_CHESTPLATE_ADVANCED.getStackForm().getItem();
+		Item quantumLeggings = MetaItems.QUANTUM_LEGGINGS.getStackForm().getItem();
+		Item quantumBoots = MetaItems.QUANTUM_BOOTS.getStackForm().getItem();
+
+		if (
+				head.equals(nanoHelmet) &&
+				(chest.equals(nanoChestplate) || chest.equals(nanoAdvancedChestplate)) &&
+						legs.equals(nanoLeggings) &&
+						feet.equals(nanoBoots)
+		) {
+			return true;
+		} else if (
+				head.equals(quantumHelmet) &&
+						(chest.equals(quantumChestplate) || chest.equals(quantumAdvancedChestplate)) &&
+						legs.equals(quantumLeggings) &&
+						feet.equals(quantumBoots)
+		) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public static void computeModifiers(EntityPlayer player, ModifierStorage modifiers) {
 		BlockPos p = player.getPosition();
 		BlockPos pos1 = new BlockPos(p.getX() - 9, p.getY() - 3, p.getZ() - 9);
@@ -69,19 +111,23 @@ public class BlockModifier extends BaseModifier{
 			for (IBlockTemperatureProvider provider : TemperatureRegistry.BLOCKS) {
 				BlockModifier modifier = provider.getModifier(state, pos, player);
 				if (modifier != null) {
-					if (modifier.affectedByDistance){
+					if (modifier.affectedByDistance) {
 						modifier.setChange(modifier.getChange() * distanceMultiplier);
 						modifier.setPotency(modifier.getPotency() * distanceMultiplier);
+					}
+					if (haveFullNanoOrQuarkArmor(player)) {
+						modifier.setChange(distanceMultiplier);
+						modifier.setPotency(distanceMultiplier);
 					}
 					modifiers.add(modifier);
 				}
 			}
 			if (block.hasTileEntity(state)) {
 				TileEntity tile = player.world.getTileEntity(pos);
-				if(tile instanceof ITileEntityTemperatureOwner) {
+				if (tile instanceof ITileEntityTemperatureOwner) {
 					ITileEntityTemperatureOwner owner = (ITileEntityTemperatureOwner)tile;
 					BlockModifier modifier = owner.getModifier(player);
-					if(modifier != null) {
+					if (modifier != null) {
 						if(modifier.affectedByDistance){
 							modifier.setChange(modifier.getChange() * distanceMultiplier);
 							modifier.setPotency(modifier.getPotency() * distanceMultiplier);

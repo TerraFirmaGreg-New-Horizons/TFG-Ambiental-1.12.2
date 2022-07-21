@@ -6,11 +6,12 @@ import java.util.Iterator;
 
 import com.lumintorious.ambiental.modifiers.*;
 
+import com.lumintorious.ambiental.modifiers.compat.FirmaLifeTileEntityModifier;
+import com.lumintorious.ambiental.modifiers.compat.TFCTechTileEntityModifier;
 import gregtech.common.blocks.BlockWireCoil;
-import gregtech.common.blocks.VariantBlock;
+import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.EnumSkyBlock;
-import net.minecraftforge.fml.common.Loader;
 
 public class TemperatureRegistry<Type extends ITemperatureProvider> implements Iterable<Type>{
 	// Add functions that provide modifiers, you can use checks and return null to skip
@@ -22,32 +23,34 @@ public class TemperatureRegistry<Type extends ITemperatureProvider> implements I
 	public static final TemperatureRegistry<IEnvironmentalTemperatureProvider> ENVIRONMENT = new TemperatureRegistry<>();
 
 	static {
-
 		// TFC-Tech
-		if (Loader.isModLoaded("tfctech")) {
-			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryFirebox); // Топило для печи для стекла
-			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryCauldron); // Печь для стекла
-			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleElectricForge); // Тигель
-			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleInductionCrucible); // Кузня
-			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleFridge); // Холодос
-		}
+		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryFirebox); // Топило для печи для стекла
+		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryCauldron); // Печь для стекла
+		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleElectricForge); // Тигель
+		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleInductionCrucible); // Кузня
+		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleFridge); // Холодос
 
 		// FirmaLife
-		if (Loader.isModLoaded("firmalife")) {
-			TILE_ENTITIES.register(FirmaLifeTileEntityModifier::handleClayOven); // Oven
-		}
+		TILE_ENTITIES.register(FirmaLifeTileEntityModifier::handleClayOven); // Oven
 
 		// GTCEu
-		if (Loader.isModLoaded("gregtech")) {
-			// Катушки
-		}
+		// Катушки
+		BLOCKS.register((state, blockPos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL, true)) ? new BlockModifier("cupronickel_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.KANTHAL, true)) ? new BlockModifier("kanthal_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME, true)) ? new BlockModifier("nichrome_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TUNGSTENSTEEL, true)) ? new BlockModifier("tungstensteel_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.HSS_G, true)) ? new BlockModifier("hss_g_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NAQUADAH, true)) ? new BlockModifier("naquadah_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRINIUM, true)) ? new BlockModifier("trinium_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRITANIUM, true)) ? new BlockModifier("tritanium_coil", 3f, 3f) : null);
 
 		// TFC
-		TILE_ENTITIES.register(TFCTileEntityModifier::handleCharcoalForge); // Угольная кузня
-		TILE_ENTITIES.register(TFCTileEntityModifier::handleFirePit); // Костер
-		TILE_ENTITIES.register(TFCTileEntityModifier::handleBloomery); // Доменка
-		TILE_ENTITIES.register(TFCTileEntityModifier::handleLamps); // Лампа
-		TILE_ENTITIES.register(TFCTileEntityModifier::handleCrucible); // Тигель
+		TILE_ENTITIES.register(TileEntityModifier::handleCharcoalForge); // Угольная кузня
+		TILE_ENTITIES.register(TileEntityModifier::handleFirePit); // Костер
+		TILE_ENTITIES.register(TileEntityModifier::handleBloomery); // Доменка
+		TILE_ENTITIES.register(TileEntityModifier::handleLamps); // Лампа
+		TILE_ENTITIES.register(TileEntityModifier::handleCrucible); // Тигель
+
 		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.TORCH ? new BlockModifier("torch", 3f, 3f) : null);
 		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.FIRE ? new BlockModifier("fire", 3f, 3f) : null);
 		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.LAVA ? new BlockModifier("lava", 3f, 3f) : null);
