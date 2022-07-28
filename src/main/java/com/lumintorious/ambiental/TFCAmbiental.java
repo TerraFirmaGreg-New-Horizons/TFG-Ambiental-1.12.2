@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
         modid = TFCAmbiental.MODID,
         name = TFCAmbiental.NAME,
         version = TFCAmbiental.VERSION,
-        dependencies = "required:tfc;"
+        dependencies = "required:tfc;required:gregtech;required:firmalife;required:cellars;required:tfctech;"
 )
 public class TFCAmbiental
 {
