@@ -7,8 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import tfctech.objects.tileentities.*;
 
-import static com.lumintorious.ambiental.modifiers.TileEntityModifier.hasProtection;
-
 public class TFCTechTileEntityModifier extends BlockModifier {
 
     public TFCTechTileEntityModifier(String name) {
@@ -29,7 +27,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float temp = electricForge.getField(TECrucible.FIELD_TEMPERATURE);
             float change =  temp / 100f;
             float potency = temp / 350f;
-            if (hasProtection(player)) {
+            if (hasArmorProtection(player)) {
                 change = 1.0F;
             }
             return new TileEntityModifier("electric_forge", change, potency);
@@ -44,7 +42,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float temp = inductionCrucible.getField(TECrucible.FIELD_TEMPERATURE);
             float change =  temp / 100f;
             float potency = temp / 350f;
-            if (hasProtection(player)) {
+            if (hasArmorProtection(player)) {
                 change = 1.0F;
             }
             return new TileEntityModifier("induction_crucible", change, potency);
@@ -59,7 +57,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float temp = smelteryCauldron.getField(TECrucible.FIELD_TEMPERATURE);
             float change =  temp / 120f;
             float potency = temp / 370f;
-            if (hasProtection(player)) {
+            if (hasArmorProtection(player)) {
                 change = 1.0F;
             }
             return new TileEntityModifier("smeltery_cauldron", change, potency);
@@ -74,7 +72,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float temp = smelteryFirebox.getField(TECrucible.FIELD_TEMPERATURE);
             float change =  temp / 120f;
             float potency = temp / 370f;
-            if (hasProtection(player)) {
+            if (hasArmorProtection(player)) {
                 change = 1.0F;
             }
             return new TileEntityModifier("smeltery_firebox", change, potency);
@@ -92,8 +90,8 @@ public class TFCTechTileEntityModifier extends BlockModifier {
 
             if (fridge.isOpen())
             {
-                change =  -5f;
-                potency = -0.2f;
+                change =  -10f;
+                potency = -0.7f;
             }
 
             return new TileEntityModifier("fridge", change, potency);

@@ -7,8 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
-import static com.lumintorious.ambiental.modifiers.TileEntityModifier.hasProtection;
-
 public class FirmaLifeTileEntityModifier extends BlockModifier {
     public FirmaLifeTileEntityModifier(String name) {
         super(name);
@@ -35,17 +33,19 @@ public class FirmaLifeTileEntityModifier extends BlockModifier {
                 e.printStackTrace();
             }
 
-            float change =  1.0f;
+            float change =  0.0f;
             float potency = 1.0f;
 
             if (isBurning) {
-                change =  12f;
+                change =  8f;
                 potency = 4f;
+
+                if (hasArmorProtection(player)) {
+                    change = 1.0F;
+                }
             }
 
-            if (hasProtection(player)) {
-                change = 1.0F;
-            }
+
             return new TileEntityModifier("firmalife_oven", change, potency);
         }
         else {

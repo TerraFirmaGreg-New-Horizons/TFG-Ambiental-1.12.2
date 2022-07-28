@@ -2,5 +2,5 @@
 death.attack.hypothermia=%1$s froze to death.
 death.attack.hyperthermia=%1$s died of heatstroke.
 
-effect.tfctemperature.cool.name=Cooling Down
-effect.tfctemperature.warm.name=Warming Up
+effect.tfcambiental.cool.name=Cooling Down
+effect.tfcambiental.warm.name=Warming Up

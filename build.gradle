@@ -8,14 +8,10 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-if (System.getenv('VERSION') != null) {
-    version = System.getenv('VERSION')
-} else {
-    version = '1.0.0'
-}
+version = 2.1
 
-group = "com.speeedcraft.tfctemperature" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "tfctemperature"
+group = "com.speeedcraft.tfcambiental" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "tfcambiental"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
@@ -43,12 +39,16 @@ repositories {
 dependencies {
     compile fileTree(include: ["*.jar"], dir: "libs")
 
+    deobfCompile "curse.maven:tfc-302973:3645502"
     deobfCompile 'curse.maven:GTCEU-557242:3745499'
     deobfCompile 'curse.maven:CCL-242818:2779848'
 
     deobfCompile 'curse.maven:hei-557549:3669679'
+    deobfCompile "curse.maven:cellar-addon-431185:3640604"
     deobfCompile "curse.maven:firmalife-453394:3612887"
     deobfCompile "curse.maven:tfc-tech-unofficial-340660:3209033"
+
+    compileOnly "curse.maven:ic2_classic-242942:3014827"
 }
 
 processResources {

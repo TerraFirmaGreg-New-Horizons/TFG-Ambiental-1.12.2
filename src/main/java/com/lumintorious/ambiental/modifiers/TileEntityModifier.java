@@ -1,11 +1,8 @@
 package com.lumintorious.ambiental.modifiers;
 
 import com.lumintorious.ambiental.capability.TemperatureCapability;
-
 import net.dries007.tfc.objects.te.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityModifier extends BlockModifier {
@@ -22,18 +19,13 @@ public class TileEntityModifier extends BlockModifier {
 		super(unlocalizedName, change, potency, affectedByDistance);
 	}
 
-	public static boolean hasProtection(EntityPlayer player) {
-		ItemStack stack = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-		return (stack != null && !stack.isEmpty()) || BlockModifier.haveFullNanoOrQuarkArmor(player);
-	}
-
 	public static TileEntityModifier handleCharcoalForge(TileEntity tile, EntityPlayer player) {
 		if (tile instanceof TECharcoalForge) {
 			TECharcoalForge forge = (TECharcoalForge)tile;
 			float temp = forge.getField(TECharcoalForge.FIELD_TEMPERATURE);
 			float change =  temp / 100f; // 140
 			float potency = temp / 350f;
-			if (hasProtection(player)) {
+			if (hasArmorProtection(player)) {
 				change = 1.0F;
 			}
 			return new TileEntityModifier("charcoal_forge", change, potency);
@@ -49,7 +41,7 @@ public class TileEntityModifier extends BlockModifier {
 			float temp = pit.getField(TEFirePit.FIELD_TEMPERATURE);
 			float change =  temp / 100f;
 			float potency = temp / 350f;
-			if (hasProtection(player)) {
+			if (hasArmorProtection(player)) {
 				change = 1.0F;
 			}
 			return new TileEntityModifier("fire_pit", Math.min(6f, change), potency);
@@ -64,7 +56,7 @@ public class TileEntityModifier extends BlockModifier {
 			TEBloomery bloomery = (TEBloomery)tile;
 			float change = bloomery.getRemainingTicks() > 0 ? 4f : 0f;
 			float potency = change;
-			if(hasProtection(player)) {
+			if(hasArmorProtection(player)) {
 				change = 1.0F;
 			}
 			return new TileEntityModifier("bloomery", change, potency);
@@ -92,7 +84,7 @@ public class TileEntityModifier extends BlockModifier {
 			float temp = crucible.getField(TECrucible.FIELD_TEMPERATURE);
 			float change =  temp / 100f;
 			float potency = temp / 350f;
-			if (hasProtection(player)) {
+			if (hasArmorProtection(player)) {
 				change = 1.0F;
 			}
 			return new TileEntityModifier("crucible", change, potency);
