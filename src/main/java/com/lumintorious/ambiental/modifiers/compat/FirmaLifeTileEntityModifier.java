@@ -41,7 +41,7 @@ public class FirmaLifeTileEntityModifier extends BlockModifier {
                 potency = 4f;
 
                 if (hasArmorProtection(player)) {
-                    change = 1.0F;
+                    change = TileEntityModifier.mod;
                 }
             }
 

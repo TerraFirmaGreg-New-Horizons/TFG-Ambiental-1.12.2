@@ -28,7 +28,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float change =  temp / 100f;
             float potency = temp / 350f;
             if (hasArmorProtection(player)) {
-                change = 1.0F;
+                change = TileEntityModifier.mod;
             }
             return new TileEntityModifier("electric_forge", change, potency);
         } else {
@@ -43,7 +43,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float change =  temp / 100f;
             float potency = temp / 350f;
             if (hasArmorProtection(player)) {
-                change = 1.0F;
+                change = TileEntityModifier.mod;
             }
             return new TileEntityModifier("induction_crucible", change, potency);
         } else {
@@ -58,7 +58,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float change =  temp / 120f;
             float potency = temp / 370f;
             if (hasArmorProtection(player)) {
-                change = 1.0F;
+                change = TileEntityModifier.mod;
             }
             return new TileEntityModifier("smeltery_cauldron", change, potency);
         } else {
@@ -73,7 +73,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float change =  temp / 120f;
             float potency = temp / 370f;
             if (hasArmorProtection(player)) {
-                change = 1.0F;
+                change = TileEntityModifier.mod;
             }
             return new TileEntityModifier("smeltery_firebox", change, potency);
         } else {
@@ -88,8 +88,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float change =  0f;
             float potency = 0f;
 
-            if (fridge.isOpen())
-            {
+            if (fridge.isOpen()) {
                 change =  -10f;
                 potency = -0.7f;
             }

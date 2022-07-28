@@ -19,6 +19,8 @@ public class TileEntityModifier extends BlockModifier {
 		super(unlocalizedName, change, potency, affectedByDistance);
 	}
 
+	public static final float mod = 0.5F;
+
 	public static TileEntityModifier handleCharcoalForge(TileEntity tile, EntityPlayer player) {
 		if (tile instanceof TECharcoalForge) {
 			TECharcoalForge forge = (TECharcoalForge)tile;
@@ -26,7 +28,7 @@ public class TileEntityModifier extends BlockModifier {
 			float change =  temp / 100f; // 140
 			float potency = temp / 350f;
 			if (hasArmorProtection(player)) {
-				change = 1.0F;
+				change = mod;
 			}
 			return new TileEntityModifier("charcoal_forge", change, potency);
 		}
@@ -42,7 +44,7 @@ public class TileEntityModifier extends BlockModifier {
 			float change =  temp / 100f;
 			float potency = temp / 350f;
 			if (hasArmorProtection(player)) {
-				change = 1.0F;
+				change = mod;
 			}
 			return new TileEntityModifier("fire_pit", Math.min(6f, change), potency);
 		}
@@ -57,7 +59,7 @@ public class TileEntityModifier extends BlockModifier {
 			float change = bloomery.getRemainingTicks() > 0 ? 4f : 0f;
 			float potency = change;
 			if(hasArmorProtection(player)) {
-				change = 1.0F;
+				change = mod;
 			}
 			return new TileEntityModifier("bloomery", change, potency);
 		}
@@ -85,7 +87,7 @@ public class TileEntityModifier extends BlockModifier {
 			float change =  temp / 100f;
 			float potency = temp / 350f;
 			if (hasArmorProtection(player)) {
-				change = 1.0F;
+				change = mod;
 			}
 			return new TileEntityModifier("crucible", change, potency);
 		} else {

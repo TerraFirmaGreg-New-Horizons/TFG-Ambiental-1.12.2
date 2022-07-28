@@ -7,6 +7,7 @@ import java.util.Iterator;
 import com.lumintorious.ambiental.TFCAmbiental;
 import com.lumintorious.ambiental.modifiers.*;
 
+import com.lumintorious.ambiental.modifiers.compat.CellarsTileEntityModifier;
 import com.lumintorious.ambiental.modifiers.compat.FirmaLifeTileEntityModifier;
 import com.lumintorious.ambiental.modifiers.compat.TFCTechTileEntityModifier;
 import gregtech.common.blocks.BlockWireCoil;
@@ -48,7 +49,7 @@ public class TemperatureRegistry<Type extends ITemperatureProvider> implements I
 
 		// Cellar Addon
 		if (TFCAmbiental.isCellarsAddonLoaded) {
-
+			TILE_ENTITIES.register(CellarsTileEntityModifier::handleCellar); // Подвал
 		}
 
 		// FirmaLife
