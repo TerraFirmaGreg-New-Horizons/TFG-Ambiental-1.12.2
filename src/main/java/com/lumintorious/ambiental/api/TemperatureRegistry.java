@@ -26,36 +26,27 @@ public class TemperatureRegistry<Type extends ITemperatureProvider> implements I
 
 	static {
 		// GTCEu
-		if (TFCAmbiental.isGTCEuLoaded) {
-			// Катушки
-			BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL, true)) ? new BlockModifier("cupronickel_coil", 3f, 3f) : null);
-			BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.KANTHAL, true)) ? new BlockModifier("kanthal_coil", 3f, 3f) : null);
-			BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME, true)) ? new BlockModifier("nichrome_coil", 3f, 3f) : null);
-			BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TUNGSTENSTEEL, true)) ? new BlockModifier("tungstensteel_coil", 3f, 3f) : null);
-			BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.HSS_G, true)) ? new BlockModifier("hss_g_coil", 3f, 3f) : null);
-			BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NAQUADAH, true)) ? new BlockModifier("naquadah_coil", 3f, 3f) : null);
-			BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRINIUM, true)) ? new BlockModifier("trinium_coil", 3f, 3f) : null);
-			BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRITANIUM, true)) ? new BlockModifier("tritanium_coil", 3f, 3f) : null);
-		}
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL, true)) ? new BlockModifier("cupronickel_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.KANTHAL, true)) ? new BlockModifier("kanthal_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME, true)) ? new BlockModifier("nichrome_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TUNGSTENSTEEL, true)) ? new BlockModifier("tungstensteel_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.HSS_G, true)) ? new BlockModifier("hss_g_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NAQUADAH, true)) ? new BlockModifier("naquadah_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRINIUM, true)) ? new BlockModifier("trinium_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRITANIUM, true)) ? new BlockModifier("tritanium_coil", 3f, 3f) : null);
 
 		// TFC-Tech
-		if (TFCAmbiental.isTFCTechLoaded) {
-			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryFirebox); // Топило для печи для стекла
-			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryCauldron); // Печь для стекла
-			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleElectricForge); // Тигель
-			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleInductionCrucible); // Кузня
-			TILE_ENTITIES.register(TFCTechTileEntityModifier::handleFridge); // Холодос
-		}
+		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryFirebox); // Топило для печи для стекла
+		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryCauldron); // Печь для стекла
+		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleElectricForge); // Тигель
+		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleInductionCrucible); // Кузня
+		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleFridge); // Холодос
 
-		// Cellar Addon
-		if (TFCAmbiental.isCellarsAddonLoaded) {
-			TILE_ENTITIES.register(CellarsTileEntityModifier::handleCellar); // Подвал
-		}
+		// Cellar
+		TILE_ENTITIES.register(CellarsTileEntityModifier::handleCellar); // Подвал
 
-		// FirmaLife
-		if (TFCAmbiental.isFirmaLifeLoaded) {
-			TILE_ENTITIES.register(FirmaLifeTileEntityModifier::handleClayOven); // Oven
-		}
+		// Firmalife
+		TILE_ENTITIES.register(FirmaLifeTileEntityModifier::handleClayOven); // Oven
 
 		// TFC
 		TILE_ENTITIES.register(TileEntityModifier::handleCharcoalForge); // Угольная кузня

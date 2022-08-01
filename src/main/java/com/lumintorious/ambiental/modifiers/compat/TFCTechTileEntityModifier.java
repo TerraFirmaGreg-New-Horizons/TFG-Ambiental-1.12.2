@@ -7,6 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import tfctech.objects.tileentities.*;
 
+import static com.lumintorious.ambiental.modifiers.TileEntityModifier.hasLeatherArmorProtection;
+
 public class TFCTechTileEntityModifier extends BlockModifier {
 
     public TFCTechTileEntityModifier(String name) {
@@ -27,7 +29,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float temp = electricForge.getField(TECrucible.FIELD_TEMPERATURE);
             float change =  temp / 100f;
             float potency = temp / 350f;
-            if (hasArmorProtection(player)) {
+            if (hasLeatherArmorProtection(player)) {
                 change = TileEntityModifier.mod;
             }
             return new TileEntityModifier("electric_forge", change, potency);
@@ -42,7 +44,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float temp = inductionCrucible.getField(TECrucible.FIELD_TEMPERATURE);
             float change =  temp / 100f;
             float potency = temp / 350f;
-            if (hasArmorProtection(player)) {
+            if (hasLeatherArmorProtection(player)) {
                 change = TileEntityModifier.mod;
             }
             return new TileEntityModifier("induction_crucible", change, potency);
@@ -57,7 +59,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float temp = smelteryCauldron.getField(TECrucible.FIELD_TEMPERATURE);
             float change =  temp / 120f;
             float potency = temp / 370f;
-            if (hasArmorProtection(player)) {
+            if (hasLeatherArmorProtection(player)) {
                 change = TileEntityModifier.mod;
             }
             return new TileEntityModifier("smeltery_cauldron", change, potency);
@@ -72,7 +74,7 @@ public class TFCTechTileEntityModifier extends BlockModifier {
             float temp = smelteryFirebox.getField(TECrucible.FIELD_TEMPERATURE);
             float change =  temp / 120f;
             float potency = temp / 370f;
-            if (hasArmorProtection(player)) {
+            if (hasLeatherArmorProtection(player)) {
                 change = TileEntityModifier.mod;
             }
             return new TileEntityModifier("smeltery_firebox", change, potency);

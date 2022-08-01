@@ -1,5 +1,6 @@
 package com.lumintorious.ambiental.capability;
 
+import com.lumintorious.ambiental.TFCAmbiental;
 import com.lumintorious.ambiental.TFCAmbientalDamage;
 import com.lumintorious.ambiental.TFCAmbientalConfig;
 import com.lumintorious.ambiental.modifiers.BaseModifier;
@@ -9,10 +10,14 @@ import com.lumintorious.ambiental.modifiers.EquipmentModifier;
 import com.lumintorious.ambiental.modifiers.ItemModifier;
 import com.lumintorious.ambiental.modifiers.ModifierStorage;
 
+import gregtech.common.items.MetaItems;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.capability.food.FoodStatsTFC;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -33,8 +38,7 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
     {
         this.player = player;
     }
-    
-	public static final BaseModifier CORE_TEMPERATURE = new BaseModifier("core", 0f, 0.0f);
+
 	public boolean isRising;
 	
 	public static float AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;
@@ -42,6 +46,7 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 	public static float COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coldTemperature;
 	public static float BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burningTemperature;
 	public static float FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezingTemperature;
+	public static float NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
 	
 	public ModifierStorage modifiers = new ModifierStorage();
 	
@@ -63,6 +68,7 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 }
 	
 	public float savedTarget = AVERAGE;
+
 	public float getTargetTemperature() {
 		return savedTarget;
 	}
@@ -74,10 +80,50 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 	
 	public float savedPotency = 1f;
 	public float getPotency() {
-		
 		return savedPotency;
 	}
-	
+
+	public static boolean hasNanoOrQuarkArmorProtection(EntityPlayer player) {
+		Item head = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem();
+		Item chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem();
+		Item legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem();
+		Item feet = player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem();
+
+		Item nanoHelmet = MetaItems.NANO_HELMET.getStackForm().getItem();
+		Item nanoChestplate = MetaItems.NANO_CHESTPLATE.getStackForm().getItem();
+		Item nanoAdvancedChestplate = MetaItems.NANO_CHESTPLATE_ADVANCED.getStackForm().getItem();
+		Item nanoLeggings = MetaItems.NANO_LEGGINGS.getStackForm().getItem();
+		Item nanoBoots = MetaItems.NANO_BOOTS.getStackForm().getItem();
+
+		Item quantumHelmet = MetaItems.QUANTUM_HELMET.getStackForm().getItem();
+		Item quantumChestplate = MetaItems.QUANTUM_CHESTPLATE.getStackForm().getItem();
+		Item quantumAdvancedChestplate = MetaItems.QUANTUM_CHESTPLATE_ADVANCED.getStackForm().getItem();
+		Item quantumLeggings = MetaItems.QUANTUM_LEGGINGS.getStackForm().getItem();
+		Item quantumBoots = MetaItems.QUANTUM_BOOTS.getStackForm().getItem();
+
+		// Nano Armor
+		if (
+				head.equals(nanoHelmet) &&
+						(chest.equals(nanoChestplate) || chest.equals(nanoAdvancedChestplate)) &&
+						legs.equals(nanoLeggings) &&
+						feet.equals(nanoBoots)
+		) {
+			return true;
+		}
+
+		// Quark Armor
+		if (
+				head.equals(quantumHelmet) &&
+						(chest.equals(quantumChestplate) || chest.equals(quantumAdvancedChestplate)) &&
+						legs.equals(quantumLeggings) &&
+						feet.equals(quantumBoots)
+		) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public float getTemperatureChange() {
 		float target = getTargetTemperature();
 		float speed = getPotency() * TFCAmbientalConfig.GENERAL.temperatureMultiplier;
@@ -97,7 +143,12 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 
 	public void update() {
 		if (!player.world.isRemote) {
-			this.setTemperature(this.getTemperature() + this.getTemperatureChange() / tickInterval);
+			if (hasNanoOrQuarkArmorProtection(player)) {
+				this.setTemperature(NANO_QUARK_ARMOR_TEMP);
+			}
+			else {
+				this.setTemperature(this.getTemperature() + this.getTemperatureChange() / tickInterval);
+			}
 
 			if (tick <= tickInterval) {
 				tick++;
@@ -156,8 +207,7 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 		if (newTemp < this.getTemperature()) {
 			isRising = false;
 		}
-		else
-		{
+		else {
 			isRising = true;
 		}
 		this.bodyTemperature = newTemp;

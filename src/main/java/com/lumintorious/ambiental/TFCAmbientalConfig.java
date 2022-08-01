@@ -68,5 +68,8 @@ public class TFCAmbientalConfig {
 
 		@Config.Comment("How many modifiers of the same type until they stop adding together. Default = 4")
 		public int modifierCap = 10;
+
+		@Config.Comment("The temperature that nano or quantum armor will do when you are in a full set.")
+		public int nanoOrQuarkTemp = 20;
 	}
 }

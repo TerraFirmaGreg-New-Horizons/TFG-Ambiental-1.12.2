@@ -7,6 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import static com.lumintorious.ambiental.modifiers.TileEntityModifier.hasLeatherArmorProtection;
+
 public class FirmaLifeTileEntityModifier extends BlockModifier {
     public FirmaLifeTileEntityModifier(String name) {
         super(name);
@@ -40,7 +42,7 @@ public class FirmaLifeTileEntityModifier extends BlockModifier {
                 change =  8f;
                 potency = 4f;
 
-                if (hasArmorProtection(player)) {
+                if (hasLeatherArmorProtection(player)) {
                     change = TileEntityModifier.mod;
                 }
             }

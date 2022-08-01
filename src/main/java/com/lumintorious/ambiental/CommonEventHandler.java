@@ -34,6 +34,7 @@ public class CommonEventHandler {
 			TemperatureCapability.COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coldTemperature;
 			TemperatureCapability.BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burningTemperature;
 			TemperatureCapability.FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezingTemperature;
+			TemperatureCapability.NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
 			ClientEventHandler.enableOverlay = TFCAmbientalConfig.CLIENT.enableOverlay;
 		}
 	}

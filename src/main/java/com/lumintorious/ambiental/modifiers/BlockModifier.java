@@ -15,6 +15,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import org.lwjgl.Sys;
 
 public class BlockModifier extends BaseModifier{
 
@@ -31,62 +32,6 @@ public class BlockModifier extends BaseModifier{
 	public BlockModifier(String name, float change, float potency, boolean affectedByDistance) {
 		super(name, change, potency);
 		this.affectedByDistance = affectedByDistance;
-	}
-
-	public static boolean hasArmorProtection(EntityPlayer player) {
-		Item head = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem();
-		Item chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem();
-		Item legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem();
-		Item feet = player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem();
-
-		Item leatherHelmet = Items.LEATHER_HELMET;
-		Item leatherChestplate = Items.LEATHER_CHESTPLATE;
-		Item leatherLeggings = Items.LEATHER_LEGGINGS;
-		Item leatherBoots = Items.LEATHER_BOOTS;
-
-		// Leather Armor
-		if (
-				head.equals(leatherHelmet) &&
-				chest.equals(leatherChestplate) &&
-				legs.equals(leatherLeggings) &&
-				feet.equals(leatherBoots)
-		) {
-			return true;
-		}
-
-		if (TFCAmbiental.isGTCEuLoaded) {
-
-			Item nanoHelmet = MetaItems.NANO_HELMET.getStackForm().getItem();
-			Item nanoChestplate = MetaItems.NANO_CHESTPLATE.getStackForm().getItem();
-			Item nanoAdvancedChestplate = MetaItems.NANO_CHESTPLATE_ADVANCED.getStackForm().getItem();
-			Item nanoLeggings = MetaItems.NANO_LEGGINGS.getStackForm().getItem();
-			Item nanoBoots = MetaItems.NANO_BOOTS.getStackForm().getItem();
-
-			Item quantumHelmet = MetaItems.QUANTUM_HELMET.getStackForm().getItem();
-			Item quantumChestplate = MetaItems.QUANTUM_CHESTPLATE.getStackForm().getItem();
-			Item quantumAdvancedChestplate = MetaItems.QUANTUM_CHESTPLATE_ADVANCED.getStackForm().getItem();
-			Item quantumLeggings = MetaItems.QUANTUM_LEGGINGS.getStackForm().getItem();
-			Item quantumBoots = MetaItems.QUANTUM_BOOTS.getStackForm().getItem();
-
-			if (
-					head.equals(nanoHelmet) &&
-					(chest.equals(nanoChestplate) || chest.equals(nanoAdvancedChestplate)) &&
-					legs.equals(nanoLeggings) &&
-					feet.equals(nanoBoots)
-			) {
-				return true;
-			}
-			else if (
-					head.equals(quantumHelmet) &&
-					(chest.equals(quantumChestplate) || chest.equals(quantumAdvancedChestplate)) &&
-					legs.equals(quantumLeggings) &&
-					feet.equals(quantumBoots)
-			) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	public static void computeModifiers(EntityPlayer player, ModifierStorage modifiers) {
@@ -130,10 +75,6 @@ public class BlockModifier extends BaseModifier{
 						modifier.setChange(modifier.getChange() * distanceMultiplier);
 						modifier.setPotency(modifier.getPotency() * distanceMultiplier);
 					}
-					if (hasArmorProtection(player)) {
-						modifier.setChange(distanceMultiplier);
-						modifier.setPotency(distanceMultiplier);
-					}
 					modifiers.add(modifier);
 				}
 			}
@@ -143,7 +84,7 @@ public class BlockModifier extends BaseModifier{
 					ITileEntityTemperatureOwner owner = (ITileEntityTemperatureOwner)tile;
 					BlockModifier modifier = owner.getModifier(player);
 					if (modifier != null) {
-						if(modifier.affectedByDistance){
+						if (modifier.affectedByDistance){
 							modifier.setChange(modifier.getChange() * distanceMultiplier);
 							modifier.setPotency(modifier.getPotency() * distanceMultiplier);
 						}

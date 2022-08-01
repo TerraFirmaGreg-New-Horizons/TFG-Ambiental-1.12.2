@@ -28,7 +28,7 @@ public class TFCAmbiental
     public static final String NAME = "TFC Ambiental";
     public static final String VERSION = "2.1";
 
-    private final Logger logger = LogManager.getLogger(MODID);
+    public static final Logger logger = LogManager.getLogger(MODID);
 
     public static boolean isGTCEuLoaded = false;
     public static boolean isFirmaLifeLoaded = false;

@@ -8,6 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.sharkbark.cellars.blocks.tileentity.TEIceBunker;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import static com.lumintorious.ambiental.modifiers.TileEntityModifier.hasLeatherArmorProtection;
+
 public class CellarsTileEntityModifier extends BlockModifier {
     public CellarsTileEntityModifier(String name) {
         super(name);
@@ -46,7 +48,7 @@ public class CellarsTileEntityModifier extends BlockModifier {
                     potency = -0.5f;
                 }
 
-                if (hasArmorProtection(player)) {
+                if (hasLeatherArmorProtection(player)) {
                     change = TileEntityModifier.mod;
                 }
             }
