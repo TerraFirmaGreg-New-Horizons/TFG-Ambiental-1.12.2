@@ -39,16 +39,16 @@ repositories {
 dependencies {
     compile fileTree(include: ["*.jar"], dir: "libs")
 
-    deobfCompile "curse.maven:tfc-302973:3645502"
-    deobfCompile 'curse.maven:GTCEU-557242:3745499'
-    deobfCompile 'curse.maven:CCL-242818:2779848'
+    deobfCompile   "curse.maven:terrafirmacraft-302973:3645502"
+    deobfCompile   "curse.maven:gregtech-ce-unofficial-557242:3949406"
+    deobfCompile   "curse.maven:codechicken-lib-1-8-242818:2779848"
 
-    deobfCompile 'curse.maven:hei-557549:3669679'
-    deobfCompile "curse.maven:cellar-addon-431185:3640604"
-    deobfCompile "curse.maven:firmalife-453394:3612887"
-    deobfCompile "curse.maven:tfc-tech-unofficial-340660:3209033"
+    deobfCompile   "curse.maven:had-enough-items-557549:3862733"
+    deobfCompile   "curse.maven:tfc-cellars-add-on-431185:3640604"
+    deobfCompile   "curse.maven:firmalife-453394:3612887"
+    deobfCompile   "curse.maven:tfctech-unofficial-340660:3209033"
 
-    compileOnly "curse.maven:ic2_classic-242942:3014827"
+    compileOnly     "curse.maven:ic2_classic-242942:3093607"
 }
 
 processResources {
