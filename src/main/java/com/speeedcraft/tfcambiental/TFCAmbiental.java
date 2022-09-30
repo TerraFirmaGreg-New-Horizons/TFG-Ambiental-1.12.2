@@ -3,6 +3,7 @@ package com.speeedcraft.tfcambiental;
 import com.speeedcraft.tfcambiental.capability.ITemperatureCapability;
 import com.speeedcraft.tfcambiental.capability.TemperaturePacket;
 
+import gregtech.client.event.ClientEventHandler;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.capability.DumbStorage;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,13 +21,20 @@ import org.apache.logging.log4j.Logger;
         modid = TFCAmbiental.MODID,
         name = TFCAmbiental.NAME,
         version = TFCAmbiental.VERSION,
-        dependencies = "required:tfc;required:gregtech;required:firmalife;required:cellars;required:tfctech;"
+        dependencies = TFCAmbiental.DEPENDENCIES
 )
 public class TFCAmbiental
 {
     public static final String MODID = "tfcambiental";
     public static final String NAME = "TFC Ambiental";
     public static final String VERSION = "2.1";
+    public static final String DEPENDENCIES =
+            "required:tfc;" +
+            "required:gregtech;" +
+            "required:firmalife;" +
+            "required:cellars;" +
+            "required:tfctech;"
+            ;
 
     public static final Logger logger = LogManager.getLogger(MODID);
 

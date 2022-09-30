@@ -1,4 +1,4 @@
-package com.speeedcraft.tfcambientall;
+package com.speeedcraft.tfcambiental;
 
 import com.speeedcraft.tfcambiental.capability.ITemperatureCapability;
 import com.speeedcraft.tfcambiental.capability.TemperatureCapability;
