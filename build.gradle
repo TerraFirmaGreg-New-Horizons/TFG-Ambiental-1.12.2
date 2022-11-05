@@ -124,7 +124,7 @@ dependencies {
     compileOnly fg.deobf("curse.maven:tfctech-unofficial-340660:3209033")
     compileOnly fg.deobf("curse.maven:firmalife-453394:3612887")
 
-    implementation fg.deobf("curse.maven:gregtech_ce_unofficial-557242:3859788")
+    implementation fg.deobf("curse.maven:gregtech_ce_unofficial-557242:4068926")
     implementation fg.deobf("curse.maven:codechicken-lib-1-8-242818:2779848")
 
     implementation fg.deobf("curse.maven:had-enough-items-557549:3862733")
