@@ -23,7 +23,7 @@ public class ItemModifier extends BaseModifier{
 		for(ItemStack stack : player.inventoryContainer.inventoryItemStacks) {
 			if(stack.hasCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null)) {
 				IItemHeat heat = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);
-				float temp = heat.getTemperature() / 500;
+				float temp = heat.getTemperature() / 800;
 				float change = temp;
 				float potency = 0f;
 				modifiers.add(new ItemModifier("heat_item", change, potency * stack.getCount()));
