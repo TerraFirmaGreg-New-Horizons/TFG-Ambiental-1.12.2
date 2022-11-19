@@ -158,17 +158,17 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 				tick = 0;
 				if (TFCAmbientalConfig.GENERAL.takeDamage) {
 					if (this.getTemperature() > BURN_THRESHOLD) {
-						player.attackEntityFrom(TFCAmbientalDamage.HEAT,  2f);
+						player.attackEntityFrom(TFCAmbientalDamage.HEAT,  4f);
 					} else if (this.getTemperature() < FREEZE_THRESHOLD) {
-						player.attackEntityFrom(TFCAmbientalDamage.COLD, 2f);
+						player.attackEntityFrom(TFCAmbientalDamage.COLD, 4f);
 					}
 				}
 				if (TFCAmbientalConfig.GENERAL.loseHungerThirst) {
 					if(player.getFoodStats() instanceof FoodStatsTFC) {
 						FoodStatsTFC stats = (FoodStatsTFC)player.getFoodStats();
-						if (this.getTemperature() > (HOT_THRESHOLD * 2f + BURN_THRESHOLD) / 3f) {
+						if (this.getTemperature() > BURN_THRESHOLD) {
 							stats.addThirst(-8);
-						} else if (this.getTemperature() < (COOL_THRESHOLD * 2f + FREEZE_THRESHOLD) / 3f){
+						} else if (this.getTemperature() < FREEZE_THRESHOLD){
 							stats.setFoodLevel(stats.getFoodLevel() - 1);
 						}
 					}

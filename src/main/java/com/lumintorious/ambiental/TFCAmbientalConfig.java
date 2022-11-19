@@ -52,7 +52,7 @@ public class TFCAmbientalConfig {
 		public float harsherMultiplier = 1.20f;
 
 		@Config.Comment("The temperature at which you are at equilibrium. It's advisable to not change this by a lot since the entire ecosystem revolves around this. Default = 15")
-		public float averageTemperature = 17f;
+		public float averageTemperature = 15f;
 
 		@Config.Comment("The temperature at which your screen starts heating. It's advisable to not change this by a lot since the entire ecosystem revolves around this. Default = 20")
 		public float hotTemperature = 27f;

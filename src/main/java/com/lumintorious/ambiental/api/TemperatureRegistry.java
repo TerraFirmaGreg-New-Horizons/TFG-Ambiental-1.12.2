@@ -63,6 +63,7 @@ public class TemperatureRegistry<Type extends ITemperatureProvider> implements I
 		TILE_ENTITIES.register(TileEntityModifier::handleCrucible); // Тигель
 
 		ENVIRONMENT.register(EnvironmentalModifier::handleGeneralTemperature);
+		ENVIRONMENT.register(EnvironmentalModifier::handleTimeOfDay);
 		ENVIRONMENT.register(EnvironmentalModifier::handleShade);
 		ENVIRONMENT.register(EnvironmentalModifier::handleCozy);
 		ENVIRONMENT.register(EnvironmentalModifier::handleThirst);

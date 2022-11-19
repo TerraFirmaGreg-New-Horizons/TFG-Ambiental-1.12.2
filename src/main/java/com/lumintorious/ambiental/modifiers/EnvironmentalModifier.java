@@ -24,9 +24,13 @@ public class EnvironmentalModifier extends BaseModifier {
 	public EnvironmentalModifier(String name, float change, float potency) {
 		super(name, change, potency);
 	}
+
+	public static float getEnvironmentTemperatureWithTimeOfDay(EntityPlayer player) {
+		return getEnvironmentTemperature(player) + handleTimeOfDay(player).getChange();
+	}
 	
 	public static float getEnvironmentTemperature(EntityPlayer player) {
-		float avg = ClimateData.DEFAULT.getRegionalTemp() + 2f;
+		float avg = ClimateTFC.getAvgTemp(player.world, player.getPosition());
 		float actual = ClimateTFC.getActualTemp(player.world, player.getPosition());
 		if(TFCAmbientalConfig.GENERAL.harsherTemperateAreas) {
 			float diff = actual - TemperatureCapability.AVERAGE;
@@ -34,7 +38,7 @@ public class EnvironmentalModifier extends BaseModifier {
 			float generalDiff = Math.abs(avg - TemperatureCapability.AVERAGE);
 			float mult0 = Math.max(0f, TFCAmbientalConfig.GENERAL.harsherMultiplier - 1f);
 			float multiplier = 1 + Math.max(0, 1 - generalDiff / 55) * mult0;
-			actual = TemperatureCapability.AVERAGE + (diff + 1.5f * sign) * multiplier;
+			actual = 20 + (diff + 0.5f * sign) * multiplier;
 		}
 		return actual;
 	}
@@ -45,6 +49,18 @@ public class EnvironmentalModifier extends BaseModifier {
 	
 	public static EnvironmentalModifier handleFire(EntityPlayer player) {
 		return player.isBurning() ? new EnvironmentalModifier("on_fire", 4f, 4f) : null;
+	}
+
+	public static EnvironmentalModifier handleGeneralTemperature(EntityPlayer player) {
+		return new EnvironmentalModifier("environment", getEnvironmentTemperature(player), getEnvironmentHumidity(player));
+	}
+
+	public static EnvironmentalModifier handleTimeOfDay(EntityPlayer player) {
+		int dayTicks = (int) (player.world.getWorldTime() % 24000);
+		if(dayTicks < 6000) return new EnvironmentalModifier("morning", 2f, 0);
+		else if(dayTicks < 12000) return new EnvironmentalModifier("afternoon", 4f, 0);
+		else if(dayTicks < 18000) return new EnvironmentalModifier("evening", 1f, 0);
+		else return new EnvironmentalModifier("night", 1f, 0);
 	}
 	
 	public static EnvironmentalModifier handleWater(EntityPlayer player) {
@@ -86,7 +102,7 @@ public class EnvironmentalModifier extends BaseModifier {
 	}
 	
 	public static EnvironmentalModifier handleUnderground(EntityPlayer player) {
-		if(player.world.getLight(player.getPosition()) < 2) {
+		if(getSkylight(player) < 2) {
 			return new EnvironmentalModifier("underground", -6f, 0.2f);
 		}else{
 			return null;
@@ -96,7 +112,7 @@ public class EnvironmentalModifier extends BaseModifier {
 	public static EnvironmentalModifier handleShade(EntityPlayer player) {
 		int light = getSkylight(player);
 		light = Math.max(12, light);
-		float temp = getEnvironmentTemperature(player);
+		float temp = getEnvironmentTemperatureWithTimeOfDay(player);
 		float avg = TemperatureCapability.AVERAGE;
 //		float coverage = (1f - (float)light/15f) + 0.5f;
 		if(light < 15 && temp > avg) {
@@ -110,7 +126,7 @@ public class EnvironmentalModifier extends BaseModifier {
 		int skyLight = getSkylight(player);
 		skyLight = Math.max(12, skyLight);
 		int blockLight = getBlockLight(player);
-		float temp = getEnvironmentTemperature(player);
+		float temp = getEnvironmentTemperatureWithTimeOfDay(player);
 		float avg = TemperatureCapability.AVERAGE;
 		float coverage = (1f - (float)skyLight/15f) + 0.4f;
 		if(skyLight < 15 && blockLight > 4 && temp < avg - 1) {
@@ -123,7 +139,7 @@ public class EnvironmentalModifier extends BaseModifier {
 	public static EnvironmentalModifier handleThirst(EntityPlayer player) {
 		if(player.getFoodStats() instanceof IFoodStatsTFC) {
 			IFoodStatsTFC stats = (IFoodStatsTFC) player.getFoodStats();
-			if(getEnvironmentTemperature(player) > TemperatureCapability.AVERAGE + 3 && stats.getThirst() > 80f) {
+			if(getEnvironmentTemperatureWithTimeOfDay(player) > TemperatureCapability.AVERAGE + 3 && stats.getThirst() > 80f) {
 				return new EnvironmentalModifier("well_hidrated", -2.5f, 0f);
 			}
 		}
@@ -131,7 +147,7 @@ public class EnvironmentalModifier extends BaseModifier {
 	}
 	
 	public static EnvironmentalModifier handleFood(EntityPlayer player) {
-		if(getEnvironmentTemperature(player) < TemperatureCapability.AVERAGE - 3 && player.getFoodStats().getFoodLevel() > 14) {
+		if(getEnvironmentTemperatureWithTimeOfDay(player) < TemperatureCapability.AVERAGE - 3 && player.getFoodStats().getFoodLevel() > 14) {
 			return new EnvironmentalModifier("well_fed", 2.5f, 0f);
 		}
 		return null;
@@ -140,12 +156,12 @@ public class EnvironmentalModifier extends BaseModifier {
 	public static EnvironmentalModifier handleDiet(EntityPlayer player) {
 		if(player.getFoodStats() instanceof IFoodStatsTFC) {
 			IFoodStatsTFC stats = (IFoodStatsTFC) player.getFoodStats();
-			if(getEnvironmentTemperature(player) < TemperatureCapability.COOL_THRESHOLD) {
+			if(getEnvironmentTemperatureWithTimeOfDay(player) < TemperatureCapability.COOL_THRESHOLD) {
 				float grainLevel = stats.getNutrition().getNutrient(Nutrient.GRAIN);
 				float meatLevel = stats.getNutrition().getNutrient(Nutrient.PROTEIN);
 				return new EnvironmentalModifier("nutrients", 4f * grainLevel * meatLevel, 0f);
 			}
-			if(getEnvironmentTemperature(player) > TemperatureCapability.HOT_THRESHOLD) {
+			if(getEnvironmentTemperatureWithTimeOfDay(player) > TemperatureCapability.HOT_THRESHOLD) {
 				float fruitLevel = stats.getNutrition().getNutrient(Nutrient.FRUIT);
 				float veggieLevel = stats.getNutrition().getNutrient(Nutrient.VEGETABLES);
 				return new EnvironmentalModifier("nutrients", -4f  * fruitLevel * veggieLevel, 0f);
@@ -164,23 +180,6 @@ public class EnvironmentalModifier extends BaseModifier {
 		BlockPos pos = new BlockPos(player.getPosition());
 		pos.add(0, 1, 0);
 		return player.world.getLightFor(EnumSkyBlock.BLOCK, pos);
-	}
-
-	public static EnvironmentalModifier handleGeneralTemperature(EntityPlayer player) {
-		int dayTicks = (int) (player.world.getWorldTime() % 24000);
-		float dayPart;
-		if(dayTicks < 6000) dayPart = 2f;
-		else if(dayTicks < 12000) dayPart = 4f;
-		else if(dayTicks < 18000) dayPart = 1f;
-		else dayPart = -4;
-		return new EnvironmentalModifier("environment", getEnvironmentTemperature(player) + dayPart, getEnvironmentHumidity(player));
-
-//	public static EnvironmentalModifier handleGeneralTemperature(EntityPlayer player) {
-//		int dayTicks = (int) (player.world.getWorldTime() % 24000);
-//		if(dayTicks < 6000) return new EnvironmentalModifier("morning", 2f, 0);
-//		else if(dayTicks < 12000) return new EnvironmentalModifier("afternoon", 4f, 0);
-//		else if(dayTicks < 18000) return new EnvironmentalModifier("evening", 1f, 0);
-//		else return new EnvironmentalModifier("night", 1f, 0);
 	}
 
 	public static EnvironmentalModifier handlePotionEffects(EntityPlayer player) {
