@@ -10,7 +10,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = 2.3
 
-group = "com.speeedcraft.tfcambiental" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = "com.lumintorious.tfcambiental" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "tfcambiental"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -50,7 +50,7 @@ dependencies {
     runtime        "curse.maven:had-enough-items-557549:3862733"
     runtime        "curse.maven:the-one-probe-245211:2667280"
 
-    compileOnly     "curse.maven:ic2_classic-242942:3093607"
+    compileOnly    "curse.maven:ic2_classic-242942:3093607"
 }
 
 processResources {
