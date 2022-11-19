@@ -15,6 +15,7 @@ import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.EnumSkyBlock;
 
+
 public class TemperatureRegistry<Type extends ITemperatureProvider> implements Iterable<Type>{
 	// Add functions that provide modifiers, you can use checks and return null to skip
 	// Use the "ModifierOwner" interfaces for self implemented objects
@@ -26,14 +27,20 @@ public class TemperatureRegistry<Type extends ITemperatureProvider> implements I
 
 	static {
 		// GTCEu
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL, true)) ? new BlockModifier("cupronickel_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.KANTHAL, true)) ? new BlockModifier("kanthal_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME, true)) ? new BlockModifier("nichrome_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TUNGSTENSTEEL, true)) ? new BlockModifier("tungstensteel_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.HSS_G, true)) ? new BlockModifier("hss_g_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NAQUADAH, true)) ? new BlockModifier("naquadah_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRINIUM, true)) ? new BlockModifier("trinium_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRITANIUM, true)) ? new BlockModifier("tritanium_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL)) ? new BlockModifier("cupronickel_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.KANTHAL)) ? new BlockModifier("kanthal_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME)) ? new BlockModifier("nichrome_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TUNGSTENSTEEL)) ? new BlockModifier("tungstensteel_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.HSS_G)) ? new BlockModifier("hss_g_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NAQUADAH)) ? new BlockModifier("naquadah_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRINIUM)) ? new BlockModifier("trinium_coil", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRITANIUM)) ? new BlockModifier("tritanium_coil", 3f, 3f) : null);
+
+		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.TORCH ? new BlockModifier("torch", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.FIRE ? new BlockModifier("fire", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.LAVA ? new BlockModifier("lava", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.FLOWING_LAVA ? new BlockModifier("lava", 3f, 3f) : null);
+		BLOCKS.register((state, pos, player) -> (state.getBlock() == Blocks.SNOW_LAYER && player.world.getLightFor(EnumSkyBlock.SKY, pos) == 15) ? new BlockModifier("snow", -1.5f, 0.2f, false) : null);
 
 		// TFC-Tech
 		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryFirebox); // Топило для печи для стекла
@@ -55,12 +62,6 @@ public class TemperatureRegistry<Type extends ITemperatureProvider> implements I
 		TILE_ENTITIES.register(TileEntityModifier::handleLamps); // Лампа
 		TILE_ENTITIES.register(TileEntityModifier::handleCrucible); // Тигель
 
-		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.TORCH ? new BlockModifier("torch", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.FIRE ? new BlockModifier("fire", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.LAVA ? new BlockModifier("lava", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.FLOWING_LAVA ? new BlockModifier("lava", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> (state.getBlock() == Blocks.SNOW_LAYER && player.world.getLightFor(EnumSkyBlock.SKY, pos) == 15) ? new BlockModifier("snow", -1.5f, 0.2f, false) : null);
-		
 		ENVIRONMENT.register(EnvironmentalModifier::handleGeneralTemperature);
 		ENVIRONMENT.register(EnvironmentalModifier::handleShade);
 		ENVIRONMENT.register(EnvironmentalModifier::handleCozy);
