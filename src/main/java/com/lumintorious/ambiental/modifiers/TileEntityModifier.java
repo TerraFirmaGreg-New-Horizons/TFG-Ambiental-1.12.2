@@ -22,7 +22,7 @@ public class TileEntityModifier extends BlockModifier {
 		super(unlocalizedName, change, potency, affectedByDistance);
 	}
 
-	public static final float mod = 0.5F;
+	public static final float mod = 0.3F;
 
 	public static boolean hasLeatherArmorProtection(EntityPlayer player) {
 		Item head = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem();
@@ -46,12 +46,11 @@ public class TileEntityModifier extends BlockModifier {
 		if (tile instanceof TECharcoalForge) {
 			TECharcoalForge forge = (TECharcoalForge)tile;
 			float temp = forge.getField(TECharcoalForge.FIELD_TEMPERATURE);
-			float change =  temp / 100f; // 140
-			float potency = temp / 350f;
+			float change =  temp / 140f;
 			if (hasLeatherArmorProtection(player)) {
-				change = mod;
+				change = change * mod;
 			}
-			return new TileEntityModifier("charcoal_forge", change, potency);
+			return new TileEntityModifier("charcoal_forge", change, 0);
 		}
 		else {
 			return null;
@@ -63,11 +62,10 @@ public class TileEntityModifier extends BlockModifier {
 			TEFirePit pit = (TEFirePit)tile;
 			float temp = pit.getField(TEFirePit.FIELD_TEMPERATURE);
 			float change =  temp / 100f;
-			float potency = temp / 350f;
 			if (hasLeatherArmorProtection(player)) {
-				change = mod;
+				change = change * mod;
 			}
-			return new TileEntityModifier("fire_pit", Math.min(6f, change), potency);
+			return new TileEntityModifier("fire_pit", Math.min(6f, change), 0);
 		}
 		else {
 			return null;
@@ -78,11 +76,10 @@ public class TileEntityModifier extends BlockModifier {
 		if (tile instanceof TEBloomery) {
 			TEBloomery bloomery = (TEBloomery)tile;
 			float change = bloomery.getRemainingTicks() > 0 ? 4f : 0f;
-			float potency = change;
 			if(hasLeatherArmorProtection(player)) {
-				change = mod;
+				change = change * mod;
 			}
-			return new TileEntityModifier("bloomery", change, potency);
+			return new TileEntityModifier("bloomery", change, 0);
 		}
 		else {
 			return null;
@@ -106,11 +103,10 @@ public class TileEntityModifier extends BlockModifier {
 			TECrucible crucible = (TECrucible) tile;
 			float temp = crucible.getField(TECrucible.FIELD_TEMPERATURE);
 			float change =  temp / 100f;
-			float potency = temp / 350f;
 			if (hasLeatherArmorProtection(player)) {
-				change = mod;
+				change = change * mod;
 			}
-			return new TileEntityModifier("crucible", change, potency);
+			return new TileEntityModifier("crucible", change, 0);
 		} else {
 			return null;
 		}
