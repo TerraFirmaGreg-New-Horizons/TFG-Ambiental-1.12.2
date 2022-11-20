@@ -11,10 +11,9 @@ import com.lumintorious.tfcambiental.modifiers.compat.CellarsTileEntityModifier;
 import com.lumintorious.tfcambiental.modifiers.compat.FirmaLifeTileEntityModifier;
 import com.lumintorious.tfcambiental.modifiers.compat.TFCTechTileEntityModifier;
 
-import gregtech.common.blocks.BlockWireCoil;
-import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.EnumSkyBlock;
+
 
 public class TemperatureRegistry<Type extends ITemperatureProvider> implements Iterable<Type>{
 	// Add functions that provide modifiers, you can use checks and return null to skip
@@ -26,16 +25,6 @@ public class TemperatureRegistry<Type extends ITemperatureProvider> implements I
 	public static final TemperatureRegistry<IEnvironmentalTemperatureProvider> ENVIRONMENT = new TemperatureRegistry<>();
 
 	static {
-		// GTCEu
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL, true)) ? new BlockModifier("cupronickel_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.KANTHAL, true)) ? new BlockModifier("kanthal_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME, true)) ? new BlockModifier("nichrome_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TUNGSTENSTEEL, true)) ? new BlockModifier("tungstensteel_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.HSS_G, true)) ? new BlockModifier("hss_g_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NAQUADAH, true)) ? new BlockModifier("naquadah_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRINIUM, true)) ? new BlockModifier("trinium_coil", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRITANIUM, true)) ? new BlockModifier("tritanium_coil", 3f, 3f) : null);
-
 		// TFC-Tech
 		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryFirebox); // Топило для печи для стекла
 		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryCauldron); // Печь для стекла
