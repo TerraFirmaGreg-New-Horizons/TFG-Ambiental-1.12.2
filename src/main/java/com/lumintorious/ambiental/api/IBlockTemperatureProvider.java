@@ -1,9 +1,7 @@
 package com.lumintorious.ambiental.api;
 
 import com.lumintorious.ambiental.modifiers.BlockModifier;
-import com.lumintorious.ambiental.modifiers.ModifierStorage;
 
-import net.dries007.tfc.util.climate.ITemperatureBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;

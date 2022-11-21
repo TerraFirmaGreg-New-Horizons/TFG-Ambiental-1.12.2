@@ -1,23 +1,17 @@
 package com.lumintorious.ambiental.modifiers;
 
-import com.lumintorious.ambiental.TFCAmbiental;
 import com.lumintorious.ambiental.api.*;
 
-import gregtech.common.items.MetaItems;
 import net.dries007.tfc.objects.blocks.stone.BlockRockRaw;
 import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import org.lwjgl.Sys;
 
-public class BlockModifier extends BaseModifier{
+public class BlockModifier extends TempModifier {
 
 	public boolean affectedByDistance = false;
 	
@@ -34,7 +28,7 @@ public class BlockModifier extends BaseModifier{
 		this.affectedByDistance = affectedByDistance;
 	}
 
-	public static void computeModifiers(EntityPlayer player, ModifierStorage modifiers) {
+	public static void computeModifiers(EntityPlayer player, TempModifierStorage modifiers) {
 		BlockPos p = player.getPosition();
 		BlockPos pos1 = new BlockPos(p.getX() - 9, p.getY() - 3, p.getZ() - 9);
 		BlockPos pos2 = new BlockPos(p.getX() + 9, p.getY() + 5, p.getZ() + 9);

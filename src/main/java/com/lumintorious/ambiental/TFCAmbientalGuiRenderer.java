@@ -26,7 +26,7 @@ import org.lwjgl.opengl.GL11;
 import static com.lumintorious.ambiental.TFCAmbiental.MODID;
 
 @SideOnly(Side.CLIENT)
-public class ClientEventHandler {
+public class TFCAmbientalGuiRenderer {
     public static final ResourceLocation COLD_VIGNETTE = new ResourceLocation(MODID + ":textures/gui/cold_vignette.png");
     public static final ResourceLocation HOT_VIGNETTE = new ResourceLocation(MODID + ":textures/gui/hot_vignette.png");
     public static final ResourceLocation MINUS = new ResourceLocation(MODID + ":textures/gui/lower.png");

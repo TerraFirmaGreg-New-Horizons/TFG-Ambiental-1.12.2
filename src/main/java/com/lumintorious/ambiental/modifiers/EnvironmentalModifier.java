@@ -9,7 +9,6 @@ import com.lumintorious.ambiental.effects.TempEffect;
 import net.dries007.tfc.api.capability.food.IFoodStatsTFC;
 import net.dries007.tfc.api.capability.food.Nutrient;
 import net.dries007.tfc.objects.fluids.FluidsTFC;
-import net.dries007.tfc.util.climate.ClimateData;
 import net.dries007.tfc.util.climate.ClimateTFC;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,9 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.biome.Biome;
 
-import java.util.Optional;
-
-public class EnvironmentalModifier extends BaseModifier {
+public class EnvironmentalModifier extends TempModifier {
 	public EnvironmentalModifier(String name, float change, float potency) {
 		super(name, change, potency);
 	}
@@ -192,7 +189,7 @@ public class EnvironmentalModifier extends BaseModifier {
 		return null;
 	}
 	
-	public static void computeModifiers(EntityPlayer player, ModifierStorage modifiers){
+	public static void computeModifiers(EntityPlayer player, TempModifierStorage modifiers){
 		for(IEnvironmentalTemperatureProvider provider : TemperatureRegistry.ENVIRONMENT) {
 			modifiers.add(provider.getModifier(player));
 		}

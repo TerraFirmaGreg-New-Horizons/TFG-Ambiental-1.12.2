@@ -1,21 +1,19 @@
 package com.lumintorious.ambiental.capability;
 
-import com.lumintorious.ambiental.TFCAmbiental;
-import com.lumintorious.ambiental.TFCAmbientalDamage;
+import com.lumintorious.ambiental.AmbientalDamage;
 import com.lumintorious.ambiental.TFCAmbientalConfig;
-import com.lumintorious.ambiental.modifiers.BaseModifier;
+import com.lumintorious.ambiental.modifiers.TempModifier;
 import com.lumintorious.ambiental.modifiers.BlockModifier;
 import com.lumintorious.ambiental.modifiers.EnvironmentalModifier;
 import com.lumintorious.ambiental.modifiers.EquipmentModifier;
 import com.lumintorious.ambiental.modifiers.ItemModifier;
-import com.lumintorious.ambiental.modifiers.ModifierStorage;
+import com.lumintorious.ambiental.modifiers.TempModifierStorage;
 
 import gregtech.common.items.MetaItems;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.capability.food.FoodStatsTFC;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
@@ -48,12 +46,12 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 	public static float FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezingTemperature;
 	public static float NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
 	
-	public ModifierStorage modifiers = new ModifierStorage();
+	public TempModifierStorage modifiers = new TempModifierStorage();
 	
 	public float bodyTemperature = AVERAGE;
 	
 	public void clearModifiers() {
-		this.modifiers = new ModifierStorage();
+		this.modifiers = new TempModifierStorage();
 	}
 	
 	public void evaluateModifiers() {
@@ -158,9 +156,9 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 				tick = 0;
 				if (TFCAmbientalConfig.GENERAL.takeDamage) {
 					if (this.getTemperature() > BURN_THRESHOLD) {
-						player.attackEntityFrom(TFCAmbientalDamage.HEAT,  4f);
+						player.attackEntityFrom(AmbientalDamage.HEAT,  4f);
 					} else if (this.getTemperature() < FREEZE_THRESHOLD) {
-						player.attackEntityFrom(TFCAmbientalDamage.COLD, 4f);
+						player.attackEntityFrom(AmbientalDamage.COLD, 4f);
 					}
 				}
 				if (TFCAmbientalConfig.GENERAL.loseHungerThirst) {
@@ -183,7 +181,7 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 	
 	public String toString() {
 		String str = "";
-		for(BaseModifier modifier : modifiers) {
+		for(TempModifier modifier : modifiers) {
 			str += modifier.getUnlocalizedName() + " -> " + modifier.getChange() + " @ " + modifier.getPotency() + "\n";
 		}
 		return String.format(

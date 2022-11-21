@@ -70,7 +70,7 @@ public class TFCAmbiental
 
         // Client Events
         if (event.getSide() == Side.CLIENT) {
-            MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+            MinecraftForge.EVENT_BUS.register(new TFCAmbientalGuiRenderer());
         }
 
         // Capability Registry

@@ -9,7 +9,7 @@ import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class ItemModifier extends BaseModifier{
+public class ItemModifier extends TempModifier {
 	
 	public ItemModifier(String name) {
 		super(name);
@@ -19,7 +19,7 @@ public class ItemModifier extends BaseModifier{
 		super(name, change, potency);
 	}
 	
-	public static void computeModifiers(EntityPlayer player, ModifierStorage modifiers) {
+	public static void computeModifiers(EntityPlayer player, TempModifierStorage modifiers) {
 		for(ItemStack stack : player.inventoryContainer.inventoryItemStacks) {
 			if(stack.hasCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null)) {
 				IItemHeat heat = stack.getCapability(CapabilityItemHeat.ITEM_HEAT_CAPABILITY, null);

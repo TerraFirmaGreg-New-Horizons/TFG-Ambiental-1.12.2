@@ -1,21 +1,19 @@
 package com.lumintorious.ambiental.modifiers;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 import io.netty.util.internal.shaded.org.jctools.queues.MessagePassingQueue.Consumer;
 
-public class ModifierStorage  implements Iterable<BaseModifier>{
-	private HashMap<String, BaseModifier> map = new HashMap<String, BaseModifier>();
+public class TempModifierStorage implements Iterable<TempModifier>{
+	private HashMap<String, TempModifier> map = new HashMap<String, TempModifier>();
 	
-	private BaseModifier put(String key, BaseModifier value) {
+	private TempModifier put(String key, TempModifier value) {
 		if((value.getChange() == 0f && value.getPotency() == 0f)) {
 			return null;
 		}
-		BaseModifier modifier = map.get(key);
+		TempModifier modifier = map.get(key);
 		if(modifier != null) {
 			modifier.absorb(value);
 			return modifier;
@@ -24,7 +22,7 @@ public class ModifierStorage  implements Iterable<BaseModifier>{
 		}
 	}
 	
-	public BaseModifier add(BaseModifier value) {
+	public TempModifier add(TempModifier value) {
 		if(value == null) {
 			return null;
 		}
@@ -35,17 +33,17 @@ public class ModifierStorage  implements Iterable<BaseModifier>{
 		return map.containsKey(key);
 	}
 	
-	public boolean contains(BaseModifier value) {
+	public boolean contains(TempModifier value) {
 		return map.containsValue(value);
 	}
 	
-	public BaseModifier get(String key) {
+	public TempModifier get(String key) {
 		return map.get(key);
 	}
 	
 	public float getTotalPotency() {
 		float potency = 1f;
-		for(Map.Entry<String, BaseModifier> entry : map.entrySet()) {
+		for(Map.Entry<String, TempModifier> entry : map.entrySet()) {
 			potency += entry.getValue().getPotency();
 		}
 		return potency;
@@ -53,21 +51,21 @@ public class ModifierStorage  implements Iterable<BaseModifier>{
 	
 	public float getTargetTemperature() {
 		float change = 0f;
-		for(Map.Entry<String, BaseModifier> entry : map.entrySet()) {
+		for(Map.Entry<String, TempModifier> entry : map.entrySet()) {
 			change += entry.getValue().getChange();
 		}
 		return change;
 	}
 	
-	public void forEach(Consumer<BaseModifier> func) {
+	public void forEach(Consumer<TempModifier> func) {
 		map.forEach((k, v) -> {func.accept(v);});
 	}
 
 	@Override
-	public Iterator<BaseModifier> iterator() {
-		Map<String, BaseModifier> map1 = map;
-		return new Iterator<BaseModifier>() {
-			private Iterator<Map.Entry<String, BaseModifier>> mapIterator = map1.entrySet().iterator();
+	public Iterator<TempModifier> iterator() {
+		Map<String, TempModifier> map1 = map;
+		return new Iterator<TempModifier>() {
+			private Iterator<Map.Entry<String, TempModifier>> mapIterator = map1.entrySet().iterator();
 
 			@Override
 			public boolean hasNext() {
@@ -75,7 +73,7 @@ public class ModifierStorage  implements Iterable<BaseModifier>{
 			}
 
 			@Override
-			public BaseModifier next() {
+			public TempModifier next() {
 				return mapIterator.next().getValue();
 			}
 		};

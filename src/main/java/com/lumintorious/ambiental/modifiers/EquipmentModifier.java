@@ -7,7 +7,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-public class EquipmentModifier extends BaseModifier{
+public class EquipmentModifier extends TempModifier {
 	
 	public EquipmentModifier(String name) {
 		super(name);
@@ -17,7 +17,7 @@ public class EquipmentModifier extends BaseModifier{
 		super(unlocalizedName, change, potency);
 	}
 	
-	public static void getModifiers(EntityPlayer player, ModifierStorage modifiers) {
+	public static void getModifiers(EntityPlayer player, TempModifierStorage modifiers) {
 		Iterable<ItemStack> armor = player.getArmorInventoryList();
 		for(ItemStack stack : armor) {
 			if(stack.getItem() instanceof ItemArmor) {

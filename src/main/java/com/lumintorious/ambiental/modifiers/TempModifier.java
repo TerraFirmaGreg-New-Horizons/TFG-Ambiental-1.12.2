@@ -3,7 +3,7 @@ package com.lumintorious.ambiental.modifiers;
 import com.lumintorious.ambiental.TFCAmbientalConfig;
 import com.lumintorious.ambiental.capability.TemperatureCapability;
 
-public class BaseModifier {
+public class TempModifier {
 	private String unlocalizedName;
 	private float change = 0f;
 	private float potency = 0f;
@@ -42,7 +42,7 @@ public class BaseModifier {
 		count++;
 	}
 	
-	public void absorb(BaseModifier modifier) {
+	public void absorb(TempModifier modifier) {
 		if(count >= TFCAmbientalConfig.GENERAL.modifierCap) {
 			return;
 		}
@@ -60,11 +60,11 @@ public class BaseModifier {
 		return unlocalizedName;
 	}
 	
-	public BaseModifier(String unlocalizedName) {
+	public TempModifier(String unlocalizedName) {
 		this.unlocalizedName = unlocalizedName;
 	}
 	
-	public BaseModifier(String unlocalizedName, float change, float potency) {
+	public TempModifier(String unlocalizedName, float change, float potency) {
 		this.unlocalizedName = unlocalizedName;
 		this.change = change;
 		this.potency = potency;
