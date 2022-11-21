@@ -1,6 +1,5 @@
 package com.lumintorious.ambiental.modifiers;
 
-import com.lumintorious.ambiental.api.IItemTemperatureOwner;
 import com.lumintorious.ambiental.api.IItemTemperatureProvider;
 import com.lumintorious.ambiental.api.AmbientalRegistry;
 
@@ -27,10 +26,6 @@ public class ItemModifier extends TempModifier {
 				float change = temp;
 				float potency = 0f;
 				modifiers.add(new ItemModifier("heat_item", change, potency * stack.getCount()));
-			}
-			if(stack.getItem() instanceof IItemTemperatureOwner) {
-				IItemTemperatureOwner owner = (IItemTemperatureOwner)stack.getItem();
-				modifiers.add(owner.getModifier(stack, player));
 			}
 			for(IItemTemperatureProvider provider : AmbientalRegistry.ITEMS) {
 				modifiers.add(provider.getModifier(stack, player));

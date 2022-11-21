@@ -51,17 +51,6 @@ public class BlockModifier extends TempModifier {
 			if (isInside) {
 				distanceMultiplier *= 1.3f;
 			}
-			if (block instanceof IBlockTemperatureOwner) {
-				IBlockTemperatureOwner owner = (IBlockTemperatureOwner)block;
-				BlockModifier modifier = owner.getModifier(state, pos, player);
-				if (modifier != null) {
-					if (modifier.affectedByDistance){
-						modifier.setChange(modifier.getChange() * distanceMultiplier);
-						modifier.setPotency(modifier.getPotency() * distanceMultiplier);
-					}
-					modifiers.add(modifier);
-				}
-			}
 			for (IBlockTemperatureProvider provider : AmbientalRegistry.BLOCKS) {
 				BlockModifier modifier = provider.getModifier(state, pos, player);
 				if (modifier != null) {
@@ -74,17 +63,6 @@ public class BlockModifier extends TempModifier {
 			}
 			if (block.hasTileEntity(state)) {
 				TileEntity tile = player.world.getTileEntity(pos);
-				if (tile instanceof ITileEntityTemperatureOwner) {
-					ITileEntityTemperatureOwner owner = (ITileEntityTemperatureOwner)tile;
-					BlockModifier modifier = owner.getModifier(player);
-					if (modifier != null) {
-						if (modifier.affectedByDistance){
-							modifier.setChange(modifier.getChange() * distanceMultiplier);
-							modifier.setPotency(modifier.getPotency() * distanceMultiplier);
-						}
-						modifiers.add(modifier);
-					}
-				} else
 				for (ITileEntityTemperatureProvider provider : AmbientalRegistry.TILE_ENTITIES) {
 					BlockModifier modifier = provider.getModifier(tile, player);
 					if (modifier != null) {
