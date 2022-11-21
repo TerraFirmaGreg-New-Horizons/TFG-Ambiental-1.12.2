@@ -30,10 +30,10 @@ public class TFCAmbientalEventHandler {
 		{
 			ConfigManager.sync(MODID, Config.Type.INSTANCE);
 			TemperatureCapability.AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;
-			TemperatureCapability.HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotTemperature;
-			TemperatureCapability.COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coldTemperature;
-			TemperatureCapability.BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burningTemperature;
-			TemperatureCapability.FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezingTemperature;
+			TemperatureCapability.HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotThreshold;
+			TemperatureCapability.COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coolThreshold;
+			TemperatureCapability.BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burnThreshold;
+			TemperatureCapability.FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezeThreshold;
 			TemperatureCapability.NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
 			TFCAmbientalGuiRenderer.enableOverlay = TFCAmbientalConfig.CLIENT.enableOverlay;
 		}

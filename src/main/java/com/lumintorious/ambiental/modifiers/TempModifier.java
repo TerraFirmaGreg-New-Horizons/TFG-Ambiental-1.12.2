@@ -2,8 +2,9 @@ package com.lumintorious.ambiental.modifiers;
 
 import com.lumintorious.ambiental.TFCAmbientalConfig;
 import com.lumintorious.ambiental.capability.TemperatureCapability;
+import org.jetbrains.annotations.NotNull;
 
-public class TempModifier {
+public class TempModifier implements Comparable<TempModifier>{
 	private String unlocalizedName;
 	private float change = 0f;
 	private float potency = 0f;
@@ -76,5 +77,9 @@ public class TempModifier {
 	
 	public void cancel(TemperatureCapability temp) {
 		// nothing;
+	}
+	@Override
+	public int compareTo(@NotNull TempModifier o) {
+		return Float.compare(this.change, o.change);
 	}
 }

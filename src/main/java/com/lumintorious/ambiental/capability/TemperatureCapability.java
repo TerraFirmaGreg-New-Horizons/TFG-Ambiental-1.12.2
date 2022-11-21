@@ -40,10 +40,10 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 	public boolean isRising;
 	
 	public static float AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;
-	public static float HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotTemperature;
-	public static float COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coldTemperature;
-	public static float BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burningTemperature;
-	public static float FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezingTemperature;
+	public static float HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotThreshold;
+	public static float COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coolThreshold;
+	public static float BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burnThreshold;
+	public static float FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezeThreshold;
 	public static float NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
 	
 	public TempModifierStorage modifiers = new TempModifierStorage();
@@ -124,15 +124,15 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 
 	public float getTemperatureChange() {
 		float target = getTargetTemperature();
-		float speed = getPotency() * TFCAmbientalConfig.GENERAL.temperatureMultiplier;
+		float speed = getPotency() * TFCAmbientalConfig.GENERAL.temperatureChangeSpeed;
 		float change = Math.min(CHANGE_CAP, Math.max(-CHANGE_CAP, target - bodyTemperature));
 		float newTemp = bodyTemperature + change;
 		boolean isRising = true;
 		if ((bodyTemperature < AVERAGE && newTemp > bodyTemperature) || (bodyTemperature > AVERAGE && newTemp < bodyTemperature)) {
-			speed *= GOOD_MULTIPLIER * TFCAmbientalConfig.GENERAL.positiveModifier;
+			speed *= GOOD_MULTIPLIER * TFCAmbientalConfig.GENERAL.goodTemperatureChangeSpeed;
 		}
 		else {
-			speed *= BAD_MULTIPLIER * TFCAmbientalConfig.GENERAL.negativeModifier;
+			speed *= BAD_MULTIPLIER * TFCAmbientalConfig.GENERAL.badTemperatureChangeSpeed;
 		}
 		return (change * speed);
 	}

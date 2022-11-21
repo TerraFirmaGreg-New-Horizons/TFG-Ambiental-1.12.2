@@ -24,6 +24,52 @@ public class TFCAmbientalConfig {
 
 	public static class GeneralCFG {
 
+		@Config.Comment("The average point for temperature, the not too warm and not too cool point")
+		@Config.RangeDouble(min = 0F, max = 30F)
+		public float averageTemperature = 15F;
+
+		@Config.Comment("The point where warmth starts to affect the screen, but only mildly")
+		@Config.RangeDouble(min = 5F, max = 35F)
+		public float hotThreshold = 25F;
+
+		@Config.Comment("The point where cold starts to affect the screen, but only mildly")
+		@Config.RangeDouble(min = -15F, max = 25F)
+		public float coolThreshold = 5F;
+
+		@Config.Comment("The point where warmth starts to hurt the player")
+		@Config.RangeDouble(min = 15F, max = 45F)
+		public float burnThreshold = 30F;
+
+		@Config.Comment("The point where cold starts to hurt the player")
+		@Config.RangeDouble(min = -15F, max = 15F)
+		public float freezeThreshold = 0F;
+
+		@Config.Comment("How quickly player temperature changes towards the target environment temperature")
+		@Config.RangeDouble(min = 0F, max = 30F)
+		public float temperatureChangeSpeed = 1.0f;
+
+		@Config.Comment("How quickly player temperature changes towards the target environment temperature when it's beneficial to do so")
+		@Config.RangeDouble(min = 0F, max = 50F)
+		public float goodTemperatureChangeSpeed = 4F;
+
+		@Config.Comment("How quickly player temperature changes towards the target environment temperature when it's not beneficial")
+		@Config.RangeDouble(min = 0F, max = 50F)
+		public float badTemperatureChangeSpeed = 1f;
+
+
+
+		@Config.Comment("How potent are multipliers with more than one instance. (Eg. 2 fire pits nearby means they have 2 * this effectiveness). Default = 0.7")
+		public float diminishedModifierMultiplier = 0.7F;
+
+		@Config.Comment("If harsherTemperateAreas is true, environmental temperatures going away from the average are multiplied by this number. (The less temperate an area is, the less the modifier affects it). Default = 1.2 ")
+		public float harsherMultiplier = 1.20F;
+
+		@Config.Comment("How many modifiers of the same type until they stop adding together. Default = 4")
+		public int modifierCap = 10;
+
+		@Config.Comment("The temperature that nano or quantum armor will do when you are in a full set.")
+		public int nanoOrQuarkTemp = 20;
+
 		@Config.Comment("Allowed Dims")
 		public int[] allowedDims = new int[] {0};
 
@@ -35,41 +81,5 @@ public class TFCAmbientalConfig {
 
 		@Config.Comment("If true, temperate areas won't be as mild. Default = true")
 		public boolean harsherTemperateAreas = true;
-
-		@Config.Comment("How fast does temperature change when it's going towards the average. Default = 5")
-		public float positiveModifier = 5f;
-
-		@Config.Comment("How fast does temperature change when it's going away from the average. If you think you are giving yourself a challenge by increasing this number, think twice. It makes it so that you have to warm yourself up every so often. Default = 1")
-		public float negativeModifier = 1f;
-
-		@Config.Comment("How quickly temperature rises and decreases. Default = 1.0")
-		public float temperatureMultiplier = 1.0f;
-
-		@Config.Comment("How potent are multipliers with more than one instance. (Eg. 2 fire pits nearby means they have 2 * this effectiveness). Default = 0.7")
-		public float diminishedModifierMultiplier = 0.7f;
-
-		@Config.Comment("If harsherTemperateAreas is true, environmental temperatures going away from the average are multiplied by this number. (The less temperate an area is, the less the modifier affects it). Default = 1.2 ")
-		public float harsherMultiplier = 1.20f;
-
-		@Config.Comment("The temperature at which you are at equilibrium. It's advisable to not change this by a lot since the entire ecosystem revolves around this. Default = 15")
-		public float averageTemperature = 15f;
-
-		@Config.Comment("The temperature at which your screen starts heating. It's advisable to not change this by a lot since the entire ecosystem revolves around this. Default = 20")
-		public float hotTemperature = 27f;
-
-		@Config.Comment("The temperature at which your screen starts freezing. It's advisable to not change this by a lot since the entire ecosystem revolves around this. Default = 10")
-		public float coldTemperature = 10f;
-
-		@Config.Comment("The temperature at which you start burning and taking damage. It's advisable to not change this by a lot since the entire ecosystem revolves around this. Default = 25")
-		public float burningTemperature = 37f;
-
-		@Config.Comment("The temperature at which you start freezing and taking damage. It's advisable to not change this by a lot since the entire ecosystem revolves around this. Default = 5")
-		public float freezingTemperature = 5f;
-
-		@Config.Comment("How many modifiers of the same type until they stop adding together. Default = 4")
-		public int modifierCap = 10;
-
-		@Config.Comment("The temperature that nano or quantum armor will do when you are in a full set.")
-		public int nanoOrQuarkTemp = 20;
 	}
 }

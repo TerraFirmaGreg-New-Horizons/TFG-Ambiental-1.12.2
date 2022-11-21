@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url = "https://files.minecraftforge.net/maven" }
+        maven { url = 'https://files.minecraftforge.net/maven' }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
@@ -10,8 +10,8 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = 2.3
 
-group = "com.lumintorious.tfcambiental" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "tfcambiental"
+group = 'com.lumintorious.tfcambiental' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'tfcambiental'
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
@@ -20,13 +20,13 @@ compileJava {
 
 task deobfJar(type: Jar, dependsOn: 'jar') {
     from sourceSets.main.output
-    classifier "deobf"
+    classifier 'deobf'
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2847"
-    runDir = "run"
-    mappings = "stable_39"
+    version = '1.12.2-14.23.5.2847'
+    runDir = 'run'
+    mappings = 'stable_39'
 }
 
 repositories {
@@ -34,29 +34,31 @@ repositories {
     maven {
         url 'https://www.cursemaven.com'
     }
+    mavenCentral()
 }
 
 dependencies {
-    compile fileTree(include: ["*.jar"], dir: "libs")
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile        'org.jetbrains:annotations:23.0.0'
 
-    deobfCompile   "curse.maven:terrafirmacraft-302973:3645502"
-    deobfCompile   "curse.maven:gregtech-ce-unofficial-557242:4068926"
-    deobfCompile   "curse.maven:codechicken-lib-1-8-242818:2779848"
+    deobfCompile   'curse.maven:terrafirmacraft-302973:3645502'
+    deobfCompile   'curse.maven:gregtech-ce-unofficial-557242:4068926'
+    deobfCompile   'curse.maven:codechicken-lib-1-8-242818:2779848'
 
-    deobfCompile   "curse.maven:tfc-cellars-add-on-431185:3640604"
-    deobfCompile   "curse.maven:firmalife-453394:3612887"
-    deobfCompile   "curse.maven:tfctech-unofficial-340660:3209033"
+    deobfCompile   'curse.maven:tfc-cellars-add-on-431185:3640604'
+    deobfCompile   'curse.maven:firmalife-453394:3612887'
+    deobfCompile   'curse.maven:tfctech-unofficial-340660:3209033'
 
-    runtime        "curse.maven:had-enough-items-557549:3862733"
-    runtime        "curse.maven:the-one-probe-245211:2667280"
+    runtime        'curse.maven:had-enough-items-557549:3862733'
+    runtime        'curse.maven:the-one-probe-245211:2667280'
 
-    compileOnly    "curse.maven:ic2_classic-242942:3093607"
+    compileOnly    'curse.maven:ic2_classic-242942:3093607'
 }
 
 processResources {
     // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
