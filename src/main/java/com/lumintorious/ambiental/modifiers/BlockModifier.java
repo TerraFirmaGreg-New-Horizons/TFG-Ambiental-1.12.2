@@ -62,7 +62,7 @@ public class BlockModifier extends TempModifier {
 					modifiers.add(modifier);
 				}
 			}
-			for (IBlockTemperatureProvider provider : TemperatureRegistry.BLOCKS) {
+			for (IBlockTemperatureProvider provider : AmbientalRegistry.BLOCKS) {
 				BlockModifier modifier = provider.getModifier(state, pos, player);
 				if (modifier != null) {
 					if (modifier.affectedByDistance) {
@@ -85,7 +85,7 @@ public class BlockModifier extends TempModifier {
 						modifiers.add(modifier);
 					}
 				} else
-				for (ITileEntityTemperatureProvider provider : TemperatureRegistry.TILE_ENTITIES) {
+				for (ITileEntityTemperatureProvider provider : AmbientalRegistry.TILE_ENTITIES) {
 					BlockModifier modifier = provider.getModifier(tile, player);
 					if (modifier != null) {
 						modifier.setChange(modifier.getChange() * distanceMultiplier);

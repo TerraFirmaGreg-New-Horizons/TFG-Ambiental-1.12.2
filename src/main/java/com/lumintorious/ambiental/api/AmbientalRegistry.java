@@ -4,26 +4,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.lumintorious.ambiental.TFCAmbiental;
 import com.lumintorious.ambiental.modifiers.*;
 
 import com.lumintorious.ambiental.modifiers.compat.CellarsTileEntityModifier;
 import com.lumintorious.ambiental.modifiers.compat.FirmaLifeTileEntityModifier;
 import com.lumintorious.ambiental.modifiers.compat.TFCTechTileEntityModifier;
-import gregtech.common.blocks.BlockWireCoil;
-import gregtech.common.blocks.MetaBlocks;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.EnumSkyBlock;
 
 
-public class TemperatureRegistry<Type extends ITemperatureProvider> implements Iterable<Type>{
+public class AmbientalRegistry<Type extends ITemperatureProvider> implements Iterable<Type>{
 	// Add functions that provide modifiers, you can use checks and return null to skip
 	// Use the "ModifierOwner" interfaces for self implemented objects
 	// Use the these only for objects out of your control
-	public static final TemperatureRegistry<IItemTemperatureProvider> ITEMS = new TemperatureRegistry<>();
-	public static final TemperatureRegistry<IBlockTemperatureProvider> BLOCKS = new TemperatureRegistry<>();
-	public static final TemperatureRegistry<ITileEntityTemperatureProvider> TILE_ENTITIES = new TemperatureRegistry<>();
-	public static final TemperatureRegistry<IEnvironmentalTemperatureProvider> ENVIRONMENT = new TemperatureRegistry<>();
+	public static final AmbientalRegistry<IItemTemperatureProvider> ITEMS = new AmbientalRegistry<>();
+	public static final AmbientalRegistry<IBlockTemperatureProvider> BLOCKS = new AmbientalRegistry<>();
+	public static final AmbientalRegistry<ITileEntityTemperatureProvider> TILE_ENTITIES = new AmbientalRegistry<>();
+	public static final AmbientalRegistry<IEnvironmentalTemperatureProvider> ENVIRONMENT = new AmbientalRegistry<>();
 
 	static {
 		// GTCEu
@@ -79,7 +76,7 @@ public class TemperatureRegistry<Type extends ITemperatureProvider> implements I
 	
 	private final ArrayList<Type> list = new ArrayList<>();
 	private final HashMap<String, Type> map = new HashMap<>();
-	private TemperatureRegistry() {}
+	private AmbientalRegistry() {}
 
 	public void register(Type type) {
 		list.add(type);

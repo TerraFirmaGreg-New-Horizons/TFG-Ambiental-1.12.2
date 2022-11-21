@@ -2,7 +2,7 @@ package com.lumintorious.ambiental.modifiers;
 
 import com.lumintorious.ambiental.api.IItemTemperatureOwner;
 import com.lumintorious.ambiental.api.IItemTemperatureProvider;
-import com.lumintorious.ambiental.api.TemperatureRegistry;
+import com.lumintorious.ambiental.api.AmbientalRegistry;
 
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
@@ -32,7 +32,7 @@ public class ItemModifier extends TempModifier {
 				IItemTemperatureOwner owner = (IItemTemperatureOwner)stack.getItem();
 				modifiers.add(owner.getModifier(stack, player));
 			}
-			for(IItemTemperatureProvider provider : TemperatureRegistry.ITEMS) {
+			for(IItemTemperatureProvider provider : AmbientalRegistry.ITEMS) {
 				modifiers.add(provider.getModifier(stack, player));
 			}
 		}
