@@ -21,7 +21,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import static com.lumintorious.ambiental.TFCAmbiental.MODID;
 
-public class CommonEventHandler {
+public class TFCAmbientalEventHandler {
 
 	@SubscribeEvent
 	public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)

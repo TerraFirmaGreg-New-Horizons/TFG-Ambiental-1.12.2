@@ -66,7 +66,7 @@ public class TFCAmbiental
     public void preInit(FMLPreInitializationEvent event)
     {
         // Common Events
-        MinecraftForge.EVENT_BUS.register(new CommonEventHandler());
+        MinecraftForge.EVENT_BUS.register(new TFCAmbientalEventHandler());
 
         // Client Events
         if (event.getSide() == Side.CLIENT) {
