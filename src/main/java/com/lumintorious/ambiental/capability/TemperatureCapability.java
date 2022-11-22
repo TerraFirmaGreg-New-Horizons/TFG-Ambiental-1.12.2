@@ -2,12 +2,10 @@ package com.lumintorious.ambiental.capability;
 
 import com.lumintorious.ambiental.AmbientalDamage;
 import com.lumintorious.ambiental.TFCAmbientalConfig;
-import com.lumintorious.ambiental.modifiers.TempModifier;
-import com.lumintorious.ambiental.modifiers.BlockModifier;
-import com.lumintorious.ambiental.modifiers.EnvironmentalModifier;
-import com.lumintorious.ambiental.modifiers.EquipmentModifier;
-import com.lumintorious.ambiental.modifiers.ItemModifier;
-import com.lumintorious.ambiental.modifiers.TempModifierStorage;
+import com.lumintorious.ambiental.api.*;
+import com.lumintorious.ambiental.modifier.TempModifier;
+import com.lumintorious.ambiental.modifier.EnvironmentalModifier;
+import com.lumintorious.ambiental.modifier.TempModifierStorage;
 
 import gregtech.common.items.MetaItems;
 import net.dries007.tfc.TerraFirmaCraft;
@@ -19,19 +17,17 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
-public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagCompound>, ITemperatureCapability
-{
-	@CapabilityInject(ITemperatureCapability.class)
-    public static final Capability<ITemperatureCapability> CAPABILITY = null;
+public class TemperatureCapability implements ICapabilitySerializable<NBTTagCompound> {
+
+	public static final Capability<TemperatureCapability> CAPABILITY = null;
 
 	public static final int tickInterval = 20;
 	
     /** The capability this is for */
     private final EntityPlayer player;
-    
+
     public TemperatureCapability(EntityPlayer player)
     {
         this.player = player;
@@ -55,11 +51,13 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 	}
 	
 	public void evaluateModifiers() {
+		TempModifierStorage previousStorage = modifiers;
 		this.clearModifiers();
-		ItemModifier.computeModifiers(player, modifiers);
-		EnvironmentalModifier.computeModifiers(player, modifiers);
-		BlockModifier.computeModifiers(player, modifiers);
-		EquipmentModifier.getModifiers(player, modifiers);
+		IItemTemperatureProvider.evaluateAll(player, modifiers);
+		EnvironmentalModifier.evaluateAll(player, modifiers);
+		IBlockTemperatureProvider.evaluateAll(player, modifiers);
+		ITileEntityTemperatureProvider.evaluateAll(player, modifiers);
+		IEquipmentTemperatureProvider.evaluateAll(player, modifiers);
 
 		savedTarget = modifiers.getTargetTemperature();
 		savedPotency = modifiers.getTotalPotency();
@@ -195,12 +193,11 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 				) + "\n"+str;
 	}
 
-	@Override
+
 	public float getTemperature() {
 		return bodyTemperature;
 	}
-	
-	@Override
+
 	public void setTemperature(float newTemp) {
 		if (newTemp < this.getTemperature()) {
 			isRising = false;
@@ -211,12 +208,12 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
 		this.bodyTemperature = newTemp;
 	}
 
-	@Override
+
 	public EntityPlayer getPlayer() {
 		return player;
 	}
 
-	@Override
+
 	public float getChange() {
 		return getTemperatureChange();
 	}
@@ -252,6 +249,15 @@ public class TemperatureCapability<C> implements ICapabilitySerializable<NBTTagC
         {
             TerraFirmaCraft.getNetwork().sendTo(new TemperaturePacket(serializeNBT()), (EntityPlayerMP) player);
         }
+	}
+
+	public void sync() {
+		EntityPlayer player = getPlayer();
+		if (player instanceof EntityPlayerMP)
+		{
+			TemperaturePacket packet = new TemperaturePacket(serializeNBT());
+			TerraFirmaCraft.getNetwork().sendTo(packet, (EntityPlayerMP) player);
+		}
 	}
     
     @Override

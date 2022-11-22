@@ -1,6 +1,6 @@
 package com.lumintorious.ambiental;
 
-import com.lumintorious.ambiental.capability.ITemperatureCapability;
+import com.lumintorious.ambiental.capability.TemperatureCapability;
 import com.lumintorious.ambiental.capability.TemperaturePacket;
 
 import net.dries007.tfc.TerraFirmaCraft;
@@ -74,7 +74,7 @@ public class TFCAmbiental
         }
 
         // Capability Registry
-    	CapabilityManager.INSTANCE.register(ITemperatureCapability.class, new DumbStorage(), () -> null);
+    	CapabilityManager.INSTANCE.register(TemperatureCapability.class, new DumbStorage(), () -> null);
     	
     	TerraFirmaCraft.getNetwork().registerMessage(new TemperaturePacket.Handler(), TemperaturePacket.class, 0, Side.CLIENT);
     }

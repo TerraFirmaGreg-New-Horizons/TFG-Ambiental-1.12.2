@@ -1,8 +1,9 @@
-package com.lumintorious.ambiental.modifiers;
+package com.lumintorious.ambiental.modifier;
 
-import com.lumintorious.ambiental.TFCAmbientalConfig;
 import com.lumintorious.ambiental.capability.TemperatureCapability;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class TempModifier implements Comparable<TempModifier>{
 	private String unlocalizedName;
@@ -24,7 +25,7 @@ public class TempModifier implements Comparable<TempModifier>{
 	}
 
 	public float getChange() {
-		return change * multiplier * (count == 1 ? 1f : TFCAmbientalConfig.GENERAL.diminishedModifierMultiplier);
+		return change * multiplier * 1; //(count == 1 ? 1f : TFCAmbientalConfig.GENERAL.diminishedModifierMultiplier);
 	}
 
 	public void setChange(float change) {
@@ -32,7 +33,7 @@ public class TempModifier implements Comparable<TempModifier>{
 	}
 
 	public float getPotency() {
-		return potency * multiplier * (count == 1 ? 1f : TFCAmbientalConfig.GENERAL.diminishedModifierMultiplier);
+		return potency * multiplier * 1; //(count == 1 ? 1f : TFCAmbientalConfig.GENERAL.diminishedModifierMultiplier);
 	}
 
 	public void setPotency(float potency) {
@@ -42,11 +43,11 @@ public class TempModifier implements Comparable<TempModifier>{
 	public void addCount() {
 		count++;
 	}
-	
+
 	public void absorb(TempModifier modifier) {
-		if(count >= TFCAmbientalConfig.GENERAL.modifierCap) {
-			return;
-		}
+//        if(count >= TFCAmbientalConfig.GENERAL.modifierCap) {
+//            return;
+//        }
 		this.count += modifier.count;
 		this.change += modifier.change;
 		this.potency += modifier.potency;
@@ -70,6 +71,18 @@ public class TempModifier implements Comparable<TempModifier>{
 		this.change = change;
 		this.potency = potency;
 	}
+
+	public static Optional<TempModifier> defined(String unlocalizedName, float change, float potency) {
+		return Optional.of(new TempModifier(unlocalizedName, change, potency));
+	}
+
+	public static Optional<TempModifier> none() {
+		return Optional.empty();
+	}
+
+//    public String getDisplayName() {
+//        return Util.translate(TFCAmbiental.MODID + ".modifier." + this.unlocalizedName);
+//    }
 	
 	public void apply(TemperatureCapability temp) {
 		// nothing;

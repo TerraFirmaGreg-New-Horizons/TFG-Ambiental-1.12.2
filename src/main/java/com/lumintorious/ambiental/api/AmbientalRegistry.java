@@ -3,17 +3,19 @@ package com.lumintorious.ambiental.api;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Optional;
 
-import com.lumintorious.ambiental.modifiers.*;
+import com.lumintorious.ambiental.compat.TFC;
+import com.lumintorious.ambiental.modifier.*;
 
-import com.lumintorious.ambiental.modifiers.compat.CellarsTileEntityModifier;
-import com.lumintorious.ambiental.modifiers.compat.FirmaLifeTileEntityModifier;
-import com.lumintorious.ambiental.modifiers.compat.TFCTechTileEntityModifier;
+import com.lumintorious.ambiental.compat.Cellars;
+import com.lumintorious.ambiental.compat.FirmaLife;
+import com.lumintorious.ambiental.compat.TFCTech;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.EnumSkyBlock;
 
 
-public class AmbientalRegistry<Type extends ITemperatureProvider> implements Iterable<Type>{
+public class AmbientalRegistry<Type> implements Iterable<Type> {
 	// Add functions that provide modifiers, you can use checks and return null to skip
 	// Use the "ModifierOwner" interfaces for self implemented objects
 	// Use the these only for objects out of your control
@@ -21,6 +23,9 @@ public class AmbientalRegistry<Type extends ITemperatureProvider> implements Ite
 	public static final AmbientalRegistry<IBlockTemperatureProvider> BLOCKS = new AmbientalRegistry<>();
 	public static final AmbientalRegistry<ITileEntityTemperatureProvider> TILE_ENTITIES = new AmbientalRegistry<>();
 	public static final AmbientalRegistry<IEnvironmentalTemperatureProvider> ENVIRONMENT = new AmbientalRegistry<>();
+
+	public static final AmbientalRegistry<IEquipmentTemperatureProvider> EQUIPMENT = new AmbientalRegistry<>();
+
 
 	static {
 		// GTCEu
@@ -33,31 +38,32 @@ public class AmbientalRegistry<Type extends ITemperatureProvider> implements Ite
 //		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRINIUM)) ? new BlockModifier("trinium_coil", 3f, 3f) : null);
 //		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRITANIUM)) ? new BlockModifier("tritanium_coil", 3f, 3f) : null);
 
-		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.TORCH ? new BlockModifier("torch", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.FIRE ? new BlockModifier("fire", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.LAVA ? new BlockModifier("lava", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> state.getBlock() == Blocks.FLOWING_LAVA ? new BlockModifier("lava", 3f, 3f) : null);
-		BLOCKS.register((state, pos, player) -> (state.getBlock() == Blocks.SNOW_LAYER && player.world.getLightFor(EnumSkyBlock.SKY, pos) == 15) ? new BlockModifier("snow", -1.5f, 0.2f, false) : null);
+		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("torch", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.TORCH));
+		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("fire", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.FIRE));
+		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("lava", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.LAVA));
+		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("flowing_lava", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.FLOWING_LAVA));
+		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("snow", -1.5f, 0.2f)).filter((mod) -> state.getBlock() == Blocks.SNOW_LAYER));
+		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("snow", -0.5f, 0.2f)).filter((mod) -> state.getBlock() == Blocks.SNOW && player.world.getLightFor(EnumSkyBlock.SKY, pos) == 15));
 
 		// TFC-Tech
-		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryFirebox); // Топило для печи для стекла
-		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleSmelteryCauldron); // Печь для стекла
-		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleElectricForge); // Тигель
-		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleInductionCrucible); // Кузня
-		TILE_ENTITIES.register(TFCTechTileEntityModifier::handleFridge); // Холодос
+		TILE_ENTITIES.register(TFCTech::handleSmelteryFirebox); // Топило для печи для стекла
+		TILE_ENTITIES.register(TFCTech::handleSmelteryCauldron); // Печь для стекла
+		TILE_ENTITIES.register(TFCTech::handleElectricForge); // Тигель
+		TILE_ENTITIES.register(TFCTech::handleInductionCrucible); // Кузня
+		TILE_ENTITIES.register(TFCTech::handleFridge); // Холодос
 
 		// Cellar
-		TILE_ENTITIES.register(CellarsTileEntityModifier::handleCellar); // Подвал
+		TILE_ENTITIES.register(Cellars::handleCellar); // Подвал
 
 		// Firmalife
-		TILE_ENTITIES.register(FirmaLifeTileEntityModifier::handleClayOven); // Oven
+		TILE_ENTITIES.register(FirmaLife::handleClayOven); // Oven
 
 		// TFC
-		TILE_ENTITIES.register(TileEntityModifier::handleCharcoalForge); // Угольная кузня
-		TILE_ENTITIES.register(TileEntityModifier::handleFirePit); // Костер
-		TILE_ENTITIES.register(TileEntityModifier::handleBloomery); // Доменка
-		TILE_ENTITIES.register(TileEntityModifier::handleLamps); // Лампа
-		TILE_ENTITIES.register(TileEntityModifier::handleCrucible); // Тигель
+		TILE_ENTITIES.register(TFC::handleCharcoalForge); // Угольная кузня
+		TILE_ENTITIES.register(TFC::handleFirePit); // Костер
+		TILE_ENTITIES.register(TFC::handleBloomery); // Доменка
+		TILE_ENTITIES.register(TFC::handleLamps); // Лампа
+		TILE_ENTITIES.register(TFC::handleCrucible); // Тигель
 
 		ENVIRONMENT.register(EnvironmentalModifier::handleGeneralTemperature);
 		ENVIRONMENT.register(EnvironmentalModifier::handleTimeOfDay);

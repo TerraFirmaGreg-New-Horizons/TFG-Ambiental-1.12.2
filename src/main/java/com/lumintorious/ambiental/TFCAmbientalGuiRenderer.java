@@ -1,6 +1,5 @@
 package com.lumintorious.ambiental;
 
-import com.lumintorious.ambiental.capability.ITemperatureCapability;
 import com.lumintorious.ambiental.capability.TemperatureCapability;
 import net.dries007.tfc.objects.fluids.FluidsTFC;
 import net.minecraft.block.Block;
@@ -167,7 +166,7 @@ public class TFCAmbientalGuiRenderer {
 		{
 			ResourceLocation vignetteLocation = null;
 			float temperature = 1f;
-			ITemperatureCapability tempSystem = (ITemperatureCapability) player.getCapability(TemperatureCapability.CAPABILITY, null);
+			TemperatureCapability tempSystem = player.getCapability(TemperatureCapability.CAPABILITY, null);
 			temperature = tempSystem.getTemperature();
 
 

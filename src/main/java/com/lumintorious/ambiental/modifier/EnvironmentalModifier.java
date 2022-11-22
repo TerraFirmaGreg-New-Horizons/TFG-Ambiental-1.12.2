@@ -1,4 +1,4 @@
-package com.lumintorious.ambiental.modifiers;
+package com.lumintorious.ambiental.modifier;
 
 import com.lumintorious.ambiental.TFCAmbientalConfig;
 import com.lumintorious.ambiental.api.IEnvironmentalTemperatureProvider;
@@ -189,7 +189,7 @@ public class EnvironmentalModifier extends TempModifier {
 		return null;
 	}
 	
-	public static void computeModifiers(EntityPlayer player, TempModifierStorage modifiers){
+	public static void evaluateAll(EntityPlayer player, TempModifierStorage modifiers){
 		for(IEnvironmentalTemperatureProvider provider : AmbientalRegistry.ENVIRONMENT) {
 			modifiers.add(provider.getModifier(player));
 		}
