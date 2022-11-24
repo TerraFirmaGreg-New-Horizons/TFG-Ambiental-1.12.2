@@ -33,6 +33,11 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 
 	public static final int tickInterval = 20;
 
+	public static final float BAD_MULTIPLIER = 0.001f;
+	public static final float GOOD_MULTIPLIER = 0.002f;
+	public static final float CHANGE_CAP = 7.5f;
+	public static final float HIGH_CHANGE = 0.20f;
+
 
     public TemperatureCapability(EntityPlayer player)
     {
@@ -50,7 +55,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	
 	public TempModifierStorage modifiers = new TempModifierStorage();
 
-	
+
 	public void clearModifiers() {
 		this.modifiers = new TempModifierStorage();
 	}
@@ -73,10 +78,6 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		return target;
 	}
 
-	public static final float BAD_MULTIPLIER = 0.002f;
-	public static final float GOOD_MULTIPLIER = 0.002f;
-	public static final float CHANGE_CAP = 7.5f;
-	public static final float HIGH_CHANGE = 0.20f;
 	public float getPotency() {
 		return potency;
 	}
