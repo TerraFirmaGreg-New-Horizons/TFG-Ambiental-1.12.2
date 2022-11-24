@@ -91,7 +91,7 @@ public class EnvironmentalModifier {
 
 	public static Optional<TempModifier> handleSprinting(EntityPlayer player) {
 		if(player.isSprinting()) {
-			return TempModifier.defined("sprint", 2000f, 0.3f);
+			return TempModifier.defined("sprint", 2f, 0.3f);
 		}else {
 			return TempModifier.none();
 		}
