@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface ITileEntityTemperatureProvider {
 	Optional<TempModifier> getModifier(EntityPlayer player, TileEntity tile);
 
-	public static final float mod = 0.3F;
+	float mod = 0.3F;
 
 	static void evaluateAll(EntityPlayer player, TempModifierStorage storage) {
 		IBlockTemperatureProvider.evaluateAll(player, storage);
