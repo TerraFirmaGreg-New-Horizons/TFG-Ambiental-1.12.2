@@ -26,23 +26,23 @@ public class TFCAmbientalConfig {
 
 		@Config.Comment("The average point for temperature, the not too warm and not too cool point")
 		@Config.RangeDouble(min = 0F, max = 30F)
-		public float averageTemperature = 15F;
+		public float averageTemperature = 18F;
 
 		@Config.Comment("The point where warmth starts to affect the screen, but only mildly")
 		@Config.RangeDouble(min = 5F, max = 35F)
-		public float hotThreshold = 25F;
+		public float hotThreshold = 35F;
 
 		@Config.Comment("The point where cold starts to affect the screen, but only mildly")
 		@Config.RangeDouble(min = -15F, max = 25F)
-		public float coolThreshold = 5F;
+		public float coolThreshold = 0F;
 
 		@Config.Comment("The point where warmth starts to hurt the player")
 		@Config.RangeDouble(min = 15F, max = 45F)
-		public float burnThreshold = 30F;
+		public float burnThreshold = 48F;
 
 		@Config.Comment("The point where cold starts to hurt the player")
 		@Config.RangeDouble(min = -15F, max = 15F)
-		public float freezeThreshold = 0F;
+		public float freezeThreshold = -5F;
 
 		@Config.Comment("How quickly player temperature changes towards the target environment temperature")
 		@Config.RangeDouble(min = 0F, max = 30F)
@@ -50,7 +50,7 @@ public class TFCAmbientalConfig {
 
 		@Config.Comment("How quickly player temperature changes towards the target environment temperature when it's beneficial to do so")
 		@Config.RangeDouble(min = 0F, max = 50F)
-		public float goodTemperatureChangeSpeed = 4F;
+		public float goodTemperatureChangeSpeed = 5F;
 
 		@Config.Comment("How quickly player temperature changes towards the target environment temperature when it's not beneficial")
 		@Config.RangeDouble(min = 0F, max = 50F)
@@ -65,7 +65,7 @@ public class TFCAmbientalConfig {
 		public float harsherMultiplier = 1.20F;
 
 		@Config.Comment("How many modifiers of the same type until they stop adding together. Default = 4")
-		public int modifierCap = 10;
+		public int modifierCap = 4;
 
 		@Config.Comment("The temperature that nano or quantum armor will do when you are in a full set.")
 		public int nanoOrQuarkTemp = 20;
@@ -74,7 +74,7 @@ public class TFCAmbientalConfig {
 		public int[] allowedDims = new int[] {0};
 
 		@Config.Comment("If true, you will start taking damage when below freezing or above burning temperatures. Default = true")
-		public boolean takeDamage = true;
+		public boolean takeDamage = false;
 
 		@Config.Comment("If true, you will start losing hunger when below cold temperatures and losing thirst when above hot temperatures. Default = true")
 		public boolean loseHungerThirst = true;
