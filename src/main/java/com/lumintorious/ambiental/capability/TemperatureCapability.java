@@ -58,6 +58,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		IBlockTemperatureProvider.evaluateAll(player, modifiers);
 		ITileEntityTemperatureProvider.evaluateAll(player, modifiers);
 		IEquipmentTemperatureProvider.evaluateAll(player, modifiers);
+		this.modifiers.keepOnlyNEach(3);
 
 		savedTarget = modifiers.getTargetTemperature();
 		savedPotency = modifiers.getTotalPotency();

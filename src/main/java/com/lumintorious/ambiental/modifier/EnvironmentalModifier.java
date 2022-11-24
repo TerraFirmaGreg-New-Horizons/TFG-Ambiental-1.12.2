@@ -17,181 +17,179 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.biome.Biome;
 
-public class EnvironmentalModifier extends TempModifier {
-	public EnvironmentalModifier(String name, float change, float potency) {
-		super(name, change, potency);
-	}
+import java.util.Optional;
+
+public class EnvironmentalModifier {
 
 	public static float getEnvironmentTemperatureWithTimeOfDay(EntityPlayer player) {
-		return getEnvironmentTemperature(player) + handleTimeOfDay(player).getChange();
+		return getEnvironmentTemperature(player) + handleTimeOfDay(player).get().getChange();
 	}
-	
+
 	public static float getEnvironmentTemperature(EntityPlayer player) {
 		float avg = ClimateTFC.getAvgTemp(player.world, player.getPosition());
 		float actual = ClimateTFC.getActualTemp(player.world, player.getPosition());
-		if(TFCAmbientalConfig.GENERAL.harsherTemperateAreas) {
-			float diff = actual - TemperatureCapability.AVERAGE;
-			float sign = Math.signum(diff);
-			float generalDiff = Math.abs(avg - TemperatureCapability.AVERAGE);
-			float mult0 = Math.max(0f, TFCAmbientalConfig.GENERAL.harsherMultiplier - 1f);
-			float multiplier = 1 + Math.max(0, 1 - generalDiff / 55) * mult0;
-			actual = 20 + (diff + 0.5f * sign) * multiplier;
-		}
+//        if(TFCAmbientalConfig.GENERAL.harsherTemperateAreas) {
+		float diff = actual - 15; //TemperatureCapability.AVERAGE;
+		float sign = Math.signum(diff);
+		float generalDiff = Math.abs(avg - 15);//TemperatureCapability.AVERAGE);
+		float mult0 = Math.max(0f, 1f); //TFCAmbientalConfig.GENERAL.harsherMultiplier - 1f);
+//            float multiplier = 1 + Math.max(0, 1 - generalDiff / 55) * mult0;
+		actual = 20 + (diff + 0.5f * sign);
+//        }
 		return actual;
 	}
-	
+
 	public static float getEnvironmentHumidity(EntityPlayer player) {
 		return ClimateTFC.getRainfall(player.world, player.getPosition()) / 3000;
 	}
-	
-	public static EnvironmentalModifier handleFire(EntityPlayer player) {
-		return player.isBurning() ? new EnvironmentalModifier("on_fire", 4f, 4f) : null;
+
+	public static Optional<TempModifier> handleFire(EntityPlayer player) {
+		return player.isBurning() ? TempModifier.defined("on_fire", 4f, 4f) : TempModifier.none();
 	}
 
-	public static EnvironmentalModifier handleGeneralTemperature(EntityPlayer player) {
-		return new EnvironmentalModifier("environment", getEnvironmentTemperature(player), getEnvironmentHumidity(player));
+	public static Optional<TempModifier> handleGeneralTemperature(EntityPlayer player) {
+		return Optional.of(new TempModifier("environment", getEnvironmentTemperature(player), getEnvironmentHumidity(player)));
 	}
 
-	public static EnvironmentalModifier handleTimeOfDay(EntityPlayer player) {
+	public static Optional<TempModifier> handleTimeOfDay(EntityPlayer player) {
 		int dayTicks = (int) (player.world.getWorldTime() % 24000);
-		if(dayTicks < 6000) return new EnvironmentalModifier("morning", 2f, 0);
-		else if(dayTicks < 12000) return new EnvironmentalModifier("afternoon", 4f, 0);
-		else if(dayTicks < 18000) return new EnvironmentalModifier("evening", 1f, 0);
-		else return new EnvironmentalModifier("night", 1f, 0);
+		if(dayTicks < 6000) return TempModifier.defined("morning", 2f, 0);
+		else if(dayTicks < 12000) return TempModifier.defined("afternoon", 4f, 0);
+		else if(dayTicks < 18000) return TempModifier.defined("evening", 1f, 0);
+		else return TempModifier.defined("night", 1f, 0);
 	}
-	
-	public static EnvironmentalModifier handleWater(EntityPlayer player) {
-		if(player.isInWater()) {
+
+	public static Optional<TempModifier> handleWater(EntityPlayer player) {
+		if (player.isInWater()) {
 			BlockPos pos = player.getPosition();
 			IBlockState state = player.world.getBlockState(pos);
-			if(state.getBlock() == FluidsTFC.HOT_WATER.get().getBlock()) {
-				return new EnvironmentalModifier("in_hot_water", 5f, 6f);
-			}else if(state.getBlock() == Blocks.LAVA) {
-				return new EnvironmentalModifier("in_lava", 10f, 5f);
-			}else if(state.getBlock() == FluidsTFC.SALT_WATER.get().getBlock() && player.world.getBiome(pos).getTempCategory() == Biome.TempCategory.OCEAN ){
-				return new EnvironmentalModifier("in_ocean_water", -8f, 6f);
-			}else {
-				return new EnvironmentalModifier("in_water", -5f, 6f);
+			if (state.getBlock() == FluidsTFC.HOT_WATER.get().getBlock()) {
+				return TempModifier.defined("in_hot_water", 5f, 6f);
+			} else if (state.getBlock() == Blocks.LAVA) {
+				return TempModifier.defined("in_lava", 10f, 5f);
+//            }else if(state.getBlock() == FluidsTFC.SALT_WATER.get().getBlock() && player.level.getBiome(pos).get() == Biome.TempCategory.OCEAN ){
+//                return new TempModifier("in_ocean_water", -8f, 6f);
+			} else {
+				return TempModifier.defined("in_water", -5f, 6f);
 			}
-		}else {
-			return null;
+		} else {
+			return TempModifier.none();
 		}
 	}
-	
-	public static EnvironmentalModifier handleRain(EntityPlayer player) {
+
+	public static Optional<TempModifier> handleRain(EntityPlayer player) {
 		if(player.world.isRaining()) {
 			if(getSkylight(player) < 15) {
-				return new EnvironmentalModifier("rain", -2f, 0.1f);
+				return TempModifier.defined("weather", -2f, 0.1f);
 			}else {
-				return new EnvironmentalModifier("rain", -4f, 0.3f);
+				return TempModifier.defined("weather", -4f, 0.3f);
 			}
 		}else {
-			return null;
+			return TempModifier.none();
 		}
 	}
-	
-	public static EnvironmentalModifier handleSprinting(EntityPlayer player) {
+
+	public static Optional<TempModifier> handleSprinting(EntityPlayer player) {
 		if(player.isSprinting()) {
-			return new EnvironmentalModifier("sprint", 2f, 0.3f);
+			return TempModifier.defined("sprint", 2000f, 0.3f);
 		}else {
-			return null;
+			return TempModifier.none();
 		}
 	}
-	
-	public static EnvironmentalModifier handleUnderground(EntityPlayer player) {
+
+	public static Optional<TempModifier> handleUnderground(EntityPlayer player) {
 		if(getSkylight(player) < 2) {
-			return new EnvironmentalModifier("underground", -6f, 0.2f);
+			return TempModifier.defined("underground", -6f, 0.2f);
 		}else{
-			return null;
+			return TempModifier.none();
 		}
 	}
-	
-	public static EnvironmentalModifier handleShade(EntityPlayer player) {
+
+	public static Optional<TempModifier> handleShade(EntityPlayer player) {
 		int light = getSkylight(player);
 		light = Math.max(12, light);
 		float temp = getEnvironmentTemperatureWithTimeOfDay(player);
-		float avg = TemperatureCapability.AVERAGE;
-//		float coverage = (1f - (float)light/15f) + 0.5f;
+		float avg = TFCAmbientalConfig.GENERAL.averageTemperature;
 		if(light < 15 && temp > avg) {
-			return new EnvironmentalModifier("shade", -Math.abs(avg - temp) * 0.6f, 0f);
+			return TempModifier.defined("shade", -Math.abs(avg - temp) * 0.6f, 0f);
 		}else{
-			return null;
+			return TempModifier.none();
 		}
 	}
-	
-	public static EnvironmentalModifier handleCozy(EntityPlayer player) {
+
+	public static Optional<TempModifier> handleCozy(EntityPlayer player) {
 		int skyLight = getSkylight(player);
 		skyLight = Math.max(12, skyLight);
 		int blockLight = getBlockLight(player);
 		float temp = getEnvironmentTemperatureWithTimeOfDay(player);
-		float avg = TemperatureCapability.AVERAGE;
-		float coverage = (1f - (float)skyLight/15f) + 0.4f;
+		float avg = TFCAmbientalConfig.GENERAL.averageTemperature;
+//		if(EnvironmentalTemperatureProvider.calculateEnclosure(player, 30) && temp < avg - 1) {
 		if(skyLight < 15 && blockLight > 4 && temp < avg - 1) {
-				return new EnvironmentalModifier("cozy", Math.abs(avg - 1 - temp) *  coverage, 0f);
-			}else{
-				return null;
-			}
+			return TempModifier.defined("cozy", Math.abs(avg - 1 - temp) * 0.6f, 0f);
+		}else{
+			return TempModifier.none();
+		}
 	}
-	
-	public static EnvironmentalModifier handleThirst(EntityPlayer player) {
+
+	public static Optional<TempModifier> handleThirst(EntityPlayer player) {
 		if(player.getFoodStats() instanceof IFoodStatsTFC) {
 			IFoodStatsTFC stats = (IFoodStatsTFC) player.getFoodStats();
-			if(getEnvironmentTemperatureWithTimeOfDay(player) > TemperatureCapability.AVERAGE + 3 && stats.getThirst() > 80f) {
-				return new EnvironmentalModifier("well_hidrated", -2.5f, 0f);
+			if(getEnvironmentTemperatureWithTimeOfDay(player) > TFCAmbientalConfig.GENERAL.averageTemperature + 3 && stats.getThirst() > 80f) {
+				return TempModifier.defined("well_hidrated", -2.5f, 0f);
 			}
 		}
-		return null;
+		return TempModifier.none();
 	}
-	
-	public static EnvironmentalModifier handleFood(EntityPlayer player) {
-		if(getEnvironmentTemperatureWithTimeOfDay(player) < TemperatureCapability.AVERAGE - 3 && player.getFoodStats().getFoodLevel() > 14) {
-			return new EnvironmentalModifier("well_fed", 2.5f, 0f);
+
+	public static Optional<TempModifier> handleFood(EntityPlayer player) {
+		if(getEnvironmentTemperatureWithTimeOfDay(player) < TFCAmbientalConfig.GENERAL.averageTemperature - 3 && player.getFoodStats().getFoodLevel() > 14) {
+			return TempModifier.defined("well_fed", 2.5f, 0f);
 		}
-		return null;
+		return TempModifier.none();
 	}
-	
-	public static EnvironmentalModifier handleDiet(EntityPlayer player) {
+
+	public static Optional<TempModifier> handleDiet(EntityPlayer player) {
 		if(player.getFoodStats() instanceof IFoodStatsTFC) {
 			IFoodStatsTFC stats = (IFoodStatsTFC) player.getFoodStats();
-			if(getEnvironmentTemperatureWithTimeOfDay(player) < TemperatureCapability.COOL_THRESHOLD) {
+			if(getEnvironmentTemperatureWithTimeOfDay(player) < TFCAmbientalConfig.GENERAL.coolThreshold) {
 				float grainLevel = stats.getNutrition().getNutrient(Nutrient.GRAIN);
 				float meatLevel = stats.getNutrition().getNutrient(Nutrient.PROTEIN);
-				return new EnvironmentalModifier("nutrients", 4f * grainLevel * meatLevel, 0f);
+				return TempModifier.defined("nutrients", 4f * grainLevel * meatLevel, 0f);
 			}
-			if(getEnvironmentTemperatureWithTimeOfDay(player) > TemperatureCapability.HOT_THRESHOLD) {
+			if(getEnvironmentTemperatureWithTimeOfDay(player) > TFCAmbientalConfig.GENERAL.hotThreshold) {
 				float fruitLevel = stats.getNutrition().getNutrient(Nutrient.FRUIT);
 				float veggieLevel = stats.getNutrition().getNutrient(Nutrient.VEGETABLES);
-				return new EnvironmentalModifier("nutrients", -4f  * fruitLevel * veggieLevel, 0f);
+				return TempModifier.defined("nutrients", -4f  * fruitLevel * veggieLevel, 0f);
 			}
 		}
-		return null;
+		return TempModifier.none();
 	}
-	
+
+	public static Optional<TempModifier> handlePotionEffects(EntityPlayer player) {
+		if(player.isPotionActive(TempEffect.COOL)){
+			return TempModifier.defined("cooling_effect", -10F, 0);
+		}
+		if(player.isPotionActive(TempEffect.WARM)){
+			return TempModifier.defined("heating_effect", 10F, 0);
+		}
+		return TempModifier.none();
+	}
+
 	public static int getSkylight(EntityPlayer player) {
 		BlockPos pos = new BlockPos(player.getPosition());
 		BlockPos pos2 = pos.add(0, 1, 0);
 		return player.world.getLightFor(EnumSkyBlock.SKY, pos2);
 	}
-	
+
 	public static int getBlockLight(EntityPlayer player) {
 		BlockPos pos = new BlockPos(player.getPosition());
-		pos.add(0, 1, 0);
-		return player.world.getLightFor(EnumSkyBlock.BLOCK, pos);
+		BlockPos pos2 = pos.add(0, 1, 0);
+		return player.world.getLightFor(EnumSkyBlock.BLOCK, pos2);
 	}
 
-	public static EnvironmentalModifier handlePotionEffects(EntityPlayer player) {
-		if(player.isPotionActive(TempEffect.COOL)){
-			return new EnvironmentalModifier("cooling_effect", -10F, 0);
-		}
-		if(player.isPotionActive(TempEffect.WARM)){
-			return new EnvironmentalModifier("heating_effect", 10F, 0);
-		}
-		return null;
-	}
-	
-	public static void evaluateAll(EntityPlayer player, TempModifierStorage modifiers){
+	public static void evaluateAll(EntityPlayer player, TempModifierStorage storage) {
 		for(IEnvironmentalTemperatureProvider provider : AmbientalRegistry.ENVIRONMENT) {
-			modifiers.add(provider.getModifier(player));
+			storage.add(provider.getModifier(player));
 		}
 	}
 
