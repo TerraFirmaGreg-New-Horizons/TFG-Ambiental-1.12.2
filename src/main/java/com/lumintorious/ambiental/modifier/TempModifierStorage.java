@@ -5,21 +5,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class TempModifierStorage implements Iterable<TempModifier>{
-//	private HashMap<String, TempModifier> map = new HashMap<String, TempModifier>();
 	private List<TempModifier> list = new LinkedList<>();
-	
-//	private TempModifier put(String key, TempModifier value) {
-//		if((value.getChange() == 0f && value.getPotency() == 0f)) {
-//			return null;
-//		}
-//		TempModifier modifier = map.get(key);
-//		if(modifier != null) {
-//			modifier.absorb(value);
-//			return modifier;
-//		}else {
-//			return map.put(key, value);
-//		}
-//	}
+
 
 	public TempModifierStorage keepOnlyNEach(int n) {
 		Map<String, List<TempModifier>> grouped = list.stream().collect(Collectors.groupingBy(TempModifier::getUnlocalizedName));
