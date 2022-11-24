@@ -26,35 +26,35 @@ public class TFCAmbientalConfig {
 
 		@Config.Comment("The average point for temperature, the not too warm and not too cool point")
 		@Config.RangeDouble(min = 0F, max = 30F)
-		public float averageTemperature = 18F;
+		public float averageTemperature = 15F;
 
 		@Config.Comment("The point where warmth starts to affect the screen, but only mildly")
 		@Config.RangeDouble(min = 5F, max = 35F)
-		public float hotThreshold = 35F;
+		public float hotThreshold = 25F;
 
 		@Config.Comment("The point where cold starts to affect the screen, but only mildly")
 		@Config.RangeDouble(min = -15F, max = 25F)
-		public float coolThreshold = 0F;
+		public float coolThreshold = 5F;
 
 		@Config.Comment("The point where warmth starts to hurt the player")
 		@Config.RangeDouble(min = 15F, max = 45F)
-		public float burnThreshold = 48F;
+		public float burnThreshold = 30F;
 
 		@Config.Comment("The point where cold starts to hurt the player")
 		@Config.RangeDouble(min = -15F, max = 15F)
-		public float freezeThreshold = -5F;
+		public float freezeThreshold = 0F;
 
 		@Config.Comment("How quickly player temperature changes towards the target environment temperature")
 		@Config.RangeDouble(min = 0F, max = 30F)
-		public float temperatureChangeSpeed = 1.0f;
+		public float temperatureChangeSpeed = 1F;
 
 		@Config.Comment("How quickly player temperature changes towards the target environment temperature when it's beneficial to do so")
 		@Config.RangeDouble(min = 0F, max = 50F)
-		public float goodTemperatureChangeSpeed = 5F;
+		public float goodTemperatureChangeSpeed = 4F;
 
 		@Config.Comment("How quickly player temperature changes towards the target environment temperature when it's not beneficial")
 		@Config.RangeDouble(min = 0F, max = 50F)
-		public float badTemperatureChangeSpeed = 1f;
+		public float badTemperatureChangeSpeed = 1F;
 
 
 
