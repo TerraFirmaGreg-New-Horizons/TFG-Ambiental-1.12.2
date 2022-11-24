@@ -23,10 +23,16 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 
 	public static final Capability<TemperatureCapability> CAPABILITY = null;
 
+	private int tick = 0;
+	private int damageTick = 0;
+	private int durabilityTick = 0;
+	private EntityPlayer player;
+	public float target = AVERAGE;
+	public float potency = 1f;
+	public float bodyTemperature = AVERAGE;
+
 	public static final int tickInterval = 20;
-	
-    /** The capability this is for */
-    private final EntityPlayer player;
+
 
     public TemperatureCapability(EntityPlayer player)
     {
@@ -43,8 +49,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	public static float NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
 	
 	public TempModifierStorage modifiers = new TempModifierStorage();
-	
-	public float bodyTemperature = AVERAGE;
+
 	
 	public void clearModifiers() {
 		this.modifiers = new TempModifierStorage();
@@ -60,24 +65,20 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		IEquipmentTemperatureProvider.evaluateAll(player, modifiers);
 		this.modifiers.keepOnlyNEach(3);
 
-		savedTarget = modifiers.getTargetTemperature();
-		savedPotency = modifiers.getTotalPotency();
+		target = modifiers.getTargetTemperature();
+		potency = modifiers.getTotalPotency();
 }
-	
-	public float savedTarget = AVERAGE;
 
 	public float getTargetTemperature() {
-		return savedTarget;
+		return target;
 	}
 
 	public static final float BAD_MULTIPLIER = 0.002f;
 	public static final float GOOD_MULTIPLIER = 0.002f;
 	public static final float CHANGE_CAP = 7.5f;
 	public static final float HIGH_CHANGE = 0.20f;
-	
-	public float savedPotency = 1f;
 	public float getPotency() {
-		return savedPotency;
+		return potency;
 	}
 
 	public static boolean hasNanoOrQuarkArmorProtection(EntityPlayer player) {
@@ -135,8 +136,6 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		}
 		return (change * speed);
 	}
-	
-	public int tick = 0;
 
 	public void update() {
 		if (!player.world.isRemote) {
@@ -236,8 +235,8 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	public void deserializeNBT(NBTTagCompound tag) {
 		if(tag.hasKey("temperature")) {
 			this.setTemperature(tag.getFloat("temperature"));
-			this.savedTarget  = (tag.getFloat("target"));
-			this.savedPotency = (tag.getFloat("potency"));
+			this.target = (tag.getFloat("target"));
+			this.potency = (tag.getFloat("potency"));
 
 		}else {
 			this.setTemperature(23.4f);
