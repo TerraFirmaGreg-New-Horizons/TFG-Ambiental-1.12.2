@@ -74,7 +74,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		potency = modifiers.getTotalPotency();
 }
 
-	public float getTargetTemperature() {
+	public float getTarget() {
 		return target;
 	}
 
@@ -124,7 +124,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	}
 
 	public float getTemperatureChange() {
-		float target = getTargetTemperature();
+		float target = getTarget();
 		float speed = getPotency() * TFCAmbientalConfig.GENERAL.temperatureChangeSpeed;
 		float change = Math.min(CHANGE_CAP, Math.max(-CHANGE_CAP, target - bodyTemperature));
 		float newTemp = bodyTemperature + change;
@@ -189,7 +189,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 				+ "Potency: %.4f",
 				bodyTemperature,
 				this.getTemperatureChange(),
-				this.getTargetTemperature(),
+				this.getTarget(),
 				modifiers.getTotalPotency()
 				) + "\n"+str;
 	}
@@ -227,7 +227,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setFloat("temperature", this.getTemperature());
-		tag.setFloat("target", this.getTargetTemperature());
+		tag.setFloat("target", this.getTarget());
 		tag.setFloat("potency", this.getPotency());
 		return tag;
 	}
