@@ -23,6 +23,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
 import static com.lumintorious.ambiental.TFCAmbiental.MODID;
+import static com.lumintorious.ambiental.capability.TemperatureCapability.*;
 
 @SideOnly(Side.CLIENT)
 public class TFCAmbientalGuiRenderer {
@@ -48,7 +49,7 @@ public class TFCAmbientalGuiRenderer {
 			return;
 		}
 
-    	TemperatureCapability tempSystem = (TemperatureCapability)player.getCapability(TemperatureCapability.CAPABILITY, null);
+    	TemperatureCapability tempSystem = (TemperatureCapability)player.getCapability(CAPABILITY, null);
     	ScaledResolution resolution = event.getResolution();
         int width = resolution.getScaledWidth();
         int height = resolution.getScaledHeight();
@@ -86,16 +87,16 @@ public class TFCAmbientalGuiRenderer {
 		int mid = sr.getScaledWidth() / 2;
 		temperature = tempSystem.getTemperature();
 		GL11.glEnable(GL11.GL_BLEND);
-		if (temperature > TemperatureCapability.AVERAGE) {
-			float hotRange = TemperatureCapability.HOT_THRESHOLD - TemperatureCapability.AVERAGE + 2;
-			float red = Math.max(0, Math.min(1, (temperature - TemperatureCapability.AVERAGE) / hotRange));
+		if (temperature > AVERAGE) {
+			float hotRange = HOT_THRESHOLD - AVERAGE + 2;
+			float red = Math.max(0, Math.min(1, (temperature - AVERAGE) / hotRange));
 			redCol = 1F;
 			greenCol = 1.0F - red / 2.4F;
 			blueCol = 1.0F - red / 1.6F;
 		}
 		else {
-			float coolRange = TemperatureCapability.AVERAGE - TemperatureCapability.COOL_THRESHOLD - 2;
-			float blue = Math.max(0, Math.min(1, (TemperatureCapability.AVERAGE - temperature) / coolRange));
+			float coolRange = AVERAGE - COOL_THRESHOLD - 2;
+			float blue = Math.max(0, Math.min(1, (AVERAGE - temperature) / coolRange));
 			redCol = 1.0F - blue / 1.6F;
 			greenCol = 1.0F - blue / 2.4F;
 			blueCol = 1.0F;
@@ -107,13 +108,13 @@ public class TFCAmbientalGuiRenderer {
 		float speed = tempSystem.getChangeSpeed();
 		float change = tempSystem.getChange();
 		if (change > 0) {
-			if (change > TemperatureCapability.HIGH_CHANGE) {
+			if (change > HIGH_CHANGE) {
 			  drawTexturedModalRect(mid - 8, armorRowHeight - 4 + offsetYArrow, 16, 16, PLUSER);
 			} else {
 			  drawTexturedModalRect(mid - 8, armorRowHeight - 4 + offsetYArrow, 16, 16, PLUS);
 			}
 		} else {
-			if (change < -TemperatureCapability.HIGH_CHANGE) {
+			if (change < -HIGH_CHANGE) {
 			  drawTexturedModalRect(mid - 8, armorRowHeight - 4 + offsetYArrow, 16, 16, MINUSER);
 			} else {
 			  drawTexturedModalRect(mid - 8, armorRowHeight - 4 + offsetYArrow, 16, 16, MINUS);
@@ -166,17 +167,17 @@ public class TFCAmbientalGuiRenderer {
 		{
 			ResourceLocation vignetteLocation = null;
 			float temperature = 1f;
-			TemperatureCapability tempSystem = player.getCapability(TemperatureCapability.CAPABILITY, null);
+			TemperatureCapability tempSystem = player.getCapability(CAPABILITY, null);
 			temperature = tempSystem.getTemperature();
 
 
 			float opacity = 1f;
-			if(temperature > TemperatureCapability.HOT_THRESHOLD) {
+			if(temperature > HOT_THRESHOLD) {
 				vignetteLocation = HOT_VIGNETTE;
-				opacity = Math.min(0.95f ,(temperature - TemperatureCapability.HOT_THRESHOLD) / 14);
-			}else if(temperature < TemperatureCapability.COOL_THRESHOLD) {
+				opacity = Math.min(0.95f ,(temperature - HOT_THRESHOLD) / 14);
+			}else if(temperature < COOL_THRESHOLD) {
 				vignetteLocation = COLD_VIGNETTE;
-				opacity = Math.min(0.95f ,(TemperatureCapability.COOL_THRESHOLD - temperature) / 14);
+				opacity = Math.min(0.95f ,(COOL_THRESHOLD - temperature) / 14);
 			}
 
 			if (event.getType() == ElementType.PORTAL)
