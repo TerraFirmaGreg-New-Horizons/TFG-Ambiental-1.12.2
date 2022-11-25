@@ -19,6 +19,8 @@ import net.minecraft.world.biome.Biome;
 
 import java.util.Optional;
 
+import static com.lumintorious.ambiental.capability.TemperatureCapability.*;
+
 public class EnvironmentalModifier {
 
 	public static float getEnvironmentTemperatureWithTimeOfDay(EntityPlayer player) {
@@ -28,14 +30,14 @@ public class EnvironmentalModifier {
 	public static float getEnvironmentTemperature(EntityPlayer player) {
 		float avg = ClimateTFC.getAvgTemp(player.world, player.getPosition());
 		float actual = ClimateTFC.getActualTemp(player.world, player.getPosition());
-//        if(TFCAmbientalConfig.GENERAL.harsherTemperateAreas) {
-		float diff = actual - 15; //TemperatureCapability.AVERAGE;
+        if(TFCAmbientalConfig.GENERAL.harsherTemperateAreas) {
+		float diff = actual - AVERAGE;
 		float sign = Math.signum(diff);
-		float generalDiff = Math.abs(avg - 15);//TemperatureCapability.AVERAGE);
-		float mult0 = Math.max(0f, 1f); //TFCAmbientalConfig.GENERAL.harsherMultiplier - 1f);
-//            float multiplier = 1 + Math.max(0, 1 - generalDiff / 55) * mult0;
+		float generalDiff = Math.abs(avg - 15);
+		float mult0 = Math.max(0f, TFCAmbientalConfig.GENERAL.harsherMultiplier - 1f);
+		float multiplier = 1 + Math.max(0, 1 - generalDiff / 55) * mult0;
 		actual = 20 + (diff + 0.5f * sign);
-//        }
+        }
 		return actual;
 	}
 
@@ -67,8 +69,8 @@ public class EnvironmentalModifier {
 				return TempModifier.defined("in_hot_water", 5f, 6f);
 			} else if (state.getBlock() == Blocks.LAVA) {
 				return TempModifier.defined("in_lava", 10f, 5f);
-//            }else if(state.getBlock() == FluidsTFC.SALT_WATER.get().getBlock() && player.level.getBiome(pos).get() == Biome.TempCategory.OCEAN ){
-//                return new TempModifier("in_ocean_water", -8f, 6f);
+			}else if(state.getBlock() == FluidsTFC.SALT_WATER.get().getBlock() && player.world.getBiome(pos).getTempCategory() == Biome.TempCategory.OCEAN ){
+                return TempModifier.defined("in_ocean_water", -8f, 6f);
 			} else {
 				return TempModifier.defined("in_water", -5f, 6f);
 			}
@@ -109,7 +111,7 @@ public class EnvironmentalModifier {
 		int light = getSkylight(player);
 		light = Math.max(12, light);
 		float temp = getEnvironmentTemperatureWithTimeOfDay(player);
-		float avg = TFCAmbientalConfig.GENERAL.averageTemperature;
+		float avg = AVERAGE;
 		if(light < 15 && temp > avg) {
 			return TempModifier.defined("shade", -Math.abs(avg - temp) * 0.6f, 0f);
 		}else{
@@ -122,7 +124,7 @@ public class EnvironmentalModifier {
 		skyLight = Math.max(12, skyLight);
 		int blockLight = getBlockLight(player);
 		float temp = getEnvironmentTemperatureWithTimeOfDay(player);
-		float avg = TFCAmbientalConfig.GENERAL.averageTemperature;
+		float avg = AVERAGE;
 //		if(EnvironmentalTemperatureProvider.calculateEnclosure(player, 30) && temp < avg - 1) {
 		if(skyLight < 15 && blockLight > 4 && temp < avg - 1) {
 			return TempModifier.defined("cozy", Math.abs(avg - 1 - temp) * 0.6f, 0f);
@@ -134,7 +136,7 @@ public class EnvironmentalModifier {
 	public static Optional<TempModifier> handleThirst(EntityPlayer player) {
 		if(player.getFoodStats() instanceof IFoodStatsTFC) {
 			IFoodStatsTFC stats = (IFoodStatsTFC) player.getFoodStats();
-			if(getEnvironmentTemperatureWithTimeOfDay(player) > TFCAmbientalConfig.GENERAL.averageTemperature + 3 && stats.getThirst() > 80f) {
+			if(getEnvironmentTemperatureWithTimeOfDay(player) > AVERAGE + 3 && stats.getThirst() > 80f) {
 				return TempModifier.defined("well_hidrated", -2.5f, 0f);
 			}
 		}

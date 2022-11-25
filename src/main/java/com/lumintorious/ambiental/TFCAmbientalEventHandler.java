@@ -79,6 +79,13 @@ public class TFCAmbientalEventHandler {
                 if (!event.getCapabilities().containsKey(loc))
                     event.addCapability(loc, new TemperatureCapability(player));
         }
+//		if (event.getObject() instanceof EntityPlayer)
+//		{
+//			EntityPlayer player = (EntityPlayer)event.getObject();
+//			TemperatureCapability capability = new TemperatureCapability();
+//			capability.setPlayer(player);
+//			event.addCapability(TemperatureCapability.KEY, capability);
+//		}
     }
 
 	@SubscribeEvent
