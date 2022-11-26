@@ -122,7 +122,7 @@ public class TFCAmbientalGuiRenderer {
 		}
 		if ((player.isSneaking() || !TFCAmbientalConfig.CLIENT.sneakyDetails) && tempSystem instanceof TemperatureCapability) {
 		  TemperatureCapability sys = (TemperatureCapability)tempSystem;
-		  float targetFormatted = sys.getTarget();
+		  float targetFormatted = sys.getTargetTemperature();
 		  float tempFormatted = sys.getTemperature();
 		  float changeFormatted = sys.getChange();
 		  FontRenderer fr = Minecraft.getMinecraft().fontRenderer;

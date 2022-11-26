@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 public class TempModifierStorage implements Iterable<TempModifier>{
 	private List<TempModifier> list = new LinkedList<>();
 
-
 	public TempModifierStorage keepOnlyNEach(int n) {
 		Map<String, List<TempModifier>> grouped = list.stream().collect(Collectors.groupingBy(TempModifier::getUnlocalizedName));
 		this.list = grouped
