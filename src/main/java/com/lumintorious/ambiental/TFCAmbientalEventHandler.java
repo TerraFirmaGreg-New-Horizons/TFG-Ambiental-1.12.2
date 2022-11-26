@@ -1,7 +1,7 @@
-package com.lumintorious.tfcambiental;
+package com.lumintorious.ambiental;
 
-import com.lumintorious.tfcambiental.capability.TemperatureCapability;
-import com.lumintorious.tfcambiental.effects.TempEffect;
+import com.lumintorious.ambiental.capability.TemperatureCapability;
+import com.lumintorious.ambiental.effects.TempEffect;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,9 +19,9 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.ArrayUtils;
 
-import static com.lumintorious.tfcambiental.TFCAmbiental.MODID;
+import static com.lumintorious.ambiental.TFCAmbiental.MODID;
 
-public class CommonEventHandler {
+public class TFCAmbientalEventHandler {
 
 	@SubscribeEvent
 	public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
@@ -30,12 +30,12 @@ public class CommonEventHandler {
 		{
 			ConfigManager.sync(MODID, Config.Type.INSTANCE);
 			TemperatureCapability.AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;
-			TemperatureCapability.HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotTemperature;
-			TemperatureCapability.COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coldTemperature;
-			TemperatureCapability.BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burningTemperature;
-			TemperatureCapability.FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezingTemperature;
+			TemperatureCapability.HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotThreshold;
+			TemperatureCapability.COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coolThreshold;
+			TemperatureCapability.BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burnThreshold;
+			TemperatureCapability.FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezeThreshold;
 			TemperatureCapability.NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
-			ClientEventHandler.enableOverlay = TFCAmbientalConfig.CLIENT.enableOverlay;
+			TFCAmbientalGuiRenderer.enableOverlay = TFCAmbientalConfig.CLIENT.enableOverlay;
 		}
 	}
 
@@ -79,6 +79,13 @@ public class CommonEventHandler {
                 if (!event.getCapabilities().containsKey(loc))
                     event.addCapability(loc, new TemperatureCapability(player));
         }
+//		if (event.getObject() instanceof EntityPlayer)
+//		{
+//			EntityPlayer player = (EntityPlayer)event.getObject();
+//			TemperatureCapability capability = new TemperatureCapability();
+//			capability.setPlayer(player);
+//			event.addCapability(TemperatureCapability.KEY, capability);
+//		}
     }
 
 	@SubscribeEvent

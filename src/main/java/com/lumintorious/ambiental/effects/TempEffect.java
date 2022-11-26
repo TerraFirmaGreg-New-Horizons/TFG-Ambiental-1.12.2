@@ -1,4 +1,4 @@
-package com.lumintorious.tfcambiental.effects;
+package com.lumintorious.ambiental.effects;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.potion.Potion;
@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static com.lumintorious.tfcambiental.TFCAmbiental.MODID;
+import static com.lumintorious.ambiental.TFCAmbiental.MODID;
 
 public class TempEffect extends Potion {
     private final ResourceLocation POTION_ICONS = new ResourceLocation(MODID, "textures/gui/potions.png");

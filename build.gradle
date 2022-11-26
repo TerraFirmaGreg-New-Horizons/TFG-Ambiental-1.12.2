@@ -1,71 +1,146 @@
 buildscript {
     repositories {
-        maven { url = "https://files.minecraftforge.net/maven" }
+        maven {
+            // url = 'https://maven.cleanroommc.com'
+            url = 'https://maven.minecraftforge.net'
+        }
+        maven {
+            url = 'https://repo.spongepowered.org/maven'
+        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3.4'
+        if (project.use_mixins.toBoolean()) {
+            classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        }
     }
 }
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = 2.3
+if (project.use_mixins.toBoolean()) {
+    apply plugin: 'org.spongepowered.mixin'
+}
 
-group = "com.speeedcraft.tfcambiental" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "tfcambiental"
+version = project.mod_version
+group = project.maven_group
+archivesBaseName = project.archives_base_name
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = '1.8'
+
 compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
 task deobfJar(type: Jar, dependsOn: 'jar') {
     from sourceSets.main.output
-    classifier "deobf"
+    classifier 'deobf'
+}
+
+configurations {
+    embed
+    implementation.extendsFrom(embed)
 }
 
 minecraft {
-    version = "1.12.2-14.23.5.2847"
-    runDir = "run"
-    mappings = "stable_39"
+    version = '1.12.2-14.23.5.2847'
+    runDir = 'run'
+    mappings = 'stable_39'
+    def args = []
+    if (project.use_coremod.toBoolean()) {
+        args << '-Dfml.coreMods.load=' + coremod_plugin_class_name
+    }
+    if (project.use_mixins.toBoolean()) {
+        args << '-Dmixin.hotSwap=true'
+        args << '-Dmixin.checks.interfaces=true'
+        args << '-Dmixin.debug.export=true'
+    }
+    clientJvmArgs.addAll(args)
+    serverJvmArgs.addAll(args)
 }
 
 repositories {
-
     maven {
-        url 'https://www.cursemaven.com'
+        url = 'https://maven.cleanroommc.com'
     }
+    maven {
+        url = 'https://repo.spongepowered.org/maven'
+    }
+    maven {
+        url = 'https://www.cursemaven.com'
+    }
+
 }
 
 dependencies {
-    compile fileTree(include: ["*.jar"], dir: "libs")
 
-    deobfCompile   "curse.maven:terrafirmacraft-302973:3645502"
-    deobfCompile   "curse.maven:gregtech-ce-unofficial-557242:4068926"
-    deobfCompile   "curse.maven:codechicken-lib-1-8-242818:2779848"
+    if (project.use_assetmover.toBoolean()) {
+        compile 'com.cleanroommc:assetmover:2.0'
+    }
+    if (project.use_mixins.toBoolean()) {
+        compile 'zone.rong:mixinbooter:7.0'
+    }
 
-    deobfCompile   "curse.maven:had-enough-items-557549:3862733"
-    deobfCompile   "curse.maven:tfc-cellars-add-on-431185:3640604"
-    deobfCompile   "curse.maven:firmalife-453394:3612887"
-    deobfCompile   "curse.maven:tfctech-unofficial-340660:3209033"
+    compile        'org.jetbrains:annotations:23.0.0'
 
-    compileOnly     "curse.maven:ic2_classic-242942:3093607"
+    deobfCompile   'curse.maven:terrafirmacraft-302973:3645502'
+    deobfCompile   'curse.maven:gregtech-ce-unofficial-557242:4068926'
+    deobfCompile   'curse.maven:codechicken-lib-1-8-242818:2779848'
+
+    deobfCompile   'curse.maven:tfc-cellars-add-on-431185:3640604'
+    deobfCompile   'curse.maven:firmalife-453394:3612887'
+    deobfCompile   'curse.maven:tfctech-unofficial-340660:3209033'
+
+    runtime        'curse.maven:had-enough-items-557549:3862733'
+    runtime        'curse.maven:the-one-probe-245211:2667280'
+
+    compileOnly    'curse.maven:ic2_classic-242942:3093607'
+}
+
+sourceSets {
+
+    main {
+        ext.refMap = 'mixins.' + archives_base_name + '.refmap.json'
+    }
+
 }
 
 processResources {
     // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+
+    if (project.use_access_transformer.toBoolean()) {
+        rename '(.+_at.cfg)', 'META-INF/$1' // Access Transformers
+    }
+}
+
+jar {
+    manifest {
+        def attribute_map = [:]
+        if (project.use_coremod.toBoolean()) {
+            attribute_map['FMLCorePlugin'] = project.coremod_plugin_class_name
+            if (project.include_mod.toBoolean()) {
+                attribute_map['FMLCorePluginContainsFMLMod'] = true
+                attribute_map['ForceLoadAsMod'] = project.gradle.startParameter.taskNames[0] == "build"
+            }
+        }
+        if (project.use_mixins.toBoolean()) {
+            attribute_map['TweakClass'] = 'org.spongepowered.asm.launch.MixinTweaker'
+        }
+        if (project.use_access_transformer.toBoolean()) {
+            attribute_map['FMLAT'] = project.archives_base_name + '_at.cfg'
+        }
+        attributes(attribute_map)
     }
 }

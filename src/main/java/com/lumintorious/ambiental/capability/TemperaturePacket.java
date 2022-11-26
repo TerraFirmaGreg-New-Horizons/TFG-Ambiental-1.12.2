@@ -1,4 +1,4 @@
-package com.lumintorious.tfcambiental.capability;
+package com.lumintorious.ambiental.capability;
 
 import io.netty.buffer.ByteBuf;
 import net.dries007.tfc.TerraFirmaCraft;
@@ -43,7 +43,7 @@ public class TemperaturePacket implements IMessage{
                 EntityPlayer player = TerraFirmaCraft.getProxy().getPlayer(ctx);
                 if (player != null)
                 {
-                    ITemperatureCapability sys = player.getCapability(TemperatureCapability.CAPABILITY, null);
+                    TemperatureCapability sys = player.getCapability(TemperatureCapability.CAPABILITY, null);
                     if (sys != null)
                     {
                     	sys.deserializeNBT(message.tag);

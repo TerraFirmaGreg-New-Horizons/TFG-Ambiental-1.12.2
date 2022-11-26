@@ -1,7 +1,6 @@
-package com.lumintorious.tfcambiental;
+package com.lumintorious.ambiental;
 
-import com.lumintorious.tfcambiental.capability.ITemperatureCapability;
-import com.lumintorious.tfcambiental.capability.TemperatureCapability;
+import com.lumintorious.ambiental.capability.TemperatureCapability;
 import net.dries007.tfc.objects.fluids.FluidsTFC;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -23,14 +22,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
+import static com.lumintorious.ambiental.TFCAmbiental.MODID;
+import static com.lumintorious.ambiental.capability.TemperatureCapability.*;
+
 @SideOnly(Side.CLIENT)
-public class ClientEventHandler {
-    public static final ResourceLocation COLD_VIGNETTE = new ResourceLocation(TFCAmbiental.MODID + ":textures/gui/cold_vignette.png");
-    public static final ResourceLocation HOT_VIGNETTE = new ResourceLocation(TFCAmbiental.MODID + ":textures/gui/hot_vignette.png");
-    public static final ResourceLocation MINUS = new ResourceLocation(TFCAmbiental.MODID + ":textures/gui/lower.png");
-    public static final ResourceLocation PLUS = new ResourceLocation(TFCAmbiental.MODID + ":textures/gui/higher.png");
-    public static final ResourceLocation MINUSER = new ResourceLocation(TFCAmbiental.MODID + ":textures/gui/lowerer.png");
-    public static final ResourceLocation PLUSER = new ResourceLocation(TFCAmbiental.MODID + ":textures/gui/higherer.png");
+public class TFCAmbientalGuiRenderer {
+    public static final ResourceLocation COLD_VIGNETTE = new ResourceLocation(MODID + ":textures/gui/cold_vignette.png");
+    public static final ResourceLocation HOT_VIGNETTE = new ResourceLocation(MODID + ":textures/gui/hot_vignette.png");
+    public static final ResourceLocation MINUS = new ResourceLocation(MODID + ":textures/gui/lower.png");
+    public static final ResourceLocation PLUS = new ResourceLocation(MODID + ":textures/gui/higher.png");
+    public static final ResourceLocation MINUSER = new ResourceLocation(MODID + ":textures/gui/lowerer.png");
+    public static final ResourceLocation PLUSER = new ResourceLocation(MODID + ":textures/gui/higherer.png");
 
 	public static boolean enableOverlay = TFCAmbientalConfig.CLIENT.enableOverlay;
 
@@ -47,7 +49,7 @@ public class ClientEventHandler {
 			return;
 		}
 
-    	TemperatureCapability tempSystem = (TemperatureCapability)player.getCapability(TemperatureCapability.CAPABILITY, null);
+    	TemperatureCapability tempSystem = (TemperatureCapability)player.getCapability(CAPABILITY, null);
     	ScaledResolution resolution = event.getResolution();
         int width = resolution.getScaledWidth();
         int height = resolution.getScaledHeight();
@@ -85,16 +87,16 @@ public class ClientEventHandler {
 		int mid = sr.getScaledWidth() / 2;
 		temperature = tempSystem.getTemperature();
 		GL11.glEnable(GL11.GL_BLEND);
-		if (temperature > TemperatureCapability.AVERAGE) {
-			float hotRange = TemperatureCapability.HOT_THRESHOLD - TemperatureCapability.AVERAGE + 2;
-			float red = Math.max(0, Math.min(1, (temperature - TemperatureCapability.AVERAGE) / hotRange));
+		if (temperature > AVERAGE) {
+			float hotRange = HOT_THRESHOLD - AVERAGE + 2;
+			float red = Math.max(0, Math.min(1, (temperature - AVERAGE) / hotRange));
 			redCol = 1F;
 			greenCol = 1.0F - red / 2.4F;
 			blueCol = 1.0F - red / 1.6F;
 		}
 		else {
-			float coolRange = TemperatureCapability.AVERAGE - TemperatureCapability.COOL_THRESHOLD - 2;
-			float blue = Math.max(0, Math.min(1, (TemperatureCapability.AVERAGE - temperature) / coolRange));
+			float coolRange = AVERAGE - COOL_THRESHOLD - 2;
+			float blue = Math.max(0, Math.min(1, (AVERAGE - temperature) / coolRange));
 			redCol = 1.0F - blue / 1.6F;
 			greenCol = 1.0F - blue / 2.4F;
 			blueCol = 1.0F;
@@ -106,13 +108,13 @@ public class ClientEventHandler {
 		float speed = tempSystem.getChangeSpeed();
 		float change = tempSystem.getChange();
 		if (change > 0) {
-			if (change > TemperatureCapability.HIGH_CHANGE) {
+			if (change > HIGH_CHANGE) {
 			  drawTexturedModalRect(mid - 8, armorRowHeight - 4 + offsetYArrow, 16, 16, PLUSER);
 			} else {
 			  drawTexturedModalRect(mid - 8, armorRowHeight - 4 + offsetYArrow, 16, 16, PLUS);
 			}
 		} else {
-			if (change < -TemperatureCapability.HIGH_CHANGE) {
+			if (change < -HIGH_CHANGE) {
 			  drawTexturedModalRect(mid - 8, armorRowHeight - 4 + offsetYArrow, 16, 16, MINUSER);
 			} else {
 			  drawTexturedModalRect(mid - 8, armorRowHeight - 4 + offsetYArrow, 16, 16, MINUS);
@@ -120,7 +122,7 @@ public class ClientEventHandler {
 		}
 		if ((player.isSneaking() || !TFCAmbientalConfig.CLIENT.sneakyDetails) && tempSystem instanceof TemperatureCapability) {
 		  TemperatureCapability sys = (TemperatureCapability)tempSystem;
-		  float targetFormatted = sys.getTargetTemperature();
+		  float targetFormatted = sys.getTarget();
 		  float tempFormatted = sys.getTemperature();
 		  float changeFormatted = sys.getChange();
 		  FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
@@ -165,17 +167,17 @@ public class ClientEventHandler {
 		{
 			ResourceLocation vignetteLocation = null;
 			float temperature = 1f;
-			ITemperatureCapability tempSystem = (ITemperatureCapability) player.getCapability(TemperatureCapability.CAPABILITY, null);
+			TemperatureCapability tempSystem = player.getCapability(CAPABILITY, null);
 			temperature = tempSystem.getTemperature();
 
 
 			float opacity = 1f;
-			if(temperature > TemperatureCapability.HOT_THRESHOLD) {
+			if(temperature > HOT_THRESHOLD) {
 				vignetteLocation = HOT_VIGNETTE;
-				opacity = Math.min(0.95f ,(temperature - TemperatureCapability.HOT_THRESHOLD) / 14);
-			}else if(temperature < TemperatureCapability.COOL_THRESHOLD) {
+				opacity = Math.min(0.95f ,(temperature - HOT_THRESHOLD) / 14);
+			}else if(temperature < COOL_THRESHOLD) {
 				vignetteLocation = COLD_VIGNETTE;
-				opacity = Math.min(0.95f ,(TemperatureCapability.COOL_THRESHOLD - temperature) / 14);
+				opacity = Math.min(0.95f ,(COOL_THRESHOLD - temperature) / 14);
 			}
 
 			if (event.getType() == ElementType.PORTAL)
