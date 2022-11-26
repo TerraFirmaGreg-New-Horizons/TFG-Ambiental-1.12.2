@@ -17,7 +17,6 @@ import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class TemperatureCapability implements ICapabilitySerializable<NBTTagCompound> {
@@ -27,19 +26,16 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	public int tick = 0;
 	private int damageTick = 0;
 	private int durabilityTick = 0;
-
 	public boolean isRising;
-
 	private final EntityPlayer player;
-
-	public float savedTarget = AVERAGE;
-	public float savedPotency = 1f;
+	public float target = 15;
+	public float potency = 0;
 
 	public static final int tickInterval = 20;
 
 	public float bodyTemperature = AVERAGE;
 
-	public static final float BAD_MULTIPLIER = 0.002f;
+	public static final float BAD_MULTIPLIER = 0.001f;
 	public static final float GOOD_MULTIPLIER = 0.002f;
 	public static final float CHANGE_CAP = 7.5f;
 	public static final float HIGH_CHANGE = 0.20f;
@@ -92,17 +88,37 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		IEquipmentTemperatureProvider.evaluateAll(player, modifiers);
 		this.modifiers.keepOnlyNEach(3);
 
+		target = modifiers.getTargetTemperature();
+		potency = modifiers.getTotalPotency();
 
-		savedTarget = modifiers.getTargetTemperature();
-		savedPotency = modifiers.getTotalPotency();
+		if(target > bodyTemperature && bodyTemperature > TFCAmbientalConfig.GENERAL.hotThreshold) {
+			potency /= potency;
+		}
+		if(target < bodyTemperature && bodyTemperature < TFCAmbientalConfig.GENERAL.coolThreshold) {
+			potency /= potency;
+		}
+
+		potency = Math.max(1f, potency);
+
+//        for (TempModifier current : previousStorage) {
+//            if (!this.modifiers.contains(current.getUnlocalizedName())) {
+//                player.sendMessage(new TextComponent("No longer " + current.getUnlocalizedName() + " @ " + current.getChange()), player.getUUID());
+//            }
+//        }
+//
+//        for (TempModifier current : modifiers) {
+//            if (!previousStorage.contains(current.getUnlocalizedName())) {
+//                player.sendMessage(new TextComponent("Started " + current.getUnlocalizedName() + " @ " + current.getChange()), player.getUUID());
+//            }
+//        }
 	}
 
 	public float getChangeSpeed() {
-		return getPotency();
+		return potency;
 	}
 
 	public float getTargetTemperature() {
-		return savedTarget;
+		return target;
 	}
 
 	public static boolean hasNanoOrQuarkArmorProtection(EntityPlayer player) {
@@ -147,7 +163,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	}
 
 	public float getPotency() {
-		return savedPotency;
+		return potency;
 	}
 
 	public EntityPlayer getPlayer() {
@@ -193,8 +209,8 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	public void deserializeNBT(NBTTagCompound tag) {
 		if(tag.hasKey("temperature")) {
 			this.setTemperature(tag.getFloat("temperature"));
-			this.savedTarget  = (tag.getFloat("target"));
-			this.savedPotency = (tag.getFloat("potency"));
+			this.target = (tag.getFloat("target"));
+			this.potency = (tag.getFloat("potency"));
 
 		}else {
 			this.setTemperature(23.4f);
