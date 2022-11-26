@@ -58,7 +58,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	}
 
 	public float getTemperatureChange() {
-		float target = getTargetTemperature();
+		float target = getTarget();
 		float speed = getPotency() * TFCAmbientalConfig.GENERAL.temperatureChangeSpeed;
 		float change = Math.min(CHANGE_CAP, Math.max(-CHANGE_CAP, target - bodyTemperature));
 		float newTemp = bodyTemperature + change;
@@ -117,7 +117,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		return potency;
 	}
 
-	public float getTargetTemperature() {
+	public float getTarget() {
 		return target;
 	}
 
@@ -166,22 +166,24 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		return potency;
 	}
 
+	public void setPotency(float potency) {
+		this.potency = potency;
+	}
+
 	public EntityPlayer getPlayer() {
 		return player;
 	}
+
+//	public void setPlayer(EntityPlayer player) {
+//		this.player = player;
+//	}
 
 	public float getTemperature() {
 		return bodyTemperature;
 	}
 
 	public void setTemperature(float newTemp) {
-		if (newTemp < this.getTemperature()) {
-			isRising = false;
-		}
-		else {
-			isRising = true;
-		}
-		this.bodyTemperature = newTemp;
+		bodyTemperature = newTemp;
 	}
 
 	@Override
@@ -199,22 +201,17 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	@Override
 	public NBTTagCompound serializeNBT() {
 		NBTTagCompound tag = new NBTTagCompound();
-		tag.setFloat("temperature", this.getTemperature());
-		tag.setFloat("target", this.getTargetTemperature());
-		tag.setFloat("potency", this.getPotency());
+		tag.setFloat("temperature", getTemperature());
+		tag.setFloat("target", target);
+		tag.setFloat("potency", potency);
 		return tag;
 	}
 
 	@Override
 	public void deserializeNBT(NBTTagCompound tag) {
-		if(tag.hasKey("temperature")) {
-			this.setTemperature(tag.getFloat("temperature"));
-			this.target = (tag.getFloat("target"));
-			this.potency = (tag.getFloat("potency"));
-
-		}else {
-			this.setTemperature(23.4f);
-		}
+		this.bodyTemperature = tag.getFloat("temperature");
+		this.target = tag.getFloat("target");
+		this.potency = tag.getFloat("potency");
 	}
 
 	public String toString() {
@@ -228,7 +225,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 						+ "Potency: %.4f",
 				bodyTemperature,
 				this.getTemperatureChange(),
-				this.getTargetTemperature(),
+				this.getTarget(),
 				modifiers.getTotalPotency()
 		) + "\n"+str;
 	}
