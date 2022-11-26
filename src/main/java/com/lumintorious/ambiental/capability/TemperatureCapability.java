@@ -24,17 +24,31 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 
 	public static final Capability<TemperatureCapability> CAPABILITY = null;
 
+	public int tick = 0;
+	private int damageTick = 0;
+	private int durabilityTick = 0;
+
+	public boolean isRising;
+
+	private final EntityPlayer player;
+
+	public float savedTarget = AVERAGE;
+	public float savedPotency = 1f;
+
 	public static final int tickInterval = 20;
-	
-    /** The capability this is for */
-    private final EntityPlayer player;
+
+	public float bodyTemperature = AVERAGE;
+
+	public static final float BAD_MULTIPLIER = 0.002f;
+	public static final float GOOD_MULTIPLIER = 0.002f;
+	public static final float CHANGE_CAP = 7.5f;
+	public static final float HIGH_CHANGE = 0.20f;
+
     
     public TemperatureCapability(EntityPlayer player)
     {
         this.player = player;
     }
-
-	public boolean isRising;
 	
 	public static float AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;
 	public static float HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotThreshold;
@@ -42,10 +56,27 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	public static float BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burnThreshold;
 	public static float FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezeThreshold;
 	public static float NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
+
+	public float getChange() {
+		return getTemperatureChange();
+	}
+
+	public float getTemperatureChange() {
+		float target = getTargetTemperature();
+		float speed = getPotency() * TFCAmbientalConfig.GENERAL.temperatureChangeSpeed;
+		float change = Math.min(CHANGE_CAP, Math.max(-CHANGE_CAP, target - bodyTemperature));
+		float newTemp = bodyTemperature + change;
+		boolean isRising = true;
+		if ((bodyTemperature < AVERAGE && newTemp > bodyTemperature) || (bodyTemperature > AVERAGE && newTemp < bodyTemperature)) {
+			speed *= GOOD_MULTIPLIER * TFCAmbientalConfig.GENERAL.goodTemperatureChangeSpeed;
+		}
+		else {
+			speed *= BAD_MULTIPLIER * TFCAmbientalConfig.GENERAL.badTemperatureChangeSpeed;
+		}
+		return (change * speed);
+	}
 	
 	public TempModifierStorage modifiers = new TempModifierStorage();
-	
-	public float bodyTemperature = AVERAGE;
 	
 	public void clearModifiers() {
 		this.modifiers = new TempModifierStorage();
@@ -62,22 +93,14 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 
 		savedTarget = modifiers.getTargetTemperature();
 		savedPotency = modifiers.getTotalPotency();
-}
-	
-	public float savedTarget = AVERAGE;
+	}
+
+	public float getChangeSpeed() {
+		return getPotency();
+	}
 
 	public float getTargetTemperature() {
 		return savedTarget;
-	}
-
-	public static final float BAD_MULTIPLIER = 0.002f;
-	public static final float GOOD_MULTIPLIER = 0.002f;
-	public static final float CHANGE_CAP = 7.5f;
-	public static final float HIGH_CHANGE = 0.20f;
-	
-	public float savedPotency = 1f;
-	public float getPotency() {
-		return savedPotency;
 	}
 
 	public static boolean hasNanoOrQuarkArmorProtection(EntityPlayer player) {
@@ -121,22 +144,76 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		return false;
 	}
 
-	public float getTemperatureChange() {
-		float target = getTargetTemperature();
-		float speed = getPotency() * TFCAmbientalConfig.GENERAL.temperatureChangeSpeed;
-		float change = Math.min(CHANGE_CAP, Math.max(-CHANGE_CAP, target - bodyTemperature));
-		float newTemp = bodyTemperature + change;
-		boolean isRising = true;
-		if ((bodyTemperature < AVERAGE && newTemp > bodyTemperature) || (bodyTemperature > AVERAGE && newTemp < bodyTemperature)) {
-			speed *= GOOD_MULTIPLIER * TFCAmbientalConfig.GENERAL.goodTemperatureChangeSpeed;
+	public float getPotency() {
+		return savedPotency;
+	}
+
+	public EntityPlayer getPlayer() {
+		return player;
+	}
+
+	public float getTemperature() {
+		return bodyTemperature;
+	}
+
+	public void setTemperature(float newTemp) {
+		if (newTemp < this.getTemperature()) {
+			isRising = false;
 		}
 		else {
-			speed *= BAD_MULTIPLIER * TFCAmbientalConfig.GENERAL.badTemperatureChangeSpeed;
+			isRising = true;
 		}
-		return (change * speed);
+		this.bodyTemperature = newTemp;
 	}
-	
-	public int tick = 0;
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing)
+	{
+		return capability != null && capability == CAPABILITY;
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing)
+	{
+		return capability == CAPABILITY ? (T)(this) : null;
+	}
+
+	@Override
+	public NBTTagCompound serializeNBT() {
+		NBTTagCompound tag = new NBTTagCompound();
+		tag.setFloat("temperature", this.getTemperature());
+		tag.setFloat("target", this.getTargetTemperature());
+		tag.setFloat("potency", this.getPotency());
+		return tag;
+	}
+
+	@Override
+	public void deserializeNBT(NBTTagCompound tag) {
+		if(tag.hasKey("temperature")) {
+			this.setTemperature(tag.getFloat("temperature"));
+			this.savedTarget  = (tag.getFloat("target"));
+			this.savedPotency = (tag.getFloat("potency"));
+
+		}else {
+			this.setTemperature(23.4f);
+		}
+	}
+
+	public String toString() {
+		String str = "";
+		for(TempModifier modifier : modifiers) {
+			str += modifier.getUnlocalizedName() + " -> " + modifier.getChange() + " @ " + modifier.getPotency() + "\n";
+		}
+		return String.format(
+				"Body: %.1f ( %.4f )\n"
+						+ "Target: %.1f \n"
+						+ "Potency: %.4f",
+				bodyTemperature,
+				this.getTemperatureChange(),
+				this.getTargetTemperature(),
+				modifiers.getTotalPotency()
+		) + "\n"+str;
+	}
 
 	public void update() {
 		if (!player.world.isRemote) {
@@ -177,70 +254,6 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		}
 
 	}
-	
-	public String toString() {
-		String str = "";
-		for(TempModifier modifier : modifiers) {
-			str += modifier.getUnlocalizedName() + " -> " + modifier.getChange() + " @ " + modifier.getPotency() + "\n";
-		}
-		return String.format(
-				"Body: %.1f ( %.4f )\n"
-				+ "Target: %.1f \n"
-				+ "Potency: %.4f",
-				bodyTemperature,
-				this.getTemperatureChange(),
-				this.getTargetTemperature(),
-				modifiers.getTotalPotency()
-				) + "\n"+str;
-	}
-
-
-	public float getTemperature() {
-		return bodyTemperature;
-	}
-
-	public void setTemperature(float newTemp) {
-		if (newTemp < this.getTemperature()) {
-			isRising = false;
-		}
-		else {
-			isRising = true;
-		}
-		this.bodyTemperature = newTemp;
-	}
-
-	public EntityPlayer getPlayer() {
-		return player;
-	}
-
-	public float getChange() {
-		return getTemperatureChange();
-	}
-	
-	public float getChangeSpeed() {
-		return getPotency();
-	}
-
-	@Override
-	public NBTTagCompound serializeNBT() {
-		NBTTagCompound tag = new NBTTagCompound();
-		tag.setFloat("temperature", this.getTemperature());
-		tag.setFloat("target", this.getTargetTemperature());
-		tag.setFloat("potency", this.getPotency());
-		return tag;
-	}
-
-	@Override
-	public void deserializeNBT(NBTTagCompound tag) {
-		if(tag.hasKey("temperature")) {
-			this.setTemperature(tag.getFloat("temperature"));
-			this.savedTarget  = (tag.getFloat("target"));
-			this.savedPotency = (tag.getFloat("potency"));
-
-		}else {
-			this.setTemperature(23.4f);
-		}
-	}
 
 	public void sync() {
 		EntityPlayer player = getPlayer();
@@ -250,16 +263,4 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 			TerraFirmaCraft.getNetwork().sendTo(packet, (EntityPlayerMP) player);
 		}
 	}
-    
-    @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing)
-    {
-        return capability != null && capability == CAPABILITY;
-    }
-
-    @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing)
-    {
-        return capability == CAPABILITY ? (T)(this) : null;
-    }
 }
