@@ -241,22 +241,28 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 			}
 			else {
 				tick = 0;
-				if (TFCAmbientalConfig.GENERAL.takeDamage) {
-					if (this.getTemperature() > BURN_THRESHOLD) {
-						player.attackEntityFrom(AmbientalDamage.HEAT,  4f);
-					} else if (this.getTemperature() < FREEZE_THRESHOLD) {
-						player.attackEntityFrom(AmbientalDamage.COLD, 4f);
-					}
-				}
-				if (TFCAmbientalConfig.GENERAL.loseHungerThirst) {
-					if(player.getFoodStats() instanceof FoodStatsTFC) {
-						FoodStatsTFC stats = (FoodStatsTFC)player.getFoodStats();
+				if (damageTick > 40) {
+					damageTick = 0;
+					if (TFCAmbientalConfig.GENERAL.takeDamage) {
 						if (this.getTemperature() > BURN_THRESHOLD) {
-							stats.addThirst(-8);
-						} else if (this.getTemperature() < FREEZE_THRESHOLD){
-							stats.setFoodLevel(stats.getFoodLevel() - 1);
+							player.attackEntityFrom(AmbientalDamage.HEAT, 4f);
+						} else if (this.getTemperature() < FREEZE_THRESHOLD) {
+							player.attackEntityFrom(AmbientalDamage.COLD, 4f);
 						}
 					}
+					if (TFCAmbientalConfig.GENERAL.loseHungerThirst) {
+						if (player.getFoodStats() instanceof FoodStatsTFC) {
+							FoodStatsTFC stats = (FoodStatsTFC) player.getFoodStats();
+							if (this.getTemperature() > BURN_THRESHOLD) {
+								stats.addThirst(-8);
+							} else if (this.getTemperature() < FREEZE_THRESHOLD) {
+								stats.setFoodLevel(stats.getFoodLevel() - 1);
+							}
+						}
+					}
+				}
+				else {
+					damageTick++;
 				}
 			}
 
