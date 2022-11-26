@@ -27,7 +27,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	private int damageTick = 0;
 	private int durabilityTick = 0;
 	public boolean isRising;
-	private final EntityPlayer player;
+	private EntityPlayer player;
 	public float target = 15;
 	public float potency = 0;
 
@@ -54,10 +54,6 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 	public static float NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
 
 	public float getChange() {
-		return getTemperatureChange();
-	}
-
-	public float getTemperatureChange() {
 		float target = getTarget();
 		float speed = getPotency() * TFCAmbientalConfig.GENERAL.temperatureChangeSpeed;
 		float change = Math.min(CHANGE_CAP, Math.max(-CHANGE_CAP, target - bodyTemperature));
@@ -174,9 +170,9 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		return player;
 	}
 
-//	public void setPlayer(EntityPlayer player) {
-//		this.player = player;
-//	}
+	public void setPlayer(EntityPlayer player) {
+		this.player = player;
+	}
 
 	public float getTemperature() {
 		return bodyTemperature;
@@ -224,7 +220,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 						+ "Target: %.1f \n"
 						+ "Potency: %.4f",
 				bodyTemperature,
-				this.getTemperatureChange(),
+				this.getChange(),
 				this.getTarget(),
 				modifiers.getTotalPotency()
 		) + "\n"+str;
@@ -236,7 +232,7 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 				this.setTemperature(NANO_QUARK_ARMOR_TEMP);
 			}
 			else {
-				this.setTemperature(this.getTemperature() + this.getTemperatureChange() / tickInterval);
+				this.setTemperature(this.getTemperature() + this.getChange() / tickInterval);
 			}
 
 			if (tick <= tickInterval) {
