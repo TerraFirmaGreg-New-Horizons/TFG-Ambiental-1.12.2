@@ -16,6 +16,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
@@ -25,13 +26,13 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 
 	public int tick = 0;
 	private int damageTick = 0;
-	private int durabilityTick = 0;
-	public boolean isRising;
 	private EntityPlayer player;
 	public float target = 15;
 	public float potency = 0;
 
-	public static final int tickInterval = 20;
+	public void say(Object string) {
+		player.sendMessage(new TextComponentString(string.toString()));
+	}
 
 	public float bodyTemperature = AVERAGE;
 
@@ -95,18 +96,6 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		}
 
 		potency = Math.max(1f, potency);
-
-//        for (TempModifier current : previousStorage) {
-//            if (!this.modifiers.contains(current.getUnlocalizedName())) {
-//                player.sendMessage(new TextComponent("No longer " + current.getUnlocalizedName() + " @ " + current.getChange()), player.getUUID());
-//            }
-//        }
-//
-//        for (TempModifier current : modifiers) {
-//            if (!previousStorage.contains(current.getUnlocalizedName())) {
-//                player.sendMessage(new TextComponent("Started " + current.getUnlocalizedName() + " @ " + current.getChange()), player.getUUID());
-//            }
-//        }
 	}
 
 	public float getChangeSpeed() {
@@ -115,6 +104,10 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 
 	public float getTarget() {
 		return target;
+	}
+
+	public void setTarget(float target) {
+		this.target = target;
 	}
 
 	public static boolean hasNanoOrQuarkArmorProtection(EntityPlayer player) {
@@ -232,10 +225,10 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 				this.setTemperature(NANO_QUARK_ARMOR_TEMP);
 			}
 			else {
-				this.setTemperature(this.getTemperature() + this.getChange() / tickInterval);
+				this.setTemperature(this.getTemperature() + this.getChange());
 			}
 
-			if (tick <= tickInterval) {
+			if (tick <= 20) {
 				tick++;
 				return;
 			}
