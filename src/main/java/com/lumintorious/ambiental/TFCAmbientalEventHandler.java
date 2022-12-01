@@ -2,12 +2,20 @@ package com.lumintorious.ambiental;
 
 import com.lumintorious.ambiental.capability.TemperatureCapability;
 import com.lumintorious.ambiental.effects.TempEffect;
+import net.dries007.tfc.api.capability.food.CapabilityFood;
+import net.dries007.tfc.api.capability.food.IFood;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.village.MerchantRecipe;
+import net.minecraft.village.MerchantRecipeList;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -15,13 +23,52 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.lang.reflect.Field;
+
 import static com.lumintorious.ambiental.TFCAmbiental.MODID;
 
 public class TFCAmbientalEventHandler {
+
+	@SubscribeEvent
+	public void onInteract(PlayerInteractEvent.EntityInteractSpecific event) {
+
+		Entity entity = event.getTarget();
+		EntityPlayer player = event.getEntityPlayer();
+		if(entity instanceof EntityVillager) {
+			EntityVillager villager = (EntityVillager)entity;
+			long time = villager.world.getWorldTime();
+			try {
+				MerchantRecipeList list = new MerchantRecipeList();
+				for(Field f : EntityVillager.class.getDeclaredFields()) {
+					f.setAccessible(true);
+					if(f.get(villager) instanceof MerchantRecipeList) {
+						list = (MerchantRecipeList)f.get(villager);
+
+						MerchantRecipeList list2 = new MerchantRecipeList();
+
+						for(MerchantRecipe recipe: list) {
+							ItemStack itemToBuy = recipe.getItemToBuy().copy();
+							ItemStack itemToBuy2 = recipe.getSecondItemToBuy().copy();
+							ItemStack itemToSell = recipe.getItemToSell().copy();
+							if(itemToSell.hasCapability(CapabilityFood.CAPABILITY, null)) {
+								IFood cap = (IFood)itemToSell.getCapability(CapabilityFood.CAPABILITY, null);
+								cap.setCreationDate(time);
+							}
+							list2.add(new MerchantRecipe(itemToBuy, itemToBuy2, itemToSell));
+						}
+						f.set(villager, list2);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	@SubscribeEvent
 	public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
@@ -89,25 +136,22 @@ public class TFCAmbientalEventHandler {
     }
 
 	@SubscribeEvent
-	public void onPlayerUpdate(LivingUpdateEvent event) {
-
-		EntityLivingBase entityLiving = event.getEntityLiving();
-		if (!(entityLiving instanceof EntityPlayer)) {
+	public void onPlayerUpdate(LivingUpdateEvent  event) {
+		if(!(event.getEntityLiving() instanceof EntityPlayer)) {
 			return;
 		}
 
-		EntityPlayer player = (EntityPlayer) entityLiving;
-		if (player.isCreative()) {
+		EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+		if(player.isCreative()) {
 			return;
 		}
-
-		if (!ArrayUtils.contains(TFCAmbientalConfig.GENERAL.allowedDims, player.dimension))
-		{
-			return;
-		}
-
 		TemperatureCapability temp = (TemperatureCapability)player.getCapability(TemperatureCapability.CAPABILITY, null);
-
+		ItemStack stack = player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+		if(stack != null && !player.world.isRemote) {
+			if(stack.getItem().getRegistryName().toString().equals("tfc:wand")) {
+				temp.say(temp);
+			}
+		}
 		temp.update();
 	}
 

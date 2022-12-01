@@ -172,12 +172,12 @@ public class TFCAmbientalGuiRenderer {
 
 
 			float opacity = 1f;
-			if(temperature > HOT_THRESHOLD) {
+			if(temperature > BURN_THRESHOLD - 2.5f) {
 				vignetteLocation = HOT_VIGNETTE;
-				opacity = Math.min(0.95f ,(temperature - HOT_THRESHOLD) / 14);
-			}else if(temperature < COOL_THRESHOLD) {
+				opacity = Math.min(0.80f ,(temperature - (BURN_THRESHOLD - 2.5f)) / 18);
+			}else if(temperature < FREEZE_THRESHOLD + 2.5f) {
 				vignetteLocation = COLD_VIGNETTE;
-				opacity = Math.min(0.95f ,(COOL_THRESHOLD - temperature) / 14);
+				opacity = Math.min(0.80f ,((FREEZE_THRESHOLD + 2.5f) - temperature) / 18);
 			}
 
 			if (event.getType() == ElementType.PORTAL)

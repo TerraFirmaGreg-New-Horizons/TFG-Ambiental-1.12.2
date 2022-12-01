@@ -29,9 +29,9 @@ public interface IBlockTemperatureProvider {
 			if(state == skipState) {
 				continue;
 			}
-            if(state.getBlock() instanceof BlockRockVariant || state.getBlock() instanceof BlockRockRaw) {
-                continue;
-            }
+//            if(state.getBlock() instanceof BlockRockVariant || state.getBlock() instanceof BlockRockRaw) {
+//                continue;
+//            }
 			Block block = state.getBlock();
 			double distance = Math.sqrt(player.getPosition().distanceSq(pos));
 			float distanceMultiplier = (float) distance / 9f;
@@ -43,6 +43,10 @@ public interface IBlockTemperatureProvider {
 			}
 			final float finalDistanceMultiplier = distanceMultiplier;
 			for(IBlockTemperatureProvider provider : AmbientalRegistry.BLOCKS) {
+				//                    if(modifier.affectedByDistance){
+				//                        modifier.setChange(modifier.getChange() * distanceMultiplier);
+				//                        modifier.setPotency(modifier.getPotency() * distanceMultiplier);
+				//                    }
 				storage.add(provider.getModifier(player, pos, state));
 			}
 			TileEntity tile = player.world.getTileEntity(pos);

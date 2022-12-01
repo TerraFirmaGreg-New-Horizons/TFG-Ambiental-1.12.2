@@ -16,9 +16,6 @@ import net.minecraft.world.EnumSkyBlock;
 
 
 public class AmbientalRegistry<Type> implements Iterable<Type> {
-	// Add functions that provide modifiers, you can use checks and return null to skip
-	// Use the "ModifierOwner" interfaces for self implemented objects
-	// Use the these only for objects out of your control
 	public static final AmbientalRegistry<IItemTemperatureProvider> ITEMS = new AmbientalRegistry<>();
 	public static final AmbientalRegistry<IBlockTemperatureProvider> BLOCKS = new AmbientalRegistry<>();
 	public static final AmbientalRegistry<ITileEntityTemperatureProvider> TILE_ENTITIES = new AmbientalRegistry<>();
@@ -32,7 +29,7 @@ public class AmbientalRegistry<Type> implements Iterable<Type> {
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("fire", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.FIRE));
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("lava", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.LAVA));
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("flowing_lava", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.FLOWING_LAVA));
-		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("snow", -1.5f, 0.2f)).filter((mod) -> state.getBlock() == Blocks.SNOW_LAYER));
+		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("snow_layer", -1.5f, 0.2f)).filter((mod) -> state.getBlock() == Blocks.SNOW_LAYER));
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("snow", -0.5f, 0.2f)).filter((mod) -> state.getBlock() == Blocks.SNOW && player.world.getLightFor(EnumSkyBlock.SKY, pos) == 15));
 
 		// TFC-Tech
@@ -84,21 +81,7 @@ public class AmbientalRegistry<Type> implements Iterable<Type> {
 
 	@Override
 	public Iterator<Type> iterator() {
-		return new Iterator<Type>() {
-
-			private Iterator listIterator = list.iterator();
-
-			@Override
-			public boolean hasNext() {
-				return listIterator.hasNext();
-			}
-
-			@Override
-			public Type next() {
-				return (Type) listIterator.next();
-			}
-			
-		};
+		return list.iterator();
 	}
 	
 	

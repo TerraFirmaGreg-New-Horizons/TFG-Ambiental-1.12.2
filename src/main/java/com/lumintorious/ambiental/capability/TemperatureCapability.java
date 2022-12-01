@@ -210,8 +210,8 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		}
 		return String.format(
 				"Body: %.1f ( %.4f )\n"
-						+ "Target: %.1f \n"
-						+ "Potency: %.4f",
+				+ "Target: %.1f \n"
+				+ "Potency: %.4f",
 				bodyTemperature,
 				this.getChange(),
 				this.getTarget(),

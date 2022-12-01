@@ -30,14 +30,14 @@ public class EnvironmentalModifier {
 	public static float getEnvironmentTemperature(EntityPlayer player) {
 		float avg = ClimateTFC.getAvgTemp(player.world, player.getPosition());
 		float actual = ClimateTFC.getActualTemp(player.world, player.getPosition());
-        if(TFCAmbientalConfig.GENERAL.harsherTemperateAreas) {
-		float diff = actual - AVERAGE;
+//        if(TFCAmbientalConfig.GENERAL.harsherTemperateAreas) {
+		float diff = actual - 15;
 		float sign = Math.signum(diff);
-		float generalDiff = Math.abs(avg - 15);
-		float mult0 = Math.max(0f, TFCAmbientalConfig.GENERAL.harsherMultiplier - 1f);
-		float multiplier = 1 + Math.max(0, 1 - generalDiff / 55) * mult0;
+		float generalDiff = Math.abs(avg - 15);//TemperatureCapability.AVERAGE);
+		float mult0 = Math.max(0f, 1f); //TFCAmbientalConfig.GENERAL.harsherMultiplier - 1f);
+//            float multiplier = 1 + Math.max(0, 1 - generalDiff / 55) * mult0;;
 		actual = 20 + (diff + 0.5f * sign);
-        }
+//        }
 		return actual;
 	}
 
@@ -55,10 +55,10 @@ public class EnvironmentalModifier {
 
 	public static Optional<TempModifier> handleTimeOfDay(EntityPlayer player) {
 		int dayTicks = (int) (player.world.getWorldTime() % 24000);
-		if(dayTicks < 6000) return TempModifier.defined("morning", 2f, 0);
-		else if(dayTicks < 12000) return TempModifier.defined("afternoon", 4f, 0);
-		else if(dayTicks < 18000) return TempModifier.defined("evening", 1f, 0);
-		else return TempModifier.defined("night", 1f, 0);
+		if(dayTicks < 6000) return TempModifier.defined("morning", 1f, 0);
+		else if(dayTicks < 12000) return TempModifier.defined("afternoon", 2f, 0);
+		else if(dayTicks < 18000) return TempModifier.defined("evening", 1.5f, 0);
+		else return TempModifier.defined("night", 0.5f, 0);
 	}
 
 	public static Optional<TempModifier> handleWater(EntityPlayer player) {
