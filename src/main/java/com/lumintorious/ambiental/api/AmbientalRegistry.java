@@ -28,16 +28,6 @@ public class AmbientalRegistry<Type> implements Iterable<Type> {
 
 
 	static {
-		// GTCEu
-//		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.CUPRONICKEL)) ? new BlockModifier("cupronickel_coil", 3f, 3f) : null);
-//		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.KANTHAL)) ? new BlockModifier("kanthal_coil", 3f, 3f) : null);
-//		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NICHROME)) ? new BlockModifier("nichrome_coil", 3f, 3f) : null);
-//		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TUNGSTENSTEEL)) ? new BlockModifier("tungstensteel_coil", 3f, 3f) : null);
-//		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.HSS_G)) ? new BlockModifier("hss_g_coil", 3f, 3f) : null);
-//		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.NAQUADAH)) ? new BlockModifier("naquadah_coil", 3f, 3f) : null);
-//		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRINIUM)) ? new BlockModifier("trinium_coil", 3f, 3f) : null);
-//		BLOCKS.register((state, pos, player) -> state.equals(MetaBlocks.WIRE_COIL.getState(BlockWireCoil.CoilType.TRITANIUM)) ? new BlockModifier("tritanium_coil", 3f, 3f) : null);
-
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("torch", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.TORCH));
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("fire", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.FIRE));
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("lava", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.LAVA));
