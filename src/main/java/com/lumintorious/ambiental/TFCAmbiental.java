@@ -34,40 +34,7 @@ public class TFCAmbiental
             "required:firmalife;" +
             "required:cellars;" +
             "required:tfctech;";
-
-    public static final Logger logger = LogManager.getLogger(MODID);
-
-    public static boolean isGTCEuLoaded = false;
-    public static boolean isFirmaLifeLoaded = false;
-    public static boolean isTFCTechLoaded = false;
-    public static boolean isCellarsAddonLoaded = false;
-
-    @EventHandler
-    public void onConstruct(FMLConstructionEvent event) {
-        if (Loader.isModLoaded("gregtech")) {
-            isGTCEuLoaded = true;
-
-            logger.info("GTCEu Compat Enabled!");
-        }
-
-        if (Loader.isModLoaded("firmalife")) {
-            isFirmaLifeLoaded = true;
-
-            logger.info("FirmaLife Compat Enabled!");
-        }
-
-        if (Loader.isModLoaded("tfctech")) {
-            isTFCTechLoaded = true;
-
-            logger.info("TFCTech Compat Enabled!");
-        }
-
-        if (Loader.isModLoaded("cellars")) {
-            isCellarsAddonLoaded = true;
-
-            logger.info("CellarAddon Compat Enabled!");
-        }
-    }
+    
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
