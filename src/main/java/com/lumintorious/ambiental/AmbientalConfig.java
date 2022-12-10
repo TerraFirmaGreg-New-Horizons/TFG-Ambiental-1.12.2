@@ -2,10 +2,10 @@ package com.lumintorious.ambiental;
 
 import net.minecraftforge.common.config.Config;
 
-import static com.lumintorious.ambiental.TFCAmbiental.MODID;
+import static com.lumintorious.ambiental.Ambiental.MODID;
 
 @Config(modid = MODID)
-public class TFCAmbientalConfig {
+public class AmbientalConfig {
 
 	@Config.Comment("Client Settings")
 	public static final ClientCFG CLIENT = new ClientCFG();

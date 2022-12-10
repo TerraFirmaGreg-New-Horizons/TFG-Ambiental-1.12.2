@@ -22,11 +22,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
-import static com.lumintorious.ambiental.TFCAmbiental.MODID;
+import static com.lumintorious.ambiental.Ambiental.MODID;
 import static com.lumintorious.ambiental.capability.TemperatureCapability.*;
 
 @SideOnly(Side.CLIENT)
-public class TFCAmbientalGuiRenderer {
+public class AmbientalGuiRenderer {
     public static final ResourceLocation COLD_VIGNETTE = new ResourceLocation(MODID + ":textures/gui/cold_vignette.png");
     public static final ResourceLocation HOT_VIGNETTE = new ResourceLocation(MODID + ":textures/gui/hot_vignette.png");
     public static final ResourceLocation MINUS = new ResourceLocation(MODID + ":textures/gui/lower.png");
@@ -34,7 +34,7 @@ public class TFCAmbientalGuiRenderer {
     public static final ResourceLocation MINUSER = new ResourceLocation(MODID + ":textures/gui/lowerer.png");
     public static final ResourceLocation PLUSER = new ResourceLocation(MODID + ":textures/gui/higherer.png");
 
-	public static boolean enableOverlay = TFCAmbientalConfig.CLIENT.enableOverlay;
+	public static boolean enableOverlay = AmbientalConfig.CLIENT.enableOverlay;
 
     @SubscribeEvent
     public void render(RenderGameOverlayEvent.Pre event)
@@ -45,7 +45,7 @@ public class TFCAmbientalGuiRenderer {
     		return;
     	}
 
-		if (!ArrayUtils.contains(TFCAmbientalConfig.GENERAL.allowedDims, player.dimension)) {
+		if (!ArrayUtils.contains(AmbientalConfig.GENERAL.allowedDims, player.dimension)) {
 			return;
 		}
 
@@ -120,7 +120,7 @@ public class TFCAmbientalGuiRenderer {
 			  drawTexturedModalRect(mid - 8, armorRowHeight - 4 + offsetYArrow, 16, 16, MINUS);
 			}
 		}
-		if ((player.isSneaking() || !TFCAmbientalConfig.CLIENT.sneakyDetails) && tempSystem instanceof TemperatureCapability) {
+		if ((player.isSneaking() || !AmbientalConfig.CLIENT.sneakyDetails) && tempSystem instanceof TemperatureCapability) {
 		  TemperatureCapability sys = (TemperatureCapability)tempSystem;
 		  float targetFormatted = sys.getTarget();
 		  float tempFormatted = sys.getTemperature();

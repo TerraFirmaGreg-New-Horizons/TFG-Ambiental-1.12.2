@@ -3,9 +3,12 @@ package com.lumintorious.ambiental.api;
 import com.lumintorious.ambiental.capability.TemperatureCapability;
 //import com.lumintorious.ambiental.item.ClothesItem;
 //import com.lumintorious.ambiental.item.TemperatureAlteringMaterial;
+import com.lumintorious.ambiental.item.ClothesItem;
+import com.lumintorious.ambiental.item.TemperatureAlteringMaterial;
 import com.lumintorious.ambiental.modifier.EnvironmentalModifier;
 import com.lumintorious.ambiental.modifier.TempModifier;
 import com.lumintorious.ambiental.modifier.TempModifierStorage;
+import net.dries007.tfc.objects.te.TECharcoalForge;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -24,14 +27,15 @@ import java.util.Optional;
 public interface IEquipmentTemperatureProvider {
     Optional<TempModifier> getModifier(EntityPlayer player, ItemStack stack);
 
-//    static Optional<TempModifier> handleClothes(EntityPlayer player, ItemStack stack) {
-//        if(stack.getItem() instanceof ClothesItem clothesItem) {
-//            if(clothesItem.getMaterial() instanceof TemperatureAlteringMaterial tempMaterial) {
-//                return Optional.of(tempMaterial.getTempModifier(stack));
-//            }
-//        }
-//        return TempModifier.none();
-//    }
+    static Optional<TempModifier> handleClothes(EntityPlayer player, ItemStack stack) {
+        if(stack.getItem() instanceof ClothesItem) {
+            ClothesItem clothesItem = (ClothesItem) stack.getItem();
+            if(clothesItem.getMaterial() instanceof TemperatureAlteringMaterial tempMaterial) {
+                return Optional.of(tempMaterial.getTempModifier(stack));
+            }
+        }
+        return TempModifier.none();
+    }
 //
 //    static Optional<TempModifier> handleSunlightCap(EntityPlayer player, ItemStack stack) {
 //        float AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;

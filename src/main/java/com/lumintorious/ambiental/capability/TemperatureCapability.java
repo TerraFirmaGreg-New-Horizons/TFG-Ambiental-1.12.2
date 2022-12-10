@@ -1,7 +1,7 @@
 package com.lumintorious.ambiental.capability;
 
 import com.lumintorious.ambiental.AmbientalDamage;
-import com.lumintorious.ambiental.TFCAmbientalConfig;
+import com.lumintorious.ambiental.AmbientalConfig;
 import com.lumintorious.ambiental.api.*;
 import com.lumintorious.ambiental.modifier.TempModifier;
 import com.lumintorious.ambiental.modifier.EnvironmentalModifier;
@@ -47,24 +47,24 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
         this.player = player;
     }
 	
-	public static float AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;
-	public static float HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotThreshold;
-	public static float COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coolThreshold;
-	public static float BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burnThreshold;
-	public static float FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezeThreshold;
-	public static float NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
+	public static float AVERAGE = AmbientalConfig.GENERAL.averageTemperature;
+	public static float HOT_THRESHOLD = AmbientalConfig.GENERAL.hotThreshold;
+	public static float COOL_THRESHOLD = AmbientalConfig.GENERAL.coolThreshold;
+	public static float BURN_THRESHOLD = AmbientalConfig.GENERAL.burnThreshold;
+	public static float FREEZE_THRESHOLD = AmbientalConfig.GENERAL.freezeThreshold;
+	public static float NANO_QUARK_ARMOR_TEMP = AmbientalConfig.GENERAL.nanoOrQuarkTemp;
 
 	public float getChange() {
 		float target = getTarget();
-		float speed = getPotency() * TFCAmbientalConfig.GENERAL.temperatureChangeSpeed;
+		float speed = getPotency() * AmbientalConfig.GENERAL.temperatureChangeSpeed;
 		float change = Math.min(CHANGE_CAP, Math.max(-CHANGE_CAP, target - bodyTemperature));
 		float newTemp = bodyTemperature + change;
 		boolean isRising = true;
 		if ((bodyTemperature < AVERAGE && newTemp > bodyTemperature) || (bodyTemperature > AVERAGE && newTemp < bodyTemperature)) {
-			speed *= GOOD_MULTIPLIER * TFCAmbientalConfig.GENERAL.goodTemperatureChangeSpeed;
+			speed *= GOOD_MULTIPLIER * AmbientalConfig.GENERAL.goodTemperatureChangeSpeed;
 		}
 		else {
-			speed *= BAD_MULTIPLIER * TFCAmbientalConfig.GENERAL.badTemperatureChangeSpeed;
+			speed *= BAD_MULTIPLIER * AmbientalConfig.GENERAL.badTemperatureChangeSpeed;
 		}
 		return (change * speed);
 	}
@@ -88,10 +88,10 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 		target = modifiers.getTargetTemperature();
 		potency = modifiers.getTotalPotency();
 
-		if(target > bodyTemperature && bodyTemperature > TFCAmbientalConfig.GENERAL.hotThreshold) {
+		if(target > bodyTemperature && bodyTemperature > AmbientalConfig.GENERAL.hotThreshold) {
 			potency /= potency;
 		}
-		if(target < bodyTemperature && bodyTemperature < TFCAmbientalConfig.GENERAL.coolThreshold) {
+		if(target < bodyTemperature && bodyTemperature < AmbientalConfig.GENERAL.coolThreshold) {
 			potency /= potency;
 		}
 
@@ -236,14 +236,14 @@ public class TemperatureCapability implements ICapabilitySerializable<NBTTagComp
 				tick = 0;
 				if (damageTick > 40) {
 					damageTick = 0;
-					if (TFCAmbientalConfig.GENERAL.takeDamage) {
+					if (AmbientalConfig.GENERAL.takeDamage) {
 						if (this.getTemperature() > BURN_THRESHOLD) {
 							player.attackEntityFrom(AmbientalDamage.HEAT, 4f);
 						} else if (this.getTemperature() < FREEZE_THRESHOLD) {
 							player.attackEntityFrom(AmbientalDamage.COLD, 4f);
 						}
 					}
-					if (TFCAmbientalConfig.GENERAL.loseHungerThirst) {
+					if (AmbientalConfig.GENERAL.loseHungerThirst) {
 						if (player.getFoodStats() instanceof FoodStatsTFC) {
 							FoodStatsTFC stats = (FoodStatsTFC) player.getFoodStats();
 							if (this.getTemperature() > BURN_THRESHOLD) {

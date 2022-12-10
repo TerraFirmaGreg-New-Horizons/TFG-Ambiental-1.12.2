@@ -1,9 +1,8 @@
 package com.lumintorious.ambiental.modifier;
 
-import com.lumintorious.ambiental.TFCAmbientalConfig;
+import com.lumintorious.ambiental.AmbientalConfig;
 import com.lumintorious.ambiental.api.IEnvironmentalTemperatureProvider;
 import com.lumintorious.ambiental.api.AmbientalRegistry;
-import com.lumintorious.ambiental.capability.TemperatureCapability;
 
 import com.lumintorious.ambiental.effects.TempEffect;
 import net.dries007.tfc.api.capability.food.IFoodStatsTFC;
@@ -144,7 +143,7 @@ public class EnvironmentalModifier {
 	}
 
 	public static Optional<TempModifier> handleFood(EntityPlayer player) {
-		if(getEnvironmentTemperatureWithTimeOfDay(player) < TFCAmbientalConfig.GENERAL.averageTemperature - 3 && player.getFoodStats().getFoodLevel() > 14) {
+		if(getEnvironmentTemperatureWithTimeOfDay(player) < AmbientalConfig.GENERAL.averageTemperature - 3 && player.getFoodStats().getFoodLevel() > 14) {
 			return TempModifier.defined("well_fed", 2.5f, 0f);
 		}
 		return TempModifier.none();
@@ -153,12 +152,12 @@ public class EnvironmentalModifier {
 	public static Optional<TempModifier> handleDiet(EntityPlayer player) {
 		if(player.getFoodStats() instanceof IFoodStatsTFC) {
 			IFoodStatsTFC stats = (IFoodStatsTFC) player.getFoodStats();
-			if(getEnvironmentTemperatureWithTimeOfDay(player) < TFCAmbientalConfig.GENERAL.coolThreshold) {
+			if(getEnvironmentTemperatureWithTimeOfDay(player) < AmbientalConfig.GENERAL.coolThreshold) {
 				float grainLevel = stats.getNutrition().getNutrient(Nutrient.GRAIN);
 				float meatLevel = stats.getNutrition().getNutrient(Nutrient.PROTEIN);
 				return TempModifier.defined("nutrients", 4f * grainLevel * meatLevel, 0f);
 			}
-			if(getEnvironmentTemperatureWithTimeOfDay(player) > TFCAmbientalConfig.GENERAL.hotThreshold) {
+			if(getEnvironmentTemperatureWithTimeOfDay(player) > AmbientalConfig.GENERAL.hotThreshold) {
 				float fruitLevel = stats.getNutrition().getNutrient(Nutrient.FRUIT);
 				float veggieLevel = stats.getNutrition().getNutrient(Nutrient.VEGETABLES);
 				return TempModifier.defined("nutrients", -4f  * fruitLevel * veggieLevel, 0f);

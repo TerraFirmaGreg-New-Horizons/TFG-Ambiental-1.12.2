@@ -5,7 +5,6 @@ import com.lumintorious.ambiental.effects.TempEffect;
 import net.dries007.tfc.api.capability.food.CapabilityFood;
 import net.dries007.tfc.api.capability.food.IFood;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -15,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -26,13 +24,12 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.Field;
 
-import static com.lumintorious.ambiental.TFCAmbiental.MODID;
+import static com.lumintorious.ambiental.Ambiental.MODID;
 
-public class TFCAmbientalEventHandler {
+public class AmbientalEventHandler {
 
 	@SubscribeEvent
 	public void onInteract(PlayerInteractEvent.EntityInteractSpecific event) {
@@ -76,13 +73,13 @@ public class TFCAmbientalEventHandler {
 		if (event.getModID().equals(MODID))
 		{
 			ConfigManager.sync(MODID, Config.Type.INSTANCE);
-			TemperatureCapability.AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;
-			TemperatureCapability.HOT_THRESHOLD = TFCAmbientalConfig.GENERAL.hotThreshold;
-			TemperatureCapability.COOL_THRESHOLD = TFCAmbientalConfig.GENERAL.coolThreshold;
-			TemperatureCapability.BURN_THRESHOLD = TFCAmbientalConfig.GENERAL.burnThreshold;
-			TemperatureCapability.FREEZE_THRESHOLD = TFCAmbientalConfig.GENERAL.freezeThreshold;
-			TemperatureCapability.NANO_QUARK_ARMOR_TEMP = TFCAmbientalConfig.GENERAL.nanoOrQuarkTemp;
-			TFCAmbientalGuiRenderer.enableOverlay = TFCAmbientalConfig.CLIENT.enableOverlay;
+			TemperatureCapability.AVERAGE = AmbientalConfig.GENERAL.averageTemperature;
+			TemperatureCapability.HOT_THRESHOLD = AmbientalConfig.GENERAL.hotThreshold;
+			TemperatureCapability.COOL_THRESHOLD = AmbientalConfig.GENERAL.coolThreshold;
+			TemperatureCapability.BURN_THRESHOLD = AmbientalConfig.GENERAL.burnThreshold;
+			TemperatureCapability.FREEZE_THRESHOLD = AmbientalConfig.GENERAL.freezeThreshold;
+			TemperatureCapability.NANO_QUARK_ARMOR_TEMP = AmbientalConfig.GENERAL.nanoOrQuarkTemp;
+			AmbientalGuiRenderer.enableOverlay = AmbientalConfig.CLIENT.enableOverlay;
 		}
 	}
 

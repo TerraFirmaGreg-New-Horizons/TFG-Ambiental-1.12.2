@@ -1,6 +1,6 @@
 package com.lumintorious.ambiental.api;
 
-import com.lumintorious.ambiental.TFCAmbientalConfig;
+import com.lumintorious.ambiental.AmbientalConfig;
 import com.lumintorious.ambiental.modifier.EnvironmentalModifier;
 import com.lumintorious.ambiental.modifier.TempModifier;
 import com.lumintorious.ambiental.modifier.TempModifierStorage;
@@ -25,7 +25,7 @@ public interface ITileEntityTemperatureProvider {
 //		var item = CuriosApi.getCuriosHelper().findCurios(player, TFCAmbientalItems.LEATHER_APRON.get());
 //		if(item.isEmpty()) return false;
 		float environmentTemperature = EnvironmentalModifier.getEnvironmentTemperatureWithTimeOfDay(player);
-		float AVERAGE = TFCAmbientalConfig.GENERAL.averageTemperature;
+		float AVERAGE = AmbientalConfig.GENERAL.averageTemperature;
 		return environmentTemperature > AVERAGE;
 	}
 

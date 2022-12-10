@@ -4,3 +4,26 @@ death.attack.hyperthermia=%1$s died of heatstroke.
 
 effect.tfcambiental.cool.name=Cooling Down
 effect.tfcambiental.warm.name=Warming Up
+
+item.tfcambiental.straw_hat.name=Straw Hat
+item.tfcambiental.leather_apron.name=Leather Apron
+item.tfcambiental.wool_hat.name=Wool Hat
+item.tfcambiental.wool_sweater.name=Wool Sweater
+item.tfcambiental.wool_pants.name=Wool Pants
+item.tfcambiental.wool_boots.name=Wool Boots
+item.tfcambiental.silk_cowl.name=Silk Cowl
+item.tfcambiental.silk_shirt.name=Silk Shirt
+item.tfcambiental.silk_pants.name=Silk Pants
+item.tfcambiental.silk_shoes.name=Silk Shoes
+item.tfcambiental.burlap_cowl.name=Burlap Cowl
+item.tfcambiental.burlap_shirt.name=Burlap Shirt
+item.tfcambiental.burlap_pants.name=Burlap Pants
+item.tfcambiental.burlap_shoes.name=Burlap Shoes
+item.tfcambiental.insulated_leather_hat.name=Insulated Leather Hat
+item.tfcambiental.insulated_leather_tunic.name=Insulated Leather Tunic
+item.tfcambiental.insulated_leather_pants.name=Insulated Leather Pants
+item.tfcambiental.insulated_leather_boots.name=Insulated Leather Boots
+
+tfcambiental.tooltip.warmth.name=Warmth: %s
+tfcambiental.tooltip.insulation.name=Insulation: %s
+tfcambiental.tooltip.sun_protection.name=Protects against direct sunlight

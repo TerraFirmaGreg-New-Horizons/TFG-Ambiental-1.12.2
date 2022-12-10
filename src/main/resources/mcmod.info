@@ -1,7 +1,7 @@
 [
 {
-  "modid": "tfcambiental",
-  "name": "TFC Ambiental",
+  "modid": "tfgambiental",
+  "name": "TFG Ambiental",
   "description": "A Simple(-ish) TFC temperature mode.",
   "version": "${version}",
   "mcversion": "${mcversion}",

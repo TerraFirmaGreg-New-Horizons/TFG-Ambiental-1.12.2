@@ -1,5 +1,6 @@
-death.attack.hypothermia=%1$s замер.
-death.attack.hyperthermia=%1$s умер от сердечного приступа.
+# TFC death messages
+death.attack.hypothermia=%1$s замерзнул насмерть.
+death.attack.hyperthermia=%1$s умер от теплового удара.
 
-effect.tfcambiental.cool.name=Остываете
-effect.tfcambiental.warm.name=Нагреваетесь
+effect.tfgambiental.cool.name=Охлаждаетесь
+effect.tfgambiental.warm.name=Нагреваетесь

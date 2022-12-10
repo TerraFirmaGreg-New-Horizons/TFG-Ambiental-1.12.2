@@ -58,6 +58,9 @@ minecraft {
     }
     clientJvmArgs.addAll(args)
     serverJvmArgs.addAll(args)
+
+    replace "@VERSION@", project.mod_version
+    replaceIn "TFGAmbiental.java"
 }
 
 repositories {
@@ -70,7 +73,6 @@ repositories {
     maven {
         url = 'https://www.cursemaven.com'
     }
-
 }
 
 dependencies {
@@ -91,6 +93,7 @@ dependencies {
     deobfCompile   'curse.maven:tfc-cellars-add-on-431185:3640604'
     deobfCompile   'curse.maven:firmalife-453394:3612887'
     deobfCompile   'curse.maven:tfctech-unofficial-340660:3209033'
+    deobfCompile   'curse.maven:galacticraft-legacy-564236:3648807'
 
     runtime        'curse.maven:had-enough-items-557549:3862733'
     runtime        'curse.maven:the-one-probe-245211:2667280'

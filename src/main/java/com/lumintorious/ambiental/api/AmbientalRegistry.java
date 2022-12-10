@@ -27,8 +27,8 @@ public class AmbientalRegistry<Type> implements Iterable<Type> {
 	static {
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("torch", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.TORCH));
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("fire", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.FIRE));
-		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("lava", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.LAVA));
-		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("flowing_lava", 3f, 0f)).filter((mod) -> state.getBlock() == Blocks.FLOWING_LAVA));
+		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("lava", 6f, 0f)).filter((mod) -> state.getBlock() == Blocks.LAVA));
+		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("flowing_lava", 4f, 0f)).filter((mod) -> state.getBlock() == Blocks.FLOWING_LAVA));
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("snow_layer", -1.5f, 0.2f)).filter((mod) -> state.getBlock() == Blocks.SNOW_LAYER));
 		BLOCKS.register((player, pos, state) -> Optional.of(new TempModifier("snow", -0.5f, 0.2f)).filter((mod) -> state.getBlock() == Blocks.SNOW && player.world.getLightFor(EnumSkyBlock.SKY, pos) == 15));
 
