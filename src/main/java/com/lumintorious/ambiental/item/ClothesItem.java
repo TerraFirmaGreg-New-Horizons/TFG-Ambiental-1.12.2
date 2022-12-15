@@ -2,8 +2,7 @@ package com.lumintorious.ambiental.item;
 
 import com.lumintorious.ambiental.Ambiental;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 
 import static com.lumintorious.ambiental.Ambiental.MODID;
 import static net.dries007.tfc.objects.CreativeTabsTFC.CT_MISC;
