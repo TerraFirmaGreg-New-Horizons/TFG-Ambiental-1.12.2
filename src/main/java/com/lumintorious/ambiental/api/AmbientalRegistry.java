@@ -65,6 +65,9 @@ public class AmbientalRegistry<Type> implements Iterable<Type> {
 		ENVIRONMENT.register(EnvironmentalModifier::handleSprinting);
 		ENVIRONMENT.register(EnvironmentalModifier::handleUnderground);
 		ENVIRONMENT.register(EnvironmentalModifier::handlePotionEffects);
+
+		EQUIPMENT.register(IEquipmentTemperatureProvider::handleSunlightCap);
+		EQUIPMENT.register(IEquipmentTemperatureProvider::handleClothes);
 	}
 	
 	private final ArrayList<Type> list = new ArrayList<>();
