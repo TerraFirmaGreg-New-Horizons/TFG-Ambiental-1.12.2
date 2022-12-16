@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.EnumHelper;
 
 import static com.lumintorious.ambiental.Ambiental.MODID;
 
-public class LeatherApronMaterialI implements ITemperatureAlteringMaterial {
+public class LeatherApronMaterial implements ITemperatureAlteringMaterial {
     public static final ArmorMaterial LEATHER_APRON = EnumHelper.addArmorMaterial("leather_apron", MODID +":leather_apron", 1000, new int[]{0, 0, 0, 0}, 0, SoundEvents.ENTITY_LEASHKNOT_BREAK, 0F);
 
     @Override

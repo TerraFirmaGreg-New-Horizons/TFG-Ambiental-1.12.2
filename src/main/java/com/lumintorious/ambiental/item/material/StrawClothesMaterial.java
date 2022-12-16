@@ -9,11 +9,11 @@ import net.minecraftforge.common.util.EnumHelper;
 
 import static com.lumintorious.ambiental.Ambiental.MODID;
 
-public class BurlapClothesMaterialI implements ITemperatureAlteringMaterial {
-    public static final ArmorMaterial BURLAP_CLOTHES = EnumHelper.addArmorMaterial("burlap_cloth", MODID + ":burlap_cloth", 3000, new int[]{0, 0, 0, 0}, 1, SoundEvents.BLOCK_WOOD_PLACE, 0.0F);
+public class StrawClothesMaterial implements ITemperatureAlteringMaterial {
+    public static final ArmorMaterial STRAW_CLOTHES = EnumHelper.addArmorMaterial("straw", MODID +":straw", 100, new int[]{0, 0, 0, 0}, 1, SoundEvents.BLOCK_GRASS_BREAK, 0F);
 
     @Override
     public TempModifier getTempModifier(ItemStack stack) {
-        return new TempModifier(stack.getItem().getRegistryName().toString(), -0.5f, -0.25f);
+        return new TempModifier(stack.getItem().getRegistryName().toString(), 0, -0.1f);
     }
 }

@@ -9,7 +9,7 @@ import net.minecraftforge.common.util.EnumHelper;
 
 import static com.lumintorious.ambiental.Ambiental.MODID;
 
-public class SilkClothesMaterialI implements ITemperatureAlteringMaterial {
+public class SilkClothesMaterial implements ITemperatureAlteringMaterial {
     public static final ArmorMaterial SILK_CLOTHES = EnumHelper.addArmorMaterial("silk_cloth", MODID +":silk_cloth", 3000, new int[]{0, 0, 0, 0}, 1, SoundEvents.BLOCK_WOOD_PLACE, 0F);
 
     @Override
