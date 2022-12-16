@@ -1,6 +1,6 @@
 package com.lumintorious.ambiental.item.material;
 
-import com.lumintorious.ambiental.item.TemperatureAlteringMaterial;
+import com.lumintorious.ambiental.item.ITemperatureAlteringMaterial;
 import com.lumintorious.ambiental.modifier.TempModifier;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -9,11 +9,11 @@ import net.minecraftforge.common.util.EnumHelper;
 
 import static com.lumintorious.ambiental.Ambiental.MODID;
 
-public class WoolClothesMaterial implements TemperatureAlteringMaterial {
-    public static final ArmorMaterial WOOL_CLOTHES = EnumHelper.addArmorMaterial(":wool_cloth", MODID +":wool_cloth", 3000, new int[]{0, 0, 0, 0}, 0, SoundEvents.BLOCK_WOOD_PLACE, 0F);
+public class StrawClothesMaterialI implements ITemperatureAlteringMaterial {
+    public static final ArmorMaterial STRAW_CLOTHES = EnumHelper.addArmorMaterial("straw", MODID +":straw", 100, new int[]{0, 0, 0, 0}, 1, SoundEvents.BLOCK_GRASS_BREAK, 0F);
 
     @Override
     public TempModifier getTempModifier(ItemStack stack) {
-        return new TempModifier(stack.getItem().getRegistryName().toString(), 4f, -0.15f);
+        return new TempModifier(stack.getItem().getRegistryName().toString(), 0, -0.1f);
     }
 }
